@@ -1,14 +1,14 @@
-import { STAGE_STATUS_STYLES } from "@/lib/constants";
+import { ELEMENT_STATUS_STYLES } from "@/lib/constants";
 import { cn } from "@/lib/cn";
-import type { StageStatus } from "@/schemas/stage-status";
+import type { ElementStatus } from "@/schemas/schedule";
 
 type BadgeProps = {
-  status: StageStatus;
+  status: ElementStatus;
   label?: string;
 };
 
 export function Badge({ status, label }: BadgeProps) {
-  const style = STAGE_STATUS_STYLES[status];
+  const style = ELEMENT_STATUS_STYLES[status];
   return (
     <span
       className={cn(
