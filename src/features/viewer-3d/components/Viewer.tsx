@@ -44,16 +44,16 @@ export function Viewer({ plan, glbUrl, className }: ViewerProps) {
       className={`relative overflow-hidden bg-viewport ${className ?? ""}`}
     >
       <ViewerCanvas plan={plan} glbUrl={glbUrl} onReady={onReady} />
-      <div className="pointer-events-none absolute inset-x-space-sm top-space-sm z-10 flex flex-col gap-space-xs">
+      <div className="pointer-events-none absolute inset-space-sm z-10 flex flex-col gap-space-xs">
         <ViewerToolbar cuts={cuts} isFullscreen={isFullscreen} onToggleFullscreen={toggle} />
         <StatusLegend />
         <SourceNotice />
-      </div>
-      <div className="pointer-events-none absolute inset-x-space-sm bottom-space-sm z-10 flex flex-col items-start gap-space-xs">
-        <div className="pointer-events-auto max-w-full">
+        <div className="pointer-events-auto flex min-h-0 max-w-full self-start max-sm:mt-auto">
           <ElementPopover plan={plan} />
         </div>
-        <CoordinatesBadge />
+        <div className="mt-auto max-sm:hidden">
+          <CoordinatesBadge />
+        </div>
       </div>
     </div>
   );

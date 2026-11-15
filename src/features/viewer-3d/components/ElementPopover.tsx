@@ -25,7 +25,7 @@ export function ElementPopover({ plan }: { plan: FloorPlan }) {
   const title = `${typeLabel} ${entry.id}`;
 
   return (
-    <aside aria-label={title} data-testid="element-popover" className={cn(GLASS, "flex w-72 max-w-full flex-col gap-space-sm p-space-md shadow-overlay")}>
+    <aside aria-label={title} data-testid="element-popover" className={cn(GLASS, "flex max-h-full w-72 max-w-full flex-col gap-space-sm overflow-y-auto overscroll-contain p-space-md shadow-overlay")}>
       <div className="flex items-start justify-between gap-space-xs">
         <div>
           <h3 className="font-display text-headline-sm">{title}</h3>
