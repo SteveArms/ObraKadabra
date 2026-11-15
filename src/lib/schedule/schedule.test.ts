@@ -4,7 +4,7 @@ import { WORKDAYS_PER_WEEK, YIELDS_PER_CREW_DAY } from "@/data/yields";
 import { DEMO_PROJECTS } from "@/lib/projects";
 import { computeCost, computeMaterials, computeTakeoffLines } from "@/lib/takeoff";
 import { makeTestPlan } from "@/lib/takeoff/test-plan";
-import { buildSchedule, costCurve, materialsForWeek, statusAt, summarizeProject } from "./index";
+import { buildSchedule, costCurve, materialsForWeek, plasteredAt, statusAt, summarizeProject } from "./index";
 
 describe.each(DEMO_PROJECTS)("buildSchedule for $id", ({ floorPlan: plan }) => {
   const lines = computeTakeoffLines(plan);
@@ -69,6 +69,12 @@ describe.each(DEMO_PROJECTS)("buildSchedule for $id", ({ floorPlan: plan }) => {
       for (const entry of materialsForWeek(schedule, week)) totals.set(entry.material, (totals.get(entry.material) ?? 0) + entry.quantity);
     }
     for (const entry of computeMaterials(lines)) expect(totals.get(entry.material)).toBeCloseTo(entry.quantity, 3);
+  });
+
+  it("plasters no wall early on and every wall by the last week", () => {
+    expect(plasteredAt(schedule, 1)).toEqual({});
+    const finished = plasteredAt(schedule, schedule.totalWeeks);
+    expect(Object.keys(finished).sort()).toEqual(plan.walls.map((wall) => `wall_${wall.id}`).sort());
   });
 
   it("reports the schedule length as the project duration", () => {
