@@ -100,7 +100,8 @@ describe("small case", () => {
   it("marks a task behind the plan as delayed and a reported one as done", () => {
     const footing = schedule.tasks.find((task) => task.meshKey === "footing_Z-1")!;
     const late = Math.max(1, footing.endWeek + 1);
-    expect(statusAt(schedule, late, { week: late, percents: {} })["footing_Z-1"]).toBe("delayed");
+    expect(statusAt(schedule, late, { week: late, percents: { "footing_Z-1": 0 } })["footing_Z-1"]).toBe("delayed");
+    expect(statusAt(schedule, late, { week: late, percents: {} })["footing_Z-1"]).toBe("done");
     expect(statusAt(schedule, late, { week: late, percents: { "footing_Z-1": 100 } })["footing_Z-1"]).toBe("done");
     const demo = buildSchedule(DEMO_PROJECTS[0].floorPlan, computeTakeoffLines(DEMO_PROJECTS[0].floorPlan));
     expect(statusAt(demo, 1, { week: 1, percents: { "column_C-1": 40 } })["column_C-1"]).toBe("in_progress");

@@ -11,10 +11,11 @@ export function plannedStatus(task: ScheduledTask, week: number): ElementStatus 
   return task.startDay < day ? "in_progress" : "not_started";
 }
 
-// Real progress wins over the plan; anything behind what the plan expects by this week is delayed
+// Reported progress wins over the plan and anything reported behind it is delayed; unreported elements keep the plan, so one photo never turns the house red
 function actualStatus(task: ScheduledTask, week: number, percent: number | undefined): ElementStatus {
   const planned = plannedStatus(task, week);
-  const actual = percent ?? 0;
+  if (percent === undefined) return planned;
+  const actual = percent;
   if (actual >= 100) return "done";
   if (planned === "done" || (planned === "in_progress" && actual === 0)) return "delayed";
   return actual > 0 ? "in_progress" : "not_started";
