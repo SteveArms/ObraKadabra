@@ -1,6 +1,6 @@
 export { footprintsMatch, objectsFootprint, sceneFootprint, type Footprint } from "./alignment";
 export { ELEMENT_TYPE_LABELS, elementLevel, levelCuts, levelLabel } from "./element-info";
-export { FOUNDATION_LEVEL } from "./elevations";
+export { FOUNDATION_LEVEL } from "@/lib/plan/elevations";
 export { BUILDING_MATERIAL_STYLES, BUILDING_MATERIALS, buildingMaterialFor, materialStateFor, type BuildingMaterial, type ColorMode, type MaterialState } from "./palette";
 export { buildPlanObjects, INSTANCING_MIN_COLUMNS } from "./instancing";
 export { buildPlanScene } from "./plan-scene";

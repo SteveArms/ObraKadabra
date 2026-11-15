@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { useUploadStore } from "../store";
 import type { Sheet } from "../types";
-import { formatScale, sheetScale } from "../utils";
+import { formatScale } from "@/lib/format";
+import { sheetScale } from "../utils";
 
 export function CalibrationPanel({ sheet }: { sheet: Sheet }) {
   const inputId = useId();

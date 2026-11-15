@@ -1,6 +1,6 @@
 import type { MeshType } from "@/lib/gltf";
 import type { FloorPlan } from "@/schemas/floor-plan";
-import { FOUNDATION_LEVEL } from "./elevations";
+import { FOUNDATION_LEVEL } from "@/lib/plan/elevations";
 
 export const ELEMENT_TYPE_LABELS: Record<MeshType, string> = {
   wall: "Wall",

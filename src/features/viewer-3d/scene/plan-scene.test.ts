@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { wallArea } from "@/lib/geometry";
 import { DEMO_PROJECTS } from "@/lib/projects";
 import { buildPlanScene } from "./plan-scene";
-import { levelClearHeight } from "./elevations";
+import { levelClearHeight } from "@/lib/plan/elevations";
 import { buildElementMesh } from "./three-objects";
 import { wallSpans } from "./wall-boxes";
 

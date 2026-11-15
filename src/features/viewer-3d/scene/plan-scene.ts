@@ -1,6 +1,6 @@
 import { FOUNDATION_DEPTH } from "@/data/structure";
 import type { FloorPlan, Point } from "@/schemas/floor-plan";
-import { FOUNDATION_LEVEL, levelBase, levelClearHeight } from "./elevations";
+import { FOUNDATION_LEVEL, levelBase, levelClearHeight } from "@/lib/plan/elevations";
 import type { SceneElement } from "./types";
 import { wallBoxes } from "./wall-boxes";
 

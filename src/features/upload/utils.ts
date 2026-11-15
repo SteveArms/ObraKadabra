@@ -1,24 +1,15 @@
 import { MIN_FLOOR_HEIGHT } from "@/data/structure";
+import { parseMeters } from "@/lib/format";
 import { metersPerPixel } from "@/lib/geometry";
 import type { FloorPlan, Point } from "@/schemas/floor-plan";
 import type { Project } from "@/schemas/project";
 import type { Rect, Sheet, WizardDetails } from "./types";
-
-// Accepts "8", "8.00" and the comma decimals common in Peru ("8,00")
-export function parseMeters(text: string): number | null {
-  const value = Number(text.trim().replace(",", "."));
-  return text.trim() !== "" && Number.isFinite(value) && value > 0 ? value : null;
-}
 
 export function sheetScale(sheet: Sheet): number | null {
   const [a, b] = sheet.calibration.points;
   const meters = parseMeters(sheet.calibration.meters);
   if (!a || !b || meters === null) return null;
   return metersPerPixel(a, b, meters);
-}
-
-export function formatScale(scale: number): string {
-  return `1 px = ${scale.toFixed(4)} m`;
 }
 
 export function rectFromPoints(a: Point, b: Point): Rect {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatArea, formatCount, formatPercent, formatSoles } from "./format";
+import { formatArea, formatCount, formatMeters, formatPercent, formatScale, formatSoles, parseMeters } from "./format";
 
 describe("format", () => {
   it("formats soles without decimals", () => {
@@ -13,5 +13,17 @@ describe("format", () => {
     expect(formatCount(1, "floor", "floors")).toBe("1 floor");
     expect(formatCount(2, "floor", "floors")).toBe("2 floors");
     expect(formatPercent(0.425)).toBe("42.5%");
+  });
+
+  it("parses meters with a dot or a comma", () => {
+    expect(parseMeters("8.00")).toBe(8);
+    expect(parseMeters("8,5")).toBe(8.5);
+    expect(parseMeters("")).toBeNull();
+    expect(parseMeters("-2")).toBeNull();
+  });
+
+  it("formats lengths and the plan scale", () => {
+    expect(formatMeters(3.456)).toBe("3.46 m");
+    expect(formatScale(0.01)).toBe("1 px = 0.0100 m");
   });
 });
