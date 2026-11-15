@@ -39,6 +39,10 @@ pnpm-debug.log*
 PLAN.md
 docs/PLAN.md
 docs/notas/
+docs/prompts/
+
+# Referencias de diseño de Stitch (solo locales)
+design/
 *.local.md
 
 # Modelos 3D pesados fuera de los demos
