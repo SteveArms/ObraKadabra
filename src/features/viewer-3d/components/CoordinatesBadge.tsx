@@ -1,9 +1,9 @@
 "use client";
 
+import { GLASS_SURFACE } from "@/components/ui/surfaces";
 import { cn } from "@/lib/cn";
 import { useViewerStore, type ViewMode } from "../store";
 import { levelLabel } from "../scene";
-import { GLASS } from "./ViewerToolbar";
 
 const VIEW_LABELS: Record<ViewMode, string> = { top: "Top view", iso: "Isometric view", front: "Front view" };
 const meters = new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -16,7 +16,7 @@ export function CoordinatesBadge() {
   const elevation = hover ? `Elevation ${hover.y >= 0 ? "+" : ""}${meters.format(hover.y)} m` : "Point at the model";
 
   return (
-    <div data-testid="viewer-coordinates" className={cn(GLASS, "inline-flex items-center gap-space-xs p-space-xs")}>
+    <div data-testid="viewer-coordinates" className={cn(GLASS_SURFACE, "inline-flex items-center gap-space-xs p-space-xs")}>
       <span aria-hidden="true" className="flex size-7 items-center justify-center rounded-full bg-surface-container-highest font-mono text-label-numeric-sm font-bold text-primary">
         N
       </span>

@@ -1,5 +1,6 @@
 "use client";
 
+import { GLASS_SURFACE } from "@/components/ui/surfaces";
 import { Icon } from "@/components/ui/Icon";
 import { ToggleButton } from "@/components/ui/ToggleButton";
 import { levelLabel } from "../scene";
@@ -20,8 +21,6 @@ const VIEWS: { view: ViewMode; label: string }[] = [
   { view: "front", label: "Front" },
 ];
 
-export const GLASS = "pointer-events-auto rounded-lg bg-surface/90 shadow-float backdrop-blur-md";
-
 type ViewerToolbarProps = { cuts: number[]; isFullscreen: boolean; onToggleFullscreen: () => void };
 
 export function ViewerToolbar({ cuts, isFullscreen, onToggleFullscreen }: ViewerToolbarProps) {
@@ -30,7 +29,7 @@ export function ViewerToolbar({ cuts, isFullscreen, onToggleFullscreen }: Viewer
   );
   return (
     <div className="flex flex-wrap items-start justify-between gap-space-xs">
-      <div role="toolbar" aria-label="Camera" className={`${GLASS} flex flex-wrap items-center gap-0.5 p-1`}>
+      <div role="toolbar" aria-label="Camera" className={`${GLASS_SURFACE} flex flex-wrap items-center gap-0.5 p-1`}>
         {NAV_MODES.map((item) => (
           <ToggleButton key={item.mode} pressed={navMode === item.mode} onClick={() => setNavMode(item.mode)} aria-label={item.label}>
             <Icon name={item.icon} size={18} />
@@ -46,7 +45,7 @@ export function ViewerToolbar({ cuts, isFullscreen, onToggleFullscreen }: Viewer
         <span aria-hidden="true" className="mx-1 h-5 w-px bg-outline-variant" />
         <ColorModeToggle />
       </div>
-      <div role="toolbar" aria-label="Level cuts" className={`${GLASS} flex flex-wrap items-center gap-0.5 p-1`}>
+      <div role="toolbar" aria-label="Level cuts" className={`${GLASS_SURFACE} flex flex-wrap items-center gap-0.5 p-1`}>
         <span className="hidden px-1 text-body-sm text-on-surface-variant sm:inline">Cut</span>
         {cuts.map((level) => (
           <ToggleButton key={level} pressed={levelCut === level} onClick={() => setLevelCut(level)}>

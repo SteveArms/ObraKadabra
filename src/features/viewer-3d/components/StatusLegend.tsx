@@ -1,11 +1,11 @@
 "use client";
 
+import { GLASS_SURFACE } from "@/components/ui/surfaces";
 import { ELEMENT_STATUS_STYLES } from "@/lib/constants";
 import { cn } from "@/lib/cn";
 import { formatPercent } from "@/lib/format";
 import { ElementStatusSchema } from "@/schemas/schedule";
 import { statusOf, useViewerStore } from "../store";
-import { GLASS } from "./ViewerToolbar";
 
 export function StatusLegend() {
   const entries = useViewerStore((state) => state.entries);
@@ -14,7 +14,7 @@ export function StatusLegend() {
   const visible = entries.filter((entry) => entry.level <= levelCut);
 
   return (
-    <ul aria-label="Status legend" className={cn(GLASS, "flex flex-wrap gap-1 self-start p-1")}>
+    <ul aria-label="Status legend" className={cn(GLASS_SURFACE, "flex max-w-full flex-wrap gap-1 self-start p-1 [&>li]:whitespace-nowrap")}>
       {ElementStatusSchema.options.map((status) => {
         const count = visible.filter((entry) => statusOf(statuses, entry.key) === status).length;
         const share = visible.length ? count / visible.length : 0;

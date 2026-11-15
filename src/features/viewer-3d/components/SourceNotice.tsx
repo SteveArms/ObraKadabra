@@ -1,9 +1,9 @@
 "use client";
 
+import { GLASS_SURFACE } from "@/components/ui/surfaces";
 import { Icon } from "@/components/ui/Icon";
 import { cn } from "@/lib/cn";
 import { useViewerStore, type GlbIssue } from "../store";
-import { GLASS } from "./ViewerToolbar";
 
 const MESSAGES: Record<GlbIssue, string> = {
   load_failed: "The 3D file could not be loaded, so the model generated from the plan is shown.",
@@ -16,7 +16,7 @@ export function SourceNotice() {
   return (
     <div role="status" className="self-start">
       {glbIssue ? (
-        <p data-testid="viewer-source-notice" className={cn(GLASS, "flex max-w-md items-start gap-1.5 px-space-sm py-space-xs text-body-sm text-on-surface")}>
+        <p data-testid="viewer-source-notice" className={cn(GLASS_SURFACE, "flex max-w-md items-start gap-1.5 px-space-sm py-space-xs text-body-sm text-on-surface")}>
           <Icon name="info" size={16} className="mt-0.5 text-primary" />
           {MESSAGES[glbIssue]}
         </p>

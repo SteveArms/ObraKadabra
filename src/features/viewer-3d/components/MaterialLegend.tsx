@@ -1,11 +1,11 @@
+import { GLASS_SURFACE } from "@/components/ui/surfaces";
 import { cn } from "@/lib/cn";
 import { BUILDING_MATERIAL_STYLES, BUILDING_MATERIALS } from "../scene";
-import { GLASS } from "./ViewerToolbar";
 
 // Material mode legend: what each color is made of, plus the two highlights that carry the schedule state
 export function MaterialLegend() {
   return (
-    <ul aria-label="Material legend" className={cn(GLASS, "flex flex-wrap gap-1 self-start p-1")}>
+    <ul aria-label="Material legend" className={cn(GLASS_SURFACE, "flex max-w-full flex-wrap gap-1 self-start p-1 [&>li]:whitespace-nowrap")}>
       {BUILDING_MATERIALS.map((material) => (
         <li key={material} className="flex items-center gap-1.5 rounded-md bg-surface-container px-2 py-0.5 text-body-sm text-on-surface">
           <span aria-hidden="true" className={cn("size-2.5 rounded-sm", BUILDING_MATERIAL_STYLES[material].swatchClass)} />
