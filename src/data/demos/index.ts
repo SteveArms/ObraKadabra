@@ -6,6 +6,7 @@ export type DemoEntry = {
   name: string;
   category: string;
   location: string;
+  startDate: string;
   highlights: string[];
   floorPlan: unknown;
 };
@@ -16,6 +17,7 @@ export const DEMO_ENTRIES: DemoEntry[] = [
     name: "1-floor house · 90 m²",
     category: "Typical urban lot",
     location: "Lima, 9 × 10 m lot",
+    startDate: "2026-10-05",
     highlights: ["Isolated and strip footings", "Load-bearing brick walls", "Joist slab roof, 20 cm"],
     floorPlan: casa1Piso90,
   },
@@ -24,6 +26,7 @@ export const DEMO_ENTRIES: DemoEntry[] = [
     name: "2-floor home · 120 m²",
     category: "Progressive build",
     location: "Lima, 6 × 10 m lot",
+    startDate: "2026-10-05",
     highlights: ["Two confined masonry floors", "Joist slab between floors", "Three bedrooms upstairs"],
     floorPlan: vivienda2Pisos120,
   },
