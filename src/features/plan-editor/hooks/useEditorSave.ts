@@ -32,6 +32,8 @@ export function useEditorSave(project: Project) {
       router.push(`/proyecto/${project.id}`);
     } catch {
       setError(SAVE_ERROR);
+    } finally {
+      // The router keeps this page alive for the back button, so the button must be usable again on return
       setSaving(false);
     }
   };

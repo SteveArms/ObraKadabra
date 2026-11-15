@@ -51,10 +51,11 @@ function Model({ plan, glbUrl }: Omit<ViewerCanvasProps, "onReady">) {
   );
 }
 
+// Three r187 dropped soft PCF shadows, so the canvas asks for plain PCF instead of falling back with a warning
 export default function ViewerCanvas({ plan, glbUrl, onReady }: ViewerCanvasProps) {
   const navMode = useViewerStore((state) => state.navMode);
   return (
-    <Canvas shadows frameloop="demand" dpr={[1, 2]} camera={{ fov: 40, near: 0.1, far: 500, position: [20, 16, 20] }} gl={{ alpha: true }}>
+    <Canvas shadows="percentage" frameloop="demand" dpr={[1, 2]} camera={{ fov: 40, near: 0.1, far: 500, position: [20, 16, 20] }} gl={{ alpha: true }}>
       <SceneLights />
       <Suspense fallback={null}>
         <Model plan={plan} glbUrl={glbUrl} />

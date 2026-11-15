@@ -129,6 +129,8 @@ test("Build in 3D asks about pending elements, saves and opens the workspace wit
   await expect.poll(async () => Number(await viewer.getAttribute("data-visible-count"))).toBeGreaterThan(0);
   const saved = await page.evaluate((key) => JSON.parse(window.localStorage.getItem(key) ?? "[]"), PROJECTS_STORAGE_KEY);
   expect(saved[0].status).toBe("ready");
+  await page.goBack();
+  await expect(page.getByRole("button", { name: "Looks good, build in 3D" })).toBeEnabled();
 });
 
 test("the Original, AI and Both toggle shows the photo, the drawing or both", async ({ page }) => {
