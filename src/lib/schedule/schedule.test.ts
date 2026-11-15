@@ -16,11 +16,21 @@ describe.each(DEMO_PROJECTS)("buildSchedule for $id", ({ floorPlan: plan }) => {
     for (const column of meshTask("column_")) expect(column.startDay).toBeGreaterThanOrEqual(foundationEnd);
   });
 
+  it("pours each floor's columns only after its walls are up, and its beams after its columns", () => {
+    const end = (prefix: string, level: number) => Math.max(...meshTask(prefix).filter((task) => task.level === level).map((task) => task.endDay));
+    const start = (prefix: string, level: number) => Math.min(...meshTask(prefix).filter((task) => task.level === level).map((task) => task.startDay));
+    for (let level = 1; level <= plan.meta.levels; level++) {
+      expect(start("column_", level)).toBeGreaterThanOrEqual(end("wall_", level));
+      const beams = schedule.tasks.filter((task) => task.stage === "beams_slab" && task.level === level);
+      for (const beam of beams) expect(beam.startDay).toBeGreaterThanOrEqual(end("column_", level));
+    }
+  });
+
   it("follows the stage order floor by floor and finishes with the roof and finishes", () => {
     const order = schedule.activities.map((activity) => `${activity.stage}@${activity.level}`);
     expect(order[0]).toBe("foundation@0");
-    expect(order.indexOf("columns@1")).toBeLessThan(order.indexOf("walls@1"));
-    expect(order.indexOf(`walls@${plan.meta.levels}`)).toBeLessThan(order.indexOf(`roof@${plan.meta.levels}`));
+    expect(order.slice(1, 4)).toEqual(["walls@1", "columns@1", "beams_slab@1"]);
+    expect(order.indexOf(`beams_slab@${plan.meta.levels}`)).toBeLessThan(order.indexOf(`roof@${plan.meta.levels}`));
     expect(order.at(-1)).toBe(`finishes@${plan.meta.levels}`);
     schedule.activities.slice(1).forEach((activity, index) => expect(activity.startDay).toBeCloseTo(schedule.activities[index].endDay));
   });

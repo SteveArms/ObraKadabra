@@ -14,12 +14,12 @@ export function toWeeks(startDay: number, endDay: number) {
   return { startWeek, endWeek: Math.max(startWeek, Math.ceil(endDay / WORKDAYS_PER_WEEK)) };
 }
 
-// Fixed order (AGENTS.md §8): foundation first, then columns → beams & slab → walls floor by floor, the roof and finishes
+// Fixed order (AGENTS.md §8): foundation, then walls → columns → beams & slab floor by floor, the roof and finishes
 export function activityOrder(levels: number): { stage: Stage; level: number }[] {
   const floors = Array.from({ length: levels }, (_, index) => index + 1);
   return [
     { stage: "foundation", level: 0 },
-    ...floors.flatMap((level) => (["columns", "beams_slab", "walls"] as const).map((stage) => ({ stage, level }))),
+    ...floors.flatMap((level) => (["walls", "columns", "beams_slab"] as const).map((stage) => ({ stage, level }))),
     { stage: "roof", level: levels },
     ...floors.map((level) => ({ stage: "finishes" as const, level })),
   ];
