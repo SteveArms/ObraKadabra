@@ -1,13 +1,14 @@
 "use client";
 
 import { ELEMENT_TYPE_LABELS } from "../scene";
-import { useViewerStore } from "../store";
+import { statusOf, useViewerStore } from "../store";
 
-// Keyboard and screen-reader path to every element, so selection never depends on clicking the canvas
+// Keyboard and screen-reader path to every element, so selection never depends on clicking the canvas; each option exposes its plan-vs-actual status for tests
 export function ElementPicker() {
   const entries = useViewerStore((state) => state.entries);
   const selectedKey = useViewerStore((state) => state.selectedKey);
   const select = useViewerStore((state) => state.select);
+  const statuses = useViewerStore((state) => state.statuses);
   const sorted = [...entries].sort((a, b) => a.key.localeCompare(b.key, "en", { numeric: true }));
 
   return (
@@ -20,7 +21,7 @@ export function ElementPicker() {
       >
         <option value="">Element…</option>
         {sorted.map((entry) => (
-          <option key={entry.key} value={entry.key}>
+          <option key={entry.key} value={entry.key} data-testid={`element-option-${entry.id}`} data-status={statusOf(statuses, entry.key)}>
             {ELEMENT_TYPE_LABELS[entry.type]} {entry.id}
           </option>
         ))}

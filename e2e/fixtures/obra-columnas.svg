@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b9d4ec"/><stop offset="1" stop-color="#e8eef2"/></linearGradient>
+    <pattern id="brick" width="80" height="40" patternUnits="userSpaceOnUse">
+      <rect width="80" height="40" fill="#b5532f"/>
+      <path d="M0 0H80M0 20H80M0 40H80M40 0V20M0 20V40M80 20V40" stroke="#d9c7b0" stroke-width="3"/>
+    </pattern>
+    <pattern id="concrete" width="20" height="20" patternUnits="userSpaceOnUse">
+      <rect width="20" height="20" fill="#a7a49d"/><circle cx="6" cy="7" r="1.5" fill="#8f8c86"/><circle cx="15" cy="14" r="1.2" fill="#8f8c86"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="800" fill="url(#sky)"/>
+  <path d="M0 470 L180 380 L360 430 L560 350 L760 420 L980 360 L1200 430 V560 H0Z" fill="#c9b79c"/>
+  <rect y="560" width="1200" height="240" fill="#a58c6a"/>
+  <rect x="250" y="160" width="90" height="420" fill="url(#concrete)" stroke="#6f6c66" stroke-width="3"/>
+  <rect x="860" y="160" width="90" height="420" fill="url(#concrete)" stroke="#6f6c66" stroke-width="3"/>
+  <path d="M265 160V110M295 160V100M325 160V110M875 160V110M905 160V100M935 160V110" stroke="#5a4a3a" stroke-width="5"/>
+  <rect x="340" y="380" width="520" height="200" fill="url(#brick)" stroke="#7d3a20" stroke-width="3"/>
+  <path d="M340 380 h40 v-20 h40 v20" fill="none" stroke="#7d3a20" stroke-width="2"/>
+  <rect x="980" y="520" width="120" height="60" fill="#e9e4da" stroke="#9b958a" stroke-width="2"/>
+  <rect x="1000" y="490" width="120" height="30" fill="#e9e4da" stroke="#9b958a" stroke-width="2"/>
+</svg>

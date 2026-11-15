@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { buttonClasses } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
-import { DEFAULT_PROJECT_ID } from "@/lib/constants";
+import { HeaderActions } from "./HeaderActions";
 import { MainNav } from "./MainNav";
 import { SaveStatus } from "./SaveStatus";
 
@@ -16,22 +15,7 @@ export function AppHeader() {
         <MainNav variant="desktop" />
         <div className="flex shrink-0 items-center gap-space-xs">
           <SaveStatus />
-          <Link
-            href={`/proyecto/${DEFAULT_PROJECT_ID}/avance`}
-            data-testid="header-log-progress"
-            className={buttonClasses("milestone")}
-          >
-            <Icon name="photo_camera" />
-            <span className="sr-only md:not-sr-only">Log progress</span>
-          </Link>
-          <Link
-            href={`/compartir/${DEFAULT_PROJECT_ID}`}
-            data-testid="header-share"
-            className={buttonClasses("ghost")}
-          >
-            <Icon name="share" />
-            <span className="sr-only md:not-sr-only">Share</span>
-          </Link>
+          <HeaderActions />
         </div>
       </div>
     </header>

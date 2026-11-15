@@ -1,8 +1,21 @@
 import type { Metadata } from "next";
-import { PlaceholderPage } from "@/components/layout/PlaceholderPage";
+import { Suspense } from "react";
+import { ProjectStatusMessage } from "@/components/layout/ProjectStatusMessage";
+import { ProgressScreen } from "@/features/progress";
+import { DEMO_PROJECTS } from "@/lib/projects";
 
 export const metadata: Metadata = { title: "Log progress" };
 
-export default function ProgressPage() {
-  return <PlaceholderPage title="Log progress" description="Add a site photo to record how far each stage has advanced." />;
+export function generateStaticParams() {
+  return DEMO_PROJECTS.map((demo) => ({ id: demo.id }));
+}
+
+export default function ProgressPage({ params }: PageProps<"/proyecto/[id]/avance">) {
+  return (
+    <Suspense fallback={<ProjectStatusMessage status="loading" />}>
+      {params.then(({ id }) => (
+        <ProgressScreen projectId={id} />
+      ))}
+    </Suspense>
+  );
 }

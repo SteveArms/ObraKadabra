@@ -21,7 +21,9 @@ export function SCurve({ points, week, total }: SCurveProps) {
 
   return (
     <figure className="flex flex-col gap-space-xs">
-      <figcaption className="text-body-sm text-on-surface-variant">Planned cumulative cost (S-curve)</figcaption>
+      <figcaption className="text-body-sm text-on-surface-variant">
+        Planned cumulative cost (S-curve){points.some((point) => point.actual !== undefined) ? ", with the value built so far as a dashed green line" : ""}
+      </figcaption>
       <div className="flex gap-space-xs">
         <div aria-hidden="true" className="flex h-40 flex-col justify-between py-0.5 text-end font-mono text-label-numeric-sm text-on-surface-variant tabular-nums">
           {[1, 0.5, 0].map((share) => (

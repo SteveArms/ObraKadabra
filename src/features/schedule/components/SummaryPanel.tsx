@@ -1,13 +1,13 @@
 import { Icon } from "@/components/ui/Icon";
 import { KpiCard } from "@/components/ui/KpiCard";
 import { formatCount, formatPercent, formatSoles } from "@/lib/format";
-import { activityLabel, plannedCostAt, plannedProgressAt } from "@/lib/schedule";
-import type { ElementStatus, Schedule } from "@/schemas/schedule";
+import { activityLabel, actualProgressAt, plannedCostAt, plannedProgressAt } from "@/lib/schedule";
+import type { ActualProgress, ElementStatus, Schedule } from "@/schemas/schedule";
 import { activityAt } from "../utils";
 
-type SummaryPanelProps = { schedule: Schedule; week: number; statuses: Record<string, ElementStatus> };
+type SummaryPanelProps = { schedule: Schedule; week: number; statuses: Record<string, ElementStatus>; progress?: ActualProgress };
 
-export function SummaryPanel({ schedule, week, statuses }: SummaryPanelProps) {
+export function SummaryPanel({ schedule, week, statuses, progress }: SummaryPanelProps) {
   const activity = activityAt(schedule, week);
   const delayed = Object.values(statuses).filter((status) => status === "delayed").length;
   return (
@@ -24,7 +24,7 @@ export function SummaryPanel({ schedule, week, statuses }: SummaryPanelProps) {
         </span>
       </div>
       <div className="grid grid-cols-2 gap-space-sm">
-        <KpiCard label="Planned progress" value={formatPercent(plannedProgressAt(schedule, week))} hint="By working days" />
+        <KpiCard label="Planned progress" value={formatPercent(plannedProgressAt(schedule, week))} hint={progress ? `Actual: ${formatPercent(actualProgressAt(schedule, week, progress))}` : "By working days"} />
         <div data-testid="kpi-invested">
           <KpiCard label="Planned spend" value={formatSoles(plannedCostAt(schedule, week))} hint={`of ${formatSoles(schedule.totalCost)}`} />
         </div>

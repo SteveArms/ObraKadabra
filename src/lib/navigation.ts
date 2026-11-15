@@ -34,3 +34,8 @@ export function getActiveHref(pathname: string, hrefs: string[]): string | undef
 export function isFocusedFlow(pathname: string): boolean {
   return matchesPath(pathname, "/subir") || /^\/proyecto\/[^/]+\/editor\/?$/.test(pathname);
 }
+
+// The project the user is looking at, so header actions act on it instead of on the default demo
+export function projectIdFromPath(pathname: string): string | undefined {
+  return /^\/proyecto\/([^/]+)/.exec(pathname)?.[1];
+}

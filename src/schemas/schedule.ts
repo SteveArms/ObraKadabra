@@ -6,18 +6,6 @@ export { STAGES, StageSchema, type Stage } from "./stage";
 
 export const ElementStatusSchema = z.enum(["not_started", "in_progress", "done", "delayed"]);
 
-export const ProgressEntrySchema = z.object({
-  id: z.string().min(1),
-  projectId: z.string().min(1),
-  stage: StageSchema,
-  elementIds: z.array(z.string().min(1)),
-  percent: z.number().min(0).max(100),
-  status: ElementStatusSchema,
-  recordedAt: z.iso.datetime(),
-  photoUrl: z.string().optional(),
-  note: z.string().optional(),
-});
-
 const span = {
   startDay: z.number().min(0),
   endDay: z.number().min(0),
@@ -58,4 +46,3 @@ export type Activity = z.infer<typeof ActivitySchema>;
 export type Schedule = z.infer<typeof ScheduleSchema>;
 export type ActualProgress = z.infer<typeof ActualProgressSchema>;
 export type ElementStatus = z.infer<typeof ElementStatusSchema>;
-export type ProgressEntry = z.infer<typeof ProgressEntrySchema>;

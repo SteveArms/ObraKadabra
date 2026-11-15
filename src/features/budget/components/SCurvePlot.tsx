@@ -9,6 +9,8 @@ export function SCurvePlot({ points, total, focus }: SCurvePlotProps) {
   const x = (week: number) => (week / last) * 100;
   const y = (value: number) => 100 - (total ? (value / total) * 100 : 0);
   const path = points.map((point, index) => `${index ? "L" : "M"}${x(point.week)},${y(point.planned)}`).join(" ");
+  const actual = points.filter((point) => point.actual !== undefined);
+  const actualPath = actual.map((point, index) => `${index ? "L" : "M"}${x(point.week)},${y(point.actual ?? 0)}`).join(" ");
   return (
     <>
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" className="absolute inset-0 size-full overflow-visible">
@@ -17,6 +19,7 @@ export function SCurvePlot({ points, total, focus }: SCurvePlotProps) {
         ))}
         <path d={`${path} L100,100 L0,100 Z`} className="fill-primary-container/10" />
         <path d={path} fill="none" className="stroke-primary-container" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+        {actual.length > 1 ? <path data-testid="s-curve-actual" d={actualPath} fill="none" className="stroke-status-done" strokeWidth={2} strokeDasharray="4 3" vectorEffect="non-scaling-stroke" /> : null}
         <line x1={x(focus.week)} x2={x(focus.week)} y1={0} y2={100} className="stroke-outline" strokeWidth={1} vectorEffect="non-scaling-stroke" />
       </svg>
       <span

@@ -1,4 +1,5 @@
 import type { ActualProgress, Schedule, ScheduledTask } from "@/schemas/schedule";
+import { earnedValueAt } from "./progress";
 import { weekEndDay } from "./status";
 
 export type CurvePoint = { week: number; planned: number; actual?: number };
@@ -23,16 +24,12 @@ export function plannedProgressAt(schedule: Schedule, week: number): number {
   return done / schedule.totalDays;
 }
 
-function actualCost(schedule: Schedule, progress: ActualProgress): number {
-  return schedule.tasks.reduce((sum, task) => sum + (task.meshKey ? task.cost * (progress.percents[task.meshKey] ?? 0) / 100 : 0), 0);
-}
-
 // Planned S-curve from week 0 to the last week; the actual curve is only known at 0 and at the reported week
 export function costCurve(schedule: Schedule, progress?: ActualProgress): CurvePoint[] {
   return Array.from({ length: schedule.totalWeeks + 1 }, (_, week) => {
     const point: CurvePoint = { week, planned: plannedCostAt(schedule, week) };
     if (progress && week === 0) point.actual = 0;
-    if (progress && week > 0 && week === progress.week) point.actual = actualCost(schedule, progress);
+    if (progress && week > 0 && week === progress.week) point.actual = earnedValueAt(schedule, week, progress);
     return point;
   });
 }

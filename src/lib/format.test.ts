@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatArea, formatCount, formatMeters, formatPercent, formatScale, formatSoles, parseMeters } from "./format";
+import { formatArea, formatBytes, formatCount, formatMeters, formatPercent, formatScale, formatSignedSoles, formatSoles, parseMeters } from "./format";
 
 describe("format", () => {
   it("formats soles without decimals", () => {
@@ -26,4 +26,13 @@ describe("format", () => {
     expect(formatMeters(3.456)).toBe("3.46 m");
     expect(formatScale(0.01)).toBe("1 px = 0.0100 m");
   });
+
+  it("formats budget variance with its sign and file sizes", () => {
+    expect(formatSignedSoles(140.4)).toBe("+S/ 140");
+    expect(formatSignedSoles(-300)).toBe("−S/ 300");
+    expect(formatSignedSoles(0.2)).toBe("S/ 0");
+    expect(formatBytes(37502)).toBe("37 KB");
+    expect(formatBytes(4.8 * 1024 * 1024)).toBe("4.8 MB");
+  });
 });
+

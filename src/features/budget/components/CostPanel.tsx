@@ -3,13 +3,13 @@
 import { useMemo } from "react";
 import { formatSoles } from "@/lib/format";
 import { costCurve, plannedCostAt } from "@/lib/schedule";
-import type { Schedule } from "@/schemas/schedule";
+import type { ActualProgress, Schedule } from "@/schemas/schedule";
 import { costByItem } from "../utils";
 import { CostByItemList } from "./CostByItemList";
 import { SCurve } from "./SCurve";
 
-export function CostPanel({ schedule, week }: { schedule: Schedule; week: number }) {
-  const points = useMemo(() => costCurve(schedule), [schedule]);
+export function CostPanel({ schedule, week, progress }: { schedule: Schedule; week: number; progress?: ActualProgress }) {
+  const points = useMemo(() => costCurve(schedule, progress), [schedule, progress]);
   const items = useMemo(() => costByItem(schedule, week), [schedule, week]);
   return (
     <div className="flex flex-col gap-space-md">

@@ -1,0 +1,7 @@
+{
+  "findings": [
+    { "elementId": "C-1", "type": "column", "status": "done", "percent": 100, "evidence": "Column C-1 is poured to the beam line and its formwork has been removed.", "confidence": 0.92 },
+    { "elementId": "C-2", "type": "column", "status": "done", "percent": 100, "evidence": "Column C-2 shows cured concrete with no formwork left on it.", "confidence": 0.88 },
+    { "elementId": "M-3", "type": "wall", "status": "in_progress", "percent": 50, "evidence": "Wall M-3 is laid up to about half of its height with toothed ends.", "confidence": 0.81 }
+  ]
+}

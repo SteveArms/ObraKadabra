@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getActiveHref, getMainNavItems, isFocusedFlow } from "./navigation";
+import { getActiveHref, getMainNavItems, isFocusedFlow, projectIdFromPath } from "./navigation";
 
 const hrefs = getMainNavItems("demo-1").map((item) => item.href);
 
@@ -32,5 +32,13 @@ describe("isFocusedFlow", () => {
     expect(isFocusedFlow("/proyecto/x/editor")).toBe(true);
     expect(isFocusedFlow("/proyecto/x")).toBe(false);
     expect(isFocusedFlow("/proyecto/x/avance")).toBe(false);
+  });
+});
+
+describe("projectIdFromPath", () => {
+  it("reads the project id from any project page", () => {
+    expect(projectIdFromPath("/proyecto/abc-123")).toBe("abc-123");
+    expect(projectIdFromPath("/proyecto/abc-123/avance")).toBe("abc-123");
+    expect(projectIdFromPath("/subir")).toBeUndefined();
   });
 });
