@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createLocalProjectRepository, getDemoProject } from "@/lib/projects";
+import { getDemoProject, getProjectRepository } from "@/lib/projects";
 import type { Project } from "@/schemas/project";
 
 type ProjectState = { status: "loading" } | { status: "missing" } | { status: "ready"; project: Project };
@@ -13,7 +13,7 @@ function initialState(id: string): ProjectState {
 
 async function loadProject(id: string): Promise<Project | undefined> {
   try {
-    return await createLocalProjectRepository(window.localStorage).get(id);
+    return await getProjectRepository().get(id);
   } catch {
     return undefined;
   }

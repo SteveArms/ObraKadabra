@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { pendingElements, withDerivedStructure } from "@/lib/plan";
-import { createLocalProjectRepository, isDemoId } from "@/lib/projects";
+import { getProjectRepository, isDemoId } from "@/lib/projects";
 import type { Project } from "@/schemas/project";
 import { useEditorStore } from "../store";
 
@@ -27,7 +27,7 @@ export function useEditorSave(project: Project) {
     try {
       if (!readOnly) {
         const floorPlan = withDerivedStructure(plan);
-        await createLocalProjectRepository(window.localStorage).save({ ...project, floorPlan, status: "ready", updatedAt: new Date().toISOString() });
+        await getProjectRepository().save({ ...project, floorPlan, status: "ready", updatedAt: new Date().toISOString() });
       }
       router.push(`/proyecto/${project.id}`);
     } catch {
