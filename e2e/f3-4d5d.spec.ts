@@ -84,3 +84,14 @@ test("tapping a stage segment jumps the timeline into it", async ({ page, isMobi
   expect(week).toBeGreaterThanOrEqual(Number(await segment.getAttribute("data-start-week")));
   expect(week).toBeLessThanOrEqual(Number(await segment.getAttribute("data-end-week")));
 });
+
+test("the viewer shows building materials and can switch to status colors", async ({ page }) => {
+  const { viewer } = await openAtWeek(page, 3);
+  await expect(viewer).toHaveAttribute("data-color-mode", "material");
+  await expect(page.getByRole("list", { name: "Material legend" })).toContainText("Brick");
+  const toggle = page.getByTestId("color-mode-toggle");
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-pressed", "true");
+  await expect(viewer).toHaveAttribute("data-color-mode", "status");
+  await expect(page.getByRole("list", { name: "Status legend" })).toContainText("Done");
+});
