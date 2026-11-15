@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { TakeoffSummary } from "@/lib/takeoff";
+import type { ProjectSummary } from "@/lib/schedule";
 import { aggregatePortfolio } from "./utils";
 
-function makeSummary(total: number, builtArea: number, durationWeeks: number): TakeoffSummary {
+function makeSummary(total: number, builtArea: number, durationWeeks: number): ProjectSummary {
   const byStage = { foundation: 0, columns: 0, beams_slab: 0, walls: 0, roof: 0, finishes: 0 };
   return { builtArea, levels: 1, durationWeeks, cost: { materials: total, labor: 0, total, byStage } };
 }

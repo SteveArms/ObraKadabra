@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { buttonClasses } from "@/components/ui/Button";
+import { Timeline } from "@/features/schedule";
 import { Viewer } from "@/features/viewer-3d";
+import type { Project } from "@/schemas/project";
+import { useProjectSchedule } from "../hooks/useProjectSchedule";
 import { useProject } from "../hooks/useProject";
 import { ProjectBar } from "./ProjectBar";
-import { TimelineSlot } from "./TimelineSlot";
 import { WorkspacePanel } from "./WorkspacePanel";
 
 type ProjectWorkspaceProps = { projectId: string; glbUrl?: string };
@@ -26,16 +28,21 @@ export function ProjectWorkspace({ projectId, glbUrl }: ProjectWorkspaceProps) {
     );
   }
 
+  return <WorkspaceLayout project={state.project} glbUrl={glbUrl} />;
+}
+
+function WorkspaceLayout({ project, glbUrl }: { project: Project; glbUrl?: string }) {
+  const { schedule, week, statuses } = useProjectSchedule(project);
   return (
     <div className="flex flex-1 flex-col">
-      <ProjectBar project={state.project} />
+      <ProjectBar project={project} schedule={schedule} week={week} />
       <div className="grid grid-cols-1 lg:grid-cols-12">
-        <Viewer plan={state.project.floorPlan} glbUrl={glbUrl} className="h-[60dvh] min-h-104 lg:col-span-8 lg:h-170" />
-        <div className="lg:col-span-4">
-          <WorkspacePanel />
+        <Viewer plan={project.floorPlan} glbUrl={glbUrl} className="h-[60dvh] min-h-104 lg:col-span-8 lg:h-170" />
+        <div className="lg:col-span-4 lg:h-170 lg:overflow-y-auto lg:overscroll-contain">
+          <WorkspacePanel schedule={schedule} week={week} statuses={statuses} projectName={project.name} />
         </div>
       </div>
-      <TimelineSlot />
+      <Timeline schedule={schedule} />
     </div>
   );
 }

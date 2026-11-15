@@ -11,6 +11,7 @@ export const MATERIAL_PRICES: Record<Material, number> = {
 
 // Labor and equipment per takeoff unit (S/), including formwork for structural concrete
 export const LABOR_PRICES: Record<TakeoffItem, number> = {
+  excavation: 35,
   structural_concrete: 260,
   cyclopean_concrete: 90,
   rebar: 1.6,

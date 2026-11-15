@@ -193,7 +193,7 @@ const total = a + b;
 ## 8. Dominio: datos clave
 
 - `FloorPlan` (en `src/schemas/floor-plan.ts`) es el contrato central: lo produce la IA, lo edita el editor, lo consume el visor, el cronograma y el presupuesto.
-- Etapas en orden fijo: `foundation → columns → beams_slab → walls → roof → finishes`.
+- Etapas en orden fijo de albañilería confinada (como se construye en el Perú): `foundation → walls → columns → beams_slab → roof → finishes`. Se repiten `walls → columns → beams_slab` piso por piso: primero se asienta el muro con sus extremos endentados, luego se vacían las columnas que lo confinan y al final las vigas soleras con la losa.
 - Duración de etapa = metrado ÷ rendimiento (`src/data/yields.ts`). No hardcodear semanas.
 - Colores de estado (únicos, en `src/lib/constants.ts`): no iniciado gris, en curso azul, terminado verde, atrasado rojo.
 - La respuesta de la IA **siempre** se valida con Zod antes de usarse. Si falla la validación, se reintenta una vez y luego se muestra el error en la UI.

@@ -11,6 +11,7 @@ export const DEMO_PROJECTS: DemoProject[] = DEMO_ENTRIES.map((entry) => ({
   id: entry.id,
   name: entry.name,
   location: entry.location,
+  startDate: entry.startDate,
   category: entry.category,
   highlights: entry.highlights,
   floorPlan: FloorPlanSchema.parse(entry.floorPlan),

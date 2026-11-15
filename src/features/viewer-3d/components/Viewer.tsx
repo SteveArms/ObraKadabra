@@ -7,11 +7,7 @@ import { useShallow } from "zustand/react/shallow";
 import { useFullscreen } from "../hooks/useFullscreen";
 import { levelCuts } from "../scene";
 import { useViewerStore, visibleEntries } from "../store";
-import { CoordinatesBadge } from "./CoordinatesBadge";
-import { ElementPopover } from "./ElementPopover";
-import { SourceNotice } from "./SourceNotice";
-import { StatusLegend } from "./StatusLegend";
-import { ViewerToolbar } from "./ViewerToolbar";
+import { ViewerOverlays } from "./ViewerOverlays";
 
 const ViewerCanvas = dynamic(() => import("./ViewerCanvas"), { ssr: false });
 
@@ -23,8 +19,8 @@ export function Viewer({ plan, glbUrl, className }: ViewerProps) {
   const [ready, setReady] = useState(false);
   const { isFullscreen, toggle } = useFullscreen(containerRef);
   const cuts = useMemo(() => levelCuts(plan), [plan]);
-  const { view, levelCut, selectedKey, entries, source, reset } = useViewerStore(
-    useShallow(({ view, levelCut, selectedKey, entries, source, reset }) => ({ view, levelCut, selectedKey, entries, source, reset })),
+  const { view, levelCut, selectedKey, entries, source, statuses, timeline, reset } = useViewerStore(
+    useShallow(({ view, levelCut, selectedKey, entries, source, statuses, timeline, reset }) => ({ view, levelCut, selectedKey, entries, source, statuses, timeline, reset })),
   );
   const selected = entries.find((entry) => entry.key === selectedKey);
   const onReady = useCallback(() => setReady(true), []);
@@ -38,23 +34,14 @@ export function Viewer({ plan, glbUrl, className }: ViewerProps) {
       data-view={view}
       data-level-cut={levelCut}
       data-selected-id={selected?.id ?? ""}
-      data-visible-count={visibleEntries(entries, levelCut).length}
+      data-visible-count={visibleEntries(entries, { levelCut, statuses, timeline }).length}
+      data-week={timeline?.week ?? ""}
       data-ready={ready}
       data-source={source ?? ""}
       className={`relative overflow-hidden bg-viewport ${className ?? ""}`}
     >
       <ViewerCanvas plan={plan} glbUrl={glbUrl} onReady={onReady} />
-      <div className="pointer-events-none absolute inset-space-sm z-10 flex flex-col gap-space-xs">
-        <ViewerToolbar cuts={cuts} isFullscreen={isFullscreen} onToggleFullscreen={toggle} />
-        <StatusLegend />
-        <SourceNotice />
-        <div className="pointer-events-auto flex min-h-0 max-w-full self-start max-sm:mt-auto">
-          <ElementPopover plan={plan} />
-        </div>
-        <div className="mt-auto max-sm:hidden">
-          <CoordinatesBadge />
-        </div>
-      </div>
+      <ViewerOverlays plan={plan} cuts={cuts} isFullscreen={isFullscreen} onToggleFullscreen={toggle} />
     </div>
   );
 }

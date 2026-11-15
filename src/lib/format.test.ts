@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatArea, formatCount, formatSoles } from "./format";
+import { formatArea, formatCount, formatPercent, formatSoles } from "./format";
 
 describe("format", () => {
   it("formats soles without decimals", () => {
@@ -12,5 +12,6 @@ describe("format", () => {
     expect(formatArea(12.25)).toBe("12.3 m²");
     expect(formatCount(1, "floor", "floors")).toBe("1 floor");
     expect(formatCount(2, "floor", "floors")).toBe("2 floors");
+    expect(formatPercent(0.425)).toBe("42.5%");
   });
 });

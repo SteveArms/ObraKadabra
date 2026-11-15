@@ -4,10 +4,10 @@ import { Icon } from "@/components/ui/Icon";
 import { MetricList } from "@/components/ui/MetricList";
 import { formatArea, formatCount, formatSoles } from "@/lib/format";
 import type { DemoProject } from "@/lib/projects";
-import { summarizeTakeoff } from "@/lib/takeoff";
+import { summarizeProject } from "@/lib/schedule";
 
 export function DemoCard({ demo }: { demo: DemoProject }) {
-  const summary = summarizeTakeoff(demo.floorPlan);
+  const summary = summarizeProject(demo.floorPlan);
   const titleId = `demo-${demo.id}-title`;
   return (
     <article
@@ -35,8 +35,7 @@ export function DemoCard({ demo }: { demo: DemoProject }) {
           ]}
         />
         <DemoHighlights highlights={demo.highlights} />
-        <div className="mt-auto flex flex-wrap items-center justify-between gap-space-sm">
-          <p className="text-body-sm text-on-surface-variant">Duration is an estimate until the schedule is built.</p>
+        <div className="mt-auto flex justify-end">
           <Link href={`/proyecto/${demo.id}`} data-testid="demo-open" className={buttonClasses("primary")}>
             <Icon name="view_in_ar" />
             Open 3D demo

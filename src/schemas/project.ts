@@ -5,6 +5,7 @@ export const ProjectSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   location: z.string().optional(),
+  startDate: z.iso.date().optional(),
   floorPlan: FloorPlanSchema,
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),

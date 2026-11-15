@@ -1,6 +1,7 @@
-import type { TakeoffItem, Unit } from "@/schemas/takeoff";
+import type { Material, TakeoffItem, Unit } from "@/schemas/takeoff";
 
 export const TAKEOFF_ITEM_LABELS: Record<TakeoffItem, string> = {
+  excavation: "Excavation",
   structural_concrete: "Concrete f'c 210",
   cyclopean_concrete: "Cyclopean concrete",
   rebar: "Rebar",
@@ -12,3 +13,11 @@ export const TAKEOFF_ITEM_LABELS: Record<TakeoffItem, string> = {
 };
 
 export const UNIT_LABELS: Record<Unit, string> = { m3: "m³", m2: "m²", kg: "kg", bag: "bags", unit: "units" };
+
+export const MATERIAL_LABELS: Record<Material, string> = {
+  cement: "Cement, type I (42.5 kg)",
+  sand: "Coarse sand",
+  gravel: "Crushed stone 1/2\"",
+  brick: "King Kong 18-hole brick",
+  rebar: "Corrugated rebar",
+};

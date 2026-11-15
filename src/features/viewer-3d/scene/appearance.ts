@@ -3,7 +3,7 @@ import type { InstanceRef } from "./instancing";
 import type { ElementEntry } from "./registry";
 
 type Appearance = {
-  levelCut: number;
+  isVisible: (entry: ElementEntry) => boolean;
   selectedKey?: string;
   materialFor: (entry: ElementEntry) => MeshStandardMaterial;
 };
@@ -28,10 +28,10 @@ function flushInstances(instances: Set<InstanceRef["mesh"]>) {
 }
 
 // three.js objects are mutated in place by design; React only decides which material and visibility apply
-export function applyAppearance(entries: ElementEntry[], { levelCut, selectedKey, materialFor }: Appearance): void {
+export function applyAppearance(entries: ElementEntry[], { isVisible, selectedKey, materialFor }: Appearance): void {
   const touched = new Set<InstanceRef["mesh"]>();
   for (const entry of entries) {
-    const visible = entry.level <= levelCut;
+    const visible = isVisible(entry);
     const material = materialFor(entry);
     const instance = entry.object.userData.instance as InstanceRef | undefined;
     if (instance) {

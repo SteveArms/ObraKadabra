@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { PageSection } from "@/components/layout/PageSection";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { summarizeTakeoff } from "@/lib/takeoff";
+import { summarizeProject } from "@/lib/schedule";
 import { useProjects } from "../hooks/useProjects";
 import { aggregatePortfolio } from "../utils";
 import { NewPlanBanner } from "./NewPlanBanner";
@@ -14,7 +14,7 @@ import { ProjectsEmptyState } from "./ProjectsEmptyState";
 export function ProjectsDashboard() {
   const state = useProjects();
   const projects = useMemo(() => (state.status === "ready" ? state.projects : []), [state]);
-  const summaries = useMemo(() => projects.map((project) => summarizeTakeoff(project.floorPlan)), [projects]);
+  const summaries = useMemo(() => projects.map((project) => summarizeProject(project.floorPlan)), [projects]);
 
   return (
     <PageSection labelledBy="projects-title">

@@ -1,4 +1,4 @@
-import type { TakeoffSummary } from "@/lib/takeoff";
+import type { ProjectSummary } from "@/lib/schedule";
 
 export type PortfolioTotals = {
   projects: number;
@@ -7,8 +7,8 @@ export type PortfolioTotals = {
   averageWeeks: number | null;
 };
 
-export function aggregatePortfolio(summaries: TakeoffSummary[]): PortfolioTotals {
-  const sum = (pick: (summary: TakeoffSummary) => number) => summaries.reduce((total, item) => total + pick(item), 0);
+export function aggregatePortfolio(summaries: ProjectSummary[]): PortfolioTotals {
+  const sum = (pick: (summary: ProjectSummary) => number) => summaries.reduce((total, item) => total + pick(item), 0);
   return {
     projects: summaries.length,
     totalBudget: sum((summary) => summary.cost.total),

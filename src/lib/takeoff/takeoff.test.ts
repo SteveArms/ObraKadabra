@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { LABOR_PRICES, MATERIAL_PRICES } from "@/data/prices";
 import { BRICKS_PER_M2 } from "@/data/mixes";
 import { WASTE_FACTORS } from "@/data/waste";
-import { builtArea, computeCost, computeMaterials, computeTakeoffLines, estimateDurationWeeks, summarizeTakeoff } from "./index";
+import { builtArea, computeCost, computeMaterials, computeTakeoffLines, summarizeTakeoff } from "./index";
 import { makeTestPlan } from "./test-plan";
 
 const find = (item: string, elementType: string) => (line: { item: string; elementType: string }) =>
@@ -10,6 +10,12 @@ const find = (item: string, elementType: string) => (line: { item: string; eleme
 
 describe("computeTakeoffLines", () => {
   const lines = computeTakeoffLines(makeTestPlan());
+
+  it("digs the footings down to the foundation depth and the strip trench", () => {
+    const digs = lines.filter((line) => line.item === "excavation");
+    expect(digs.find((line) => line.elementId === "Z-1")?.quantity).toBeCloseTo(1 * 1 * 1);
+    expect(digs.find((line) => line.elementId === "M-1")?.quantity).toBeCloseTo(0.4 * 0.8 * 4);
+  });
 
   it("measures each structural element", () => {
     expect(lines.find(find("structural_concrete", "footing"))?.quantity).toBeCloseTo(0.6);
@@ -64,16 +70,10 @@ describe("computeCost", () => {
   });
 });
 
-describe("estimateDurationWeeks and summarizeTakeoff", () => {
-  it("rounds each stage up to whole weeks", () => {
-    const lines = computeTakeoffLines(makeTestPlan());
-    expect(estimateDurationWeeks(lines)).toBe(6);
-    expect(estimateDurationWeeks([])).toBe(0);
-  });
-
-  it("summarizes area, floors, cost and duration", () => {
+describe("summarizeTakeoff", () => {
+  it("summarizes area, floors and cost", () => {
     const summary = summarizeTakeoff(makeTestPlan());
-    expect(summary).toMatchObject({ builtArea: 16, levels: 1, durationWeeks: 6 });
+    expect(summary).toMatchObject({ builtArea: 16, levels: 1 });
     expect(summary.cost.total).toBeGreaterThan(0);
   });
 });

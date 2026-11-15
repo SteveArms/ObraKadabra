@@ -2,6 +2,7 @@ import type { TakeoffItem } from "@/schemas/takeoff";
 
 // Daily output of one crew per takeoff item; reference values for confined masonry homes in Peru
 export const YIELDS_PER_CREW_DAY: Record<TakeoffItem, number> = {
+  excavation: 4,
   structural_concrete: 4,
   cyclopean_concrete: 10,
   rebar: 250,
