@@ -1,18 +1,11 @@
 import type { Point, Wall } from "@/schemas/floor-plan";
 import { length } from "./measure";
+import { distanceToLine, project } from "./segment";
 
 type Segment = { start: Point; end: Point };
 
 function toSegment(wall: Wall): Segment {
   return { start: { x: wall.x1, y: wall.y1 }, end: { x: wall.x2, y: wall.y2 } };
-}
-
-function project(point: Point, origin: Point, unit: Point): number {
-  return (point.x - origin.x) * unit.x + (point.y - origin.y) * unit.y;
-}
-
-function distanceToLine(point: Point, origin: Point, unit: Point): number {
-  return Math.abs((point.x - origin.x) * unit.y - (point.y - origin.y) * unit.x);
 }
 
 function canMerge(a: Wall, b: Wall): boolean {
