@@ -3,16 +3,15 @@
 import { useEffect, useMemo } from "react";
 import { todayWeek, useTimeline } from "@/features/schedule";
 import { useViewerTimeline, type ElementSpan } from "@/features/viewer-3d";
-import { useProgressLog } from "@/lib/hooks/useProgressLog";
 import { actualProgressFrom, plasteredAt, scheduleFor, statusAt } from "@/lib/schedule";
+import type { ProgressEntry } from "@/schemas/progress";
 import type { Project } from "@/schemas/project";
 
 // Builds the project's schedule once and keeps the timeline, the 3D viewer and the panels on the same week, plan against approved photo logs
-export function useProjectSchedule(project: Project) {
+export function useProjectSchedule(project: Project, entries: ProgressEntry[]) {
   const schedule = useMemo(() => scheduleFor(project.floorPlan), [project.floorPlan]);
   const week = useTimeline((state) => state.week);
   const reset = useTimeline((state) => state.reset);
-  const { entries } = useProgressLog(project.id);
 
   useEffect(() => reset(schedule.totalWeeks, todayWeek(project.startDate, schedule.totalWeeks)), [schedule, project.startDate, reset]);
 

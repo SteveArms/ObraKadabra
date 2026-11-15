@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatArea, formatBytes, formatCount, formatMeters, formatPercent, formatScale, formatSignedSoles, formatSoles, parseMeters } from "./format";
+import { formatArea, formatBytes, formatCount, formatDate, formatMonth, formatMeters, formatPercent, formatScale, formatSignedSoles, formatSoles, formatWholePercent, parseMeters } from "./format";
 
 describe("format", () => {
   it("formats soles without decimals", () => {
@@ -34,5 +34,14 @@ describe("format", () => {
     expect(formatBytes(37502)).toBe("37 KB");
     expect(formatBytes(4.8 * 1024 * 1024)).toBe("4.8 MB");
   });
-});
 
+  it("formats plan dates without shifting the day", () => {
+    expect(formatDate("2027-02-08")).toBe("Feb 8, 2027");
+    expect(formatMonth("2027-03-29T00:00:00.000Z")).toBe("Mar 2027");
+  });
+
+  it("never rounds a percent up to a finished house", () => {
+    expect(formatWholePercent(0.426)).toBe("42%");
+    expect(formatWholePercent(0.996)).toBe("99%");
+  });
+});

@@ -1,6 +1,7 @@
 const integer = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
 const plural = new Intl.PluralRules("en-US");
 const percent = new Intl.NumberFormat("en-US", { style: "percent", maximumFractionDigits: 1 });
+const wholePercent = new Intl.NumberFormat("en-US", { style: "percent", maximumFractionDigits: 0 });
 const oneDecimal = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 });
 
 export function formatSoles(amount: number): string {
@@ -17,6 +18,11 @@ export function formatCount(value: number, singular: string, pluralForm: string)
 
 export function formatPercent(ratio: number): string {
   return percent.format(ratio);
+}
+
+// Floored so a house at 99.6% never reads as 100% before it is finished
+export function formatWholePercent(ratio: number): string {
+  return wholePercent.format(Math.floor(ratio * 100) / 100);
 }
 
 const meters = new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -46,4 +52,16 @@ const megabytes = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 });
 
 export function formatBytes(bytes: number): string {
   return bytes < 1024 * 1024 ? `${integer.format(Math.ceil(bytes / 1024))} KB` : `${megabytes.format(bytes / 1024 / 1024)} MB`;
+}
+
+// Plan dates are calendar days without a time zone, so they are formatted in UTC to never shift by one day
+const day = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+const month = new Intl.DateTimeFormat("en-US", { month: "short", year: "numeric", timeZone: "UTC" });
+
+export function formatDate(isoDate: string): string {
+  return day.format(new Date(`${isoDate.slice(0, 10)}T00:00:00Z`));
+}
+
+export function formatMonth(isoDate: string): string {
+  return month.format(new Date(`${isoDate.slice(0, 10)}T00:00:00Z`));
 }

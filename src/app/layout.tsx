@@ -1,9 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import type { ReactNode } from "react";
-import { AppFooter } from "@/components/layout/AppFooter";
-import { AppHeader } from "@/components/layout/AppHeader";
-import { MainNav } from "@/components/layout/MainNav";
+import { siteUrl } from "@/lib/site";
 import "@/styles/globals.css";
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk" });
@@ -11,6 +9,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const jetBrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono" });
 
 export const metadata: Metadata = {
+  metadataBase: siteUrl(),
   title: { default: "ObraKadabra", template: "%s · ObraKadabra" },
   description: "Turn a 2D floor plan into a 3D home linked to its construction schedule and budget.",
 };
@@ -19,6 +18,7 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
+// Shared by the app and the family view; each route group adds its own header and footer
 export default function RootLayout({ children }: { children: ReactNode }) {
   const fontVariables = `${spaceGrotesk.variable} ${inter.variable} ${jetBrainsMono.variable}`;
   return (
@@ -30,14 +30,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
           Skip to content
         </a>
-        <AppHeader />
-        <main id="main" className="flex flex-1 flex-col">
-          {children}
-        </main>
-        <div className="pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0">
-          <AppFooter />
-        </div>
-        <MainNav variant="mobile" />
+        {children}
       </body>
     </html>
   );
