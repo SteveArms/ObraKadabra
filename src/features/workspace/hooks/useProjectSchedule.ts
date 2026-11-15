@@ -3,7 +3,7 @@
 import { useEffect, useMemo } from "react";
 import { todayWeek, useTimeline } from "@/features/schedule";
 import { useViewerTimeline, type ElementSpan } from "@/features/viewer-3d";
-import { scheduleFor, statusAt } from "@/lib/schedule";
+import { plasteredAt, scheduleFor, statusAt } from "@/lib/schedule";
 import type { Project } from "@/schemas/project";
 
 // Builds the project's schedule once and keeps the timeline, the 3D viewer and the panels on the same week
@@ -21,7 +21,8 @@ export function useProjectSchedule(project: Project) {
     return Object.fromEntries(entries);
   }, [schedule]);
   const statuses = useMemo(() => statusAt(schedule, week), [schedule, week]);
-  const timeline = useMemo(() => ({ week, spans }), [week, spans]);
+  const plastered = useMemo(() => plasteredAt(schedule, week), [schedule, week]);
+  const timeline = useMemo(() => ({ week, spans, plastered }), [week, spans, plastered]);
   useViewerTimeline(timeline, statuses);
 
   return { schedule, week, statuses };

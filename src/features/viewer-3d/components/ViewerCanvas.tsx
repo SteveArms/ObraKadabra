@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import { MOUSE, TOUCH } from "three";
 import type { FloorPlan } from "@/schemas/floor-plan";
 import { cssColor } from "../hooks/css-color";
-import { useStatusMaterials } from "../hooks/useStatusMaterials";
+import { useViewerMaterials } from "../hooks/useViewerMaterials";
 import { findElementKey } from "../scene";
 import { useViewerStore, type NavMode } from "../store";
 import { CameraRig } from "./CameraRig";
@@ -14,6 +14,7 @@ import { GlbBoundary } from "./GlbBoundary";
 import { ElementSync } from "./ElementSync";
 import { ModelFromGlb } from "./ModelFromGlb";
 import { ModelFromPlan } from "./ModelFromPlan";
+import { SceneLights } from "./SceneLights";
 
 const LEFT_BUTTON: Record<NavMode, MOUSE> = { orbit: MOUSE.ROTATE, pan: MOUSE.PAN, zoom: MOUSE.DOLLY };
 const ONE_FINGER: Record<NavMode, TOUCH> = { orbit: TOUCH.ROTATE, pan: TOUCH.PAN, zoom: TOUCH.DOLLY_PAN };
@@ -21,7 +22,7 @@ const ONE_FINGER: Record<NavMode, TOUCH> = { orbit: TOUCH.ROTATE, pan: TOUCH.PAN
 type ViewerCanvasProps = { plan: FloorPlan; glbUrl?: string; onReady: () => void };
 
 function Model({ plan, glbUrl }: Omit<ViewerCanvasProps, "onReady">) {
-  const materials = useStatusMaterials();
+  const materials = useViewerMaterials();
   const select = useViewerStore((state) => state.select);
   const setHover = useViewerStore((state) => state.setHover);
   const glbIssue = useViewerStore((state) => state.glbIssue);
@@ -53,9 +54,8 @@ function Model({ plan, glbUrl }: Omit<ViewerCanvasProps, "onReady">) {
 export default function ViewerCanvas({ plan, glbUrl, onReady }: ViewerCanvasProps) {
   const navMode = useViewerStore((state) => state.navMode);
   return (
-    <Canvas frameloop="demand" dpr={[1, 2]} camera={{ fov: 40, near: 0.1, far: 500, position: [20, 16, 20] }} gl={{ alpha: true }}>
-      <hemisphereLight args={["#ffffff", "#3a3d44", 1.4]} />
-      <directionalLight position={[12, 20, 8]} intensity={1.6} />
+    <Canvas shadows frameloop="demand" dpr={[1, 2]} camera={{ fov: 40, near: 0.1, far: 500, position: [20, 16, 20] }} gl={{ alpha: true }}>
+      <SceneLights />
       <Suspense fallback={null}>
         <Model plan={plan} glbUrl={glbUrl} />
       </Suspense>

@@ -2,27 +2,28 @@
 
 import { useThree } from "@react-three/fiber";
 import { useEffect } from "react";
-import type { StatusMaterials } from "../hooks/useStatusMaterials";
-import { applyAppearance } from "../scene";
+import { useShallow } from "zustand/react/shallow";
+import type { ViewerMaterials } from "../hooks/useViewerMaterials";
+import { applyAppearance, buildingMaterialFor, materialStateFor, type ElementEntry } from "../scene";
 import { isEntryVisible, statusOf, useViewerStore } from "../store";
 
-// Applies visibility, status color and selection to every registered element, whatever model it came from
-export function ElementSync({ materials }: { materials: StatusMaterials }) {
+// Applies visibility, color and selection to every registered element, whatever model it came from
+export function ElementSync({ materials }: { materials: ViewerMaterials }) {
   const invalidate = useThree((state) => state.invalidate);
-  const entries = useViewerStore((state) => state.entries);
-  const levelCut = useViewerStore((state) => state.levelCut);
-  const selectedKey = useViewerStore((state) => state.selectedKey);
-  const statuses = useViewerStore((state) => state.statuses);
-  const timeline = useViewerStore((state) => state.timeline);
+  const { entries, levelCut, selectedKey, statuses, timeline, colorMode } = useViewerStore(
+    useShallow(({ entries, levelCut, selectedKey, statuses, timeline, colorMode }) => ({ entries, levelCut, selectedKey, statuses, timeline, colorMode })),
+  );
 
   useEffect(() => {
-    applyAppearance(entries, {
-      isVisible: (entry) => isEntryVisible(entry, { levelCut, statuses, timeline }),
-      selectedKey,
-      materialFor: (entry) => (entry.key === selectedKey ? materials.selected : materials.byStatus[statusOf(statuses, entry.key)]),
-    });
+    const materialFor = (entry: ElementEntry) => {
+      if (entry.key === selectedKey) return materials.selected;
+      const status = statusOf(statuses, entry.key);
+      if (colorMode === "status") return materials.byStatus[status];
+      return materials.building(buildingMaterialFor(entry.type, Boolean(timeline?.plastered[entry.key])), materialStateFor(status));
+    };
+    applyAppearance(entries, { isVisible: (entry) => isEntryVisible(entry, { levelCut, statuses, timeline }), selectedKey, materialFor });
     invalidate();
-  }, [entries, levelCut, selectedKey, statuses, timeline, materials, invalidate]);
+  }, [entries, levelCut, selectedKey, statuses, timeline, colorMode, materials, invalidate]);
 
   return null;
 }

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import type { ElementStatus, Stage } from "@/schemas/schedule";
-import type { ElementEntry } from "./scene";
+import type { ColorMode, ElementEntry } from "./scene";
 
 export type ViewMode = "top" | "iso" | "front";
 export type NavMode = "orbit" | "pan" | "zoom";
@@ -8,11 +8,12 @@ export type HoverPoint = { x: number; y: number; z: number };
 export type ModelSource = "glb" | "plan";
 export type GlbIssue = "load_failed" | "unlabeled" | "misaligned";
 export type ElementSpan = { stage: Stage; level: number; startWeek: number; endWeek: number };
-export type ViewerTimeline = { week: number; spans: Record<string, ElementSpan> };
+export type ViewerTimeline = { week: number; spans: Record<string, ElementSpan>; plastered: Record<string, boolean> };
 
 type ViewerState = {
   view: ViewMode;
   navMode: NavMode;
+  colorMode: ColorMode;
   levelCut: number;
   selectedKey?: string;
   hover?: HoverPoint;
@@ -24,6 +25,7 @@ type ViewerState = {
   reset: (topLevel: number) => void;
   setView: (view: ViewMode) => void;
   setNavMode: (navMode: NavMode) => void;
+  setColorMode: (colorMode: ColorMode) => void;
   setLevelCut: (levelCut: number) => void;
   select: (key?: string) => void;
   setHover: (hover?: HoverPoint) => void;
@@ -35,6 +37,7 @@ type ViewerState = {
 export const useViewerStore = create<ViewerState>((set) => ({
   view: "iso",
   navMode: "orbit",
+  colorMode: "material",
   levelCut: 1,
   entries: [],
   statuses: {},
@@ -42,6 +45,7 @@ export const useViewerStore = create<ViewerState>((set) => ({
     set({ view: "iso", navMode: "orbit", levelCut: topLevel, selectedKey: undefined, hover: undefined, entries: [], statuses: {}, source: undefined, glbIssue: undefined, timeline: undefined }),
   setView: (view) => set({ view }),
   setNavMode: (navMode) => set({ navMode }),
+  setColorMode: (colorMode) => set({ colorMode }),
   setLevelCut: (levelCut) => set({ levelCut }),
   select: (selectedKey) => set({ selectedKey }),
   setHover: (hover) => set({ hover }),

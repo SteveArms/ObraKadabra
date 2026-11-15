@@ -5,6 +5,7 @@ import { ToggleButton } from "@/components/ui/ToggleButton";
 import { levelLabel } from "../scene";
 import { useShallow } from "zustand/react/shallow";
 import { useViewerStore, type NavMode, type ViewMode } from "../store";
+import { ColorModeToggle } from "./ColorModeToggle";
 import { ElementPicker } from "./ElementPicker";
 
 const NAV_MODES: { mode: NavMode; label: string; icon: string }[] = [
@@ -42,6 +43,8 @@ export function ViewerToolbar({ cuts, isFullscreen, onToggleFullscreen }: Viewer
             {item.label}
           </ToggleButton>
         ))}
+        <span aria-hidden="true" className="mx-1 h-5 w-px bg-outline-variant" />
+        <ColorModeToggle />
       </div>
       <div role="toolbar" aria-label="Level cuts" className={`${GLASS} flex flex-wrap items-center gap-0.5 p-1`}>
         <span className="hidden px-1 text-body-sm text-on-surface-variant sm:inline">Cut</span>

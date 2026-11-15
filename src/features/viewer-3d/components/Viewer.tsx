@@ -19,8 +19,8 @@ export function Viewer({ plan, glbUrl, className }: ViewerProps) {
   const [ready, setReady] = useState(false);
   const { isFullscreen, toggle } = useFullscreen(containerRef);
   const cuts = useMemo(() => levelCuts(plan), [plan]);
-  const { view, levelCut, selectedKey, entries, source, statuses, timeline, reset } = useViewerStore(
-    useShallow(({ view, levelCut, selectedKey, entries, source, statuses, timeline, reset }) => ({ view, levelCut, selectedKey, entries, source, statuses, timeline, reset })),
+  const { view, levelCut, selectedKey, entries, source, statuses, timeline, colorMode, reset } = useViewerStore(
+    useShallow(({ view, levelCut, selectedKey, entries, source, statuses, timeline, colorMode, reset }) => ({ view, levelCut, selectedKey, entries, source, statuses, timeline, colorMode, reset })),
   );
   const selected = entries.find((entry) => entry.key === selectedKey);
   const onReady = useCallback(() => setReady(true), []);
@@ -36,6 +36,7 @@ export function Viewer({ plan, glbUrl, className }: ViewerProps) {
       data-selected-id={selected?.id ?? ""}
       data-visible-count={visibleEntries(entries, { levelCut, statuses, timeline }).length}
       data-week={timeline?.week ?? ""}
+      data-color-mode={colorMode}
       data-ready={ready}
       data-source={source ?? ""}
       className={`relative overflow-hidden bg-viewport ${className ?? ""}`}

@@ -1,10 +1,34 @@
-import { BoxGeometry, BufferGeometry, ExtrudeGeometry, Matrix4, Mesh, Quaternion, Shape, Vector2, Vector3, type Material } from "three";
+import {
+  BoxGeometry,
+  BufferGeometry,
+  EdgesGeometry,
+  ExtrudeGeometry,
+  LineBasicMaterial,
+  LineSegments,
+  Matrix4,
+  Mesh,
+  Quaternion,
+  Shape,
+  Vector2,
+  Vector3,
+  type Material,
+} from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import type { SceneBox, ScenePrism, SceneElement } from "./types";
 
 // One unit cube shared by every single-box element (columns, footings, plain walls): only the transform changes
 export const UNIT_BOX = new BoxGeometry(1, 1, 1);
 const Y_AXIS = new Vector3(0, 1, 0);
+const UNIT_EDGES = new EdgesGeometry(UNIT_BOX);
+
+// Thin dark outlines give the model a crisp maquette look; the viewer sets their color from the viewport token
+export const EDGE_MATERIAL = new LineBasicMaterial({ transparent: true, opacity: 0.35 });
+
+function addEdges(mesh: Mesh): void {
+  const lines = new LineSegments(mesh.geometry === UNIT_BOX ? UNIT_EDGES : new EdgesGeometry(mesh.geometry, 20), EDGE_MATERIAL);
+  lines.raycast = () => undefined;
+  mesh.add(lines);
+}
 
 export function boxMatrix(box: SceneBox): Matrix4 {
   const rotation = new Quaternion().setFromAxisAngle(Y_AXIS, box.rotationY);
@@ -36,9 +60,15 @@ export function buildElementMesh(element: SceneElement, material: Material): Mes
   if (shape.kind === "boxes" && shape.boxes.length === 1) boxMatrix(shape.boxes[0]).decompose(mesh.position, mesh.quaternion, mesh.scale);
   mesh.name = element.key;
   mesh.userData = { elementKey: element.key };
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  addEdges(mesh);
   return mesh;
 }
 
 export function disposeElementMesh(mesh: Mesh): void {
   if (mesh.geometry !== UNIT_BOX) mesh.geometry.dispose();
+  mesh.children.forEach((child) => {
+    if (child instanceof LineSegments && child.geometry !== UNIT_EDGES) child.geometry.dispose();
+  });
 }
