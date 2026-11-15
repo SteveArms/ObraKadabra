@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="flex min-h-dvh flex-col font-sans text-body-md">
         <a
           href="#main"
-          className="sr-only rounded bg-surface-container-lowest px-space-sm py-space-xs focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-60"
+          className="sr-only rounded-md bg-surface-container-lowest px-space-sm py-space-xs focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-60"
         >
           Skip to content
         </a>

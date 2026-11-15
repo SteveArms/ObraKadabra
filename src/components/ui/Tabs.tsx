@@ -40,7 +40,7 @@ export function Tabs({ items, label, defaultTabId }: TabsProps) {
 
   return (
     <div className="flex flex-col gap-space-md">
-      <div role="tablist" aria-label={label} className="flex gap-1 rounded-md bg-surface-container-low p-1">
+      <div role="tablist" aria-label={label} className="flex gap-1 rounded-lg bg-surface-container-low p-1">
         {items.map((item, index) => {
           const selected = item.id === activeId;
           return (
@@ -58,7 +58,7 @@ export function Tabs({ items, label, defaultTabId }: TabsProps) {
               onClick={() => setActiveId(item.id)}
               onKeyDown={(event) => handleKeyDown(event, index)}
               className={cn(
-                "min-h-9 rounded px-space-sm text-body-md transition-[background-color] duration-150",
+                "min-h-9 rounded-md px-space-sm text-body-md transition-[background-color] duration-150",
                 selected ? "bg-surface-container-lowest font-semibold text-on-surface" : "text-on-surface-variant hover:text-on-surface",
               )}
             >

@@ -34,7 +34,7 @@ function ActiveNav({ Nav }: { Nav: typeof DesktopNav }) {
 function DesktopNav({ activeHref }: { activeHref?: string }) {
   return (
     <nav aria-label="Main" data-testid="desktop-nav" className="hidden lg:block">
-      <ul className="flex items-center gap-1 rounded-md bg-surface-container-low p-1">
+      <ul className="flex items-center gap-1 rounded-lg bg-surface-container-low p-1">
         {NAV_ITEMS.map((item) => {
           const active = item.href === activeHref;
           return (
@@ -44,7 +44,7 @@ function DesktopNav({ activeHref }: { activeHref?: string }) {
                 data-testid={`nav-link-${item.id}`}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex min-h-9 items-center rounded px-space-sm text-body-md whitespace-nowrap transition-[background-color,color] duration-150",
+                  "flex min-h-9 items-center rounded-md px-space-sm text-body-md whitespace-nowrap transition-[background-color,color] duration-150",
                   active ? "bg-primary-container font-semibold text-on-primary" : "text-on-surface-variant hover:bg-surface-container hover:text-on-surface",
                 )}
               >
