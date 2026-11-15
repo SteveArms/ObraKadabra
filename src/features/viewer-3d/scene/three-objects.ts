@@ -3,10 +3,10 @@ import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js
 import type { SceneBox, ScenePrism, SceneElement } from "./types";
 
 // One unit cube shared by every single-box element (columns, footings, plain walls): only the transform changes
-const UNIT_BOX = new BoxGeometry(1, 1, 1);
+export const UNIT_BOX = new BoxGeometry(1, 1, 1);
 const Y_AXIS = new Vector3(0, 1, 0);
 
-function boxMatrix(box: SceneBox): Matrix4 {
+export function boxMatrix(box: SceneBox): Matrix4 {
   const rotation = new Quaternion().setFromAxisAngle(Y_AXIS, box.rotationY);
   return new Matrix4().compose(new Vector3(...box.center), rotation, new Vector3(...box.size));
 }

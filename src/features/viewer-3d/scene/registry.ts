@@ -26,7 +26,9 @@ export function registerElements(root: Object3D, plan: FloorPlan): ElementEntry[
   return [...entries.values()];
 }
 
-export function findElementKey(object: Object3D | null): string | undefined {
+export function findElementKey(object: Object3D | null, instanceId?: number): string | undefined {
+  const instanceKeys = object?.userData.instanceKeys as string[] | undefined;
+  if (instanceKeys && instanceId !== undefined) return instanceKeys[instanceId];
   for (let current = object; current; current = current.parent) {
     if (typeof current.userData.elementKey === "string") return current.userData.elementKey;
   }

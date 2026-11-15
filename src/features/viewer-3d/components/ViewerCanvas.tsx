@@ -26,7 +26,7 @@ function Model({ plan, glbUrl }: Omit<ViewerCanvasProps, "onReady">) {
 
   const handleClick = (event: ThreeEvent<MouseEvent>) => {
     event.stopPropagation();
-    select(findElementKey(event.object));
+    select(findElementKey(event.object, event.instanceId));
   };
   const handleMove = (event: ThreeEvent<PointerEvent>) => setHover({ x: event.point.x, y: event.point.y, z: event.point.z });
 

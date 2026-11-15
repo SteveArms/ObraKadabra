@@ -17,6 +17,7 @@ export function ElementSync({ materials }: { materials: StatusMaterials }) {
   useEffect(() => {
     applyAppearance(entries, {
       levelCut,
+      selectedKey,
       materialFor: (entry) => (entry.key === selectedKey ? materials.selected : materials.byStatus[statusOf(statuses, entry.key)]),
     });
     invalidate();
