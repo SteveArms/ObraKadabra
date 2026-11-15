@@ -13,7 +13,7 @@ export function ModelFromPlan({ plan, materials }: ModelFromPlanProps) {
   const model = useMemo(() => buildPlanObjects(buildPlanScene(plan), materials.byStatus.not_started), [plan, materials]);
 
   useEffect(() => {
-    setEntries(model.entries);
+    setEntries(model.entries, "plan");
     return () => {
       setEntries([]);
       model.dispose();

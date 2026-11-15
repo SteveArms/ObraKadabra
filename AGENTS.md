@@ -198,6 +198,7 @@ const total = a + b;
 - Colores de estado (únicos, en `src/lib/constants.ts`): no iniciado gris, en curso azul, terminado verde, atrasado rojo.
 - La respuesta de la IA **siempre** se valida con Zod antes de usarse. Si falla la validación, se reintenta una vez y luego se muestra el error en la UI.
 - Los meshes de los GLB demo se nombran `<tipo>_<id>` (ej. `column_C-2`, `wall_M-14`, `slab_L1`, `footing_Z-1`, `roof_T1`), y cada `<id>` existe en el `FloorPlan` del demo. Así el cronograma colorea el GLB igual que el modelo procedural.
+- Ejes de los GLB demo: metros, Y hacia arriba, origen en el (0, 0) del plano; el `x` del plano va al X del mundo y el `y` del plano al Z (en Blender: exportar glTF con "+Y Up"). El visor compara la huella del GLB con la del plano y, si no coincide (otra escala, eje u origen), muestra el modelo procedural con un aviso.
 - Los proyectos se leen y escriben a través de una sola interfaz, `ProjectRepository` (`src/lib/projects/`). Primero se implementa con localStorage y luego con Supabase, sin cambiar a quienes la usan.
 
 ## 8.1 Diseño (Stitch)

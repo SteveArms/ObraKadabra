@@ -9,6 +9,7 @@ import { levelCuts } from "../scene";
 import { useViewerStore, visibleEntries } from "../store";
 import { CoordinatesBadge } from "./CoordinatesBadge";
 import { ElementPopover } from "./ElementPopover";
+import { SourceNotice } from "./SourceNotice";
 import { StatusLegend } from "./StatusLegend";
 import { ViewerToolbar } from "./ViewerToolbar";
 
@@ -22,8 +23,8 @@ export function Viewer({ plan, glbUrl, className }: ViewerProps) {
   const [ready, setReady] = useState(false);
   const { isFullscreen, toggle } = useFullscreen(containerRef);
   const cuts = useMemo(() => levelCuts(plan), [plan]);
-  const { view, levelCut, selectedKey, entries, reset } = useViewerStore(
-    useShallow(({ view, levelCut, selectedKey, entries, reset }) => ({ view, levelCut, selectedKey, entries, reset })),
+  const { view, levelCut, selectedKey, entries, source, reset } = useViewerStore(
+    useShallow(({ view, levelCut, selectedKey, entries, source, reset }) => ({ view, levelCut, selectedKey, entries, source, reset })),
   );
   const selected = entries.find((entry) => entry.key === selectedKey);
   const onReady = useCallback(() => setReady(true), []);
@@ -39,13 +40,14 @@ export function Viewer({ plan, glbUrl, className }: ViewerProps) {
       data-selected-id={selected?.id ?? ""}
       data-visible-count={visibleEntries(entries, levelCut).length}
       data-ready={ready}
-      data-source={glbUrl ? "glb" : "plan"}
+      data-source={source ?? ""}
       className={`relative overflow-hidden bg-viewport ${className ?? ""}`}
     >
       <ViewerCanvas plan={plan} glbUrl={glbUrl} onReady={onReady} />
       <div className="pointer-events-none absolute inset-x-space-sm top-space-sm z-10 flex flex-col gap-space-xs">
         <ViewerToolbar cuts={cuts} isFullscreen={isFullscreen} onToggleFullscreen={toggle} />
         <StatusLegend />
+        <SourceNotice />
       </div>
       <div className="pointer-events-none absolute inset-x-space-sm bottom-space-sm z-10 flex flex-col items-start gap-space-xs">
         <div className="pointer-events-auto max-w-full">

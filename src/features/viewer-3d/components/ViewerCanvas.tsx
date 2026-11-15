@@ -10,6 +10,7 @@ import { useStatusMaterials } from "../hooks/useStatusMaterials";
 import { findElementKey } from "../scene";
 import { useViewerStore, type NavMode } from "../store";
 import { CameraRig } from "./CameraRig";
+import { GlbBoundary } from "./GlbBoundary";
 import { ElementSync } from "./ElementSync";
 import { ModelFromGlb } from "./ModelFromGlb";
 import { ModelFromPlan } from "./ModelFromPlan";
@@ -23,6 +24,9 @@ function Model({ plan, glbUrl }: Omit<ViewerCanvasProps, "onReady">) {
   const materials = useStatusMaterials();
   const select = useViewerStore((state) => state.select);
   const setHover = useViewerStore((state) => state.setHover);
+  const glbIssue = useViewerStore((state) => state.glbIssue);
+  const rejectGlb = useViewerStore((state) => state.rejectGlb);
+  const useGlb = Boolean(glbUrl) && !glbIssue;
 
   const handleClick = (event: ThreeEvent<MouseEvent>) => {
     event.stopPropagation();
@@ -32,7 +36,15 @@ function Model({ plan, glbUrl }: Omit<ViewerCanvasProps, "onReady">) {
 
   return (
     <group onClick={handleClick} onPointerMove={handleMove} onPointerOut={() => setHover(undefined)}>
-      {glbUrl ? <ModelFromGlb url={glbUrl} plan={plan} /> : <ModelFromPlan plan={plan} materials={materials} />}
+      {useGlb && glbUrl ? (
+        <GlbBoundary onError={() => rejectGlb("load_failed")}>
+          <Suspense fallback={null}>
+            <ModelFromGlb url={glbUrl} plan={plan} />
+          </Suspense>
+        </GlbBoundary>
+      ) : (
+        <ModelFromPlan plan={plan} materials={materials} />
+      )}
       <ElementSync materials={materials} />
     </group>
   );
