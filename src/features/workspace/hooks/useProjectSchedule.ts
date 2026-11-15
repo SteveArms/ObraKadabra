@@ -1,0 +1,28 @@
+"use client";
+
+import { useEffect, useMemo } from "react";
+import { todayWeek, useTimeline } from "@/features/schedule";
+import { useViewerTimeline, type ElementSpan } from "@/features/viewer-3d";
+import { scheduleFor, statusAt } from "@/lib/schedule";
+import type { Project } from "@/schemas/project";
+
+// Builds the project's schedule once and keeps the timeline, the 3D viewer and the panels on the same week
+export function useProjectSchedule(project: Project) {
+  const schedule = useMemo(() => scheduleFor(project.floorPlan), [project.floorPlan]);
+  const week = useTimeline((state) => state.week);
+  const reset = useTimeline((state) => state.reset);
+
+  useEffect(() => reset(schedule.totalWeeks, todayWeek(project.startDate, schedule.totalWeeks)), [schedule, project.startDate, reset]);
+
+  const spans = useMemo(() => {
+    const entries = schedule.tasks.flatMap((task): [string, ElementSpan][] =>
+      task.meshKey ? [[task.meshKey, { stage: task.stage, level: task.level, startWeek: task.startWeek, endWeek: task.endWeek }]] : [],
+    );
+    return Object.fromEntries(entries);
+  }, [schedule]);
+  const statuses = useMemo(() => statusAt(schedule, week), [schedule, week]);
+  const timeline = useMemo(() => ({ week, spans }), [week, spans]);
+  useViewerTimeline(timeline, statuses);
+
+  return { schedule, week, statuses };
+}
