@@ -1,4 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
+import { DEMO_PROJECTS } from "../src/lib/projects";
+import { scheduleFor } from "../src/lib/schedule";
 
 async function openWorkspace(page: Page, id: string) {
   await page.goto(`/proyecto/${id}`);
@@ -57,11 +59,15 @@ test("the panel tabs sit beside the viewer on desktop and below it on mobile", a
   if (isMobile) expect(tabs.y).toBeGreaterThanOrEqual(viewer.y + viewer.height);
   else expect(tabs.x).toBeGreaterThanOrEqual(viewer.x + viewer.width);
   expect(viewer.y).toBeLessThan(tabs.y + (isMobile ? 0 : 1));
-  await expect(page.getByTestId("timeline-slot")).toBeAttached();
+  await expect(page.getByTestId("timeline")).toBeAttached();
 });
 
 test("the viewer matches its reference image", async ({ page }) => {
   const viewer = await openWorkspace(page, "casa-1-piso-90");
+  // The workspace opens on today's week, so pin the last week to keep the reference image stable over time
+  await page.getByTestId("timeline-slider").focus();
+  await page.keyboard.press("End");
+  await expect(viewer).toHaveAttribute("data-week", String(scheduleFor(DEMO_PROJECTS[0].floorPlan).totalWeeks));
   const overlays = [page.getByRole("toolbar"), page.getByRole("list", { name: "Status legend" }), page.getByTestId("viewer-coordinates")];
   await expect(viewer).toHaveScreenshot("viewer-casa-1-piso-90.png", { mask: overlays, maxDiffPixelRatio: 0.03 });
 });
