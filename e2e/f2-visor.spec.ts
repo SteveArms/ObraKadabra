@@ -62,5 +62,6 @@ test("the panel tabs sit beside the viewer on desktop and below it on mobile", a
 
 test("the viewer matches its reference image", async ({ page }) => {
   const viewer = await openWorkspace(page, "casa-1-piso-90");
-  await expect(viewer).toHaveScreenshot("viewer-casa-1-piso-90.png", { maxDiffPixelRatio: 0.08 });
+  const overlays = [page.getByRole("toolbar"), page.getByRole("list", { name: "Status legend" }), page.getByTestId("viewer-coordinates")];
+  await expect(viewer).toHaveScreenshot("viewer-casa-1-piso-90.png", { mask: overlays, maxDiffPixelRatio: 0.03 });
 });

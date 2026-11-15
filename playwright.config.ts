@@ -5,8 +5,8 @@ const isCI = Boolean(process.env.CI);
 
 export default defineConfig({
   testDir: "./e2e",
-  // One baseline per viewport for every OS; the 3D screenshot uses a tolerant threshold instead of per-platform files
-  snapshotPathTemplate: "{testDir}/__screenshots__/{testFilePath}/{arg}-{projectName}{ext}",
+  // WebGL and fonts render differently per OS, so each platform keeps its own baseline (CI compares the linux one)
+  snapshotPathTemplate: "{testDir}/__screenshots__/{testFilePath}/{arg}-{projectName}-{platform}{ext}",
   fullyParallel: true,
   forbidOnly: isCI,
   retries: isCI ? 1 : 0,
