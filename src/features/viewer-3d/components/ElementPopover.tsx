@@ -1,5 +1,6 @@
 "use client";
 
+import { GLASS_SURFACE } from "@/components/ui/surfaces";
 import { useCallback, useMemo } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { Icon } from "@/components/ui/Icon";
@@ -11,7 +12,6 @@ import { useEscapeKey } from "../hooks/useEscapeKey";
 import { ELEMENT_TYPE_LABELS, levelLabel } from "../scene";
 import { statusOf, useViewerStore } from "../store";
 import { ElementTakeoffList } from "./ElementTakeoffList";
-import { GLASS } from "./ViewerToolbar";
 
 export function ElementPopover({ plan }: { plan: FloorPlan }) {
   const entry = useViewerStore((state) => state.entries.find((item) => item.key === state.selectedKey));
@@ -27,7 +27,7 @@ export function ElementPopover({ plan }: { plan: FloorPlan }) {
   const title = `${typeLabel} ${entry.id}`;
 
   return (
-    <aside aria-label={title} data-testid="element-popover" className={cn(GLASS, "flex max-h-full w-72 max-w-full flex-col gap-space-sm overflow-y-auto overscroll-contain p-space-md shadow-overlay")}>
+    <aside aria-label={title} data-testid="element-popover" className={cn(GLASS_SURFACE, "flex max-h-full w-72 max-w-full flex-col gap-space-sm overflow-y-auto overscroll-contain p-space-md shadow-overlay")}>
       <div className="flex items-start justify-between gap-space-xs">
         <div>
           <h3 className="font-display text-headline-sm">{title}</h3>

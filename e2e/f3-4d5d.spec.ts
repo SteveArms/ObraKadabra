@@ -47,7 +47,7 @@ test("Simulate 4D advances the weeks and Pause stops them", async ({ page }) => 
   const { viewer } = await openAtWeek(page, 1);
   await page.getByTestId("timeline-play").click();
   await expect(viewer).not.toHaveAttribute("data-week", "1", { timeout: 5_000 });
-  await page.getByRole("button", { name: "Pause" }).click();
+  await page.getByTestId("timeline-play").click();
   const paused = await viewer.getAttribute("data-week");
   await page.waitForTimeout(1_500);
   await expect(viewer).toHaveAttribute("data-week", paused!);
@@ -85,13 +85,44 @@ test("tapping a stage segment jumps the timeline into it", async ({ page, isMobi
   expect(week).toBeLessThanOrEqual(Number(await segment.getAttribute("data-end-week")));
 });
 
-test("the viewer shows building materials and can switch to status colors", async ({ page }) => {
+test("the viewer shows building materials and can switch to status colors", async ({ page, isMobile }) => {
   const { viewer } = await openAtWeek(page, 3);
   await expect(viewer).toHaveAttribute("data-color-mode", "material");
+  if (isMobile) await page.getByTestId("legend-toggle").click();
   await expect(page.getByRole("list", { name: "Material legend" })).toContainText("Brick");
   const toggle = page.getByTestId("color-mode-toggle");
   await toggle.click();
   await expect(toggle).toHaveAttribute("aria-pressed", "true");
   await expect(viewer).toHaveAttribute("data-color-mode", "status");
   await expect(page.getByRole("list", { name: "Status legend" })).toContainText("Done");
+});
+
+test("the house and the simulation controls stay on screen together", async ({ page, isMobile }) => {
+  await openAtWeek(page, 1);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  const viewer = page.getByTestId("viewer");
+  const player = page.getByTestId("mini-player");
+  if (!isMobile) {
+    await expect(viewer).toBeInViewport({ ratio: 1 });
+    await expect(page.getByTestId("timeline-slider")).toBeInViewport({ ratio: 1 });
+    return;
+  }
+  await page.getByRole("tablist", { name: "Project data" }).scrollIntoViewIfNeeded();
+  await expect(page.getByRole("tablist", { name: "Project data" })).toBeInViewport();
+  await expect(viewer).toBeInViewport({ ratio: 0.9 });
+  await expect(player).toBeInViewport({ ratio: 1 });
+});
+
+test("the player inside the viewer plays, pauses and steps the weeks", async ({ page }) => {
+  const { viewer } = await openAtWeek(page, 1);
+  const player = page.getByTestId("mini-player");
+  await player.getByRole("button", { name: "Next week" }).click();
+  await expect(viewer).toHaveAttribute("data-week", "2");
+  await expect(player).toContainText("W2");
+  await player.getByRole("button", { name: "Play simulation" }).click();
+  await expect(viewer).not.toHaveAttribute("data-week", "2", { timeout: 5_000 });
+  await player.getByRole("button", { name: "Pause simulation" }).click();
+  const paused = await viewer.getAttribute("data-week");
+  await page.waitForTimeout(1_500);
+  await expect(viewer).toHaveAttribute("data-week", paused!);
 });

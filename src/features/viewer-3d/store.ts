@@ -8,6 +8,7 @@ export type HoverPoint = { x: number; y: number; z: number };
 export type ModelSource = "glb" | "plan";
 export type GlbIssue = "load_failed" | "unlabeled" | "misaligned";
 export type ElementSpan = { stage: Stage; level: number; startWeek: number; endWeek: number };
+export type OverlayInsets = { top: number; bottom: number };
 export type ViewerTimeline = { week: number; spans: Record<string, ElementSpan>; plastered: Record<string, boolean> };
 
 type ViewerState = {
@@ -22,6 +23,7 @@ type ViewerState = {
   source?: ModelSource;
   glbIssue?: GlbIssue;
   timeline?: ViewerTimeline;
+  insets: OverlayInsets;
   reset: (topLevel: number) => void;
   setView: (view: ViewMode) => void;
   setNavMode: (navMode: NavMode) => void;
@@ -32,6 +34,7 @@ type ViewerState = {
   setEntries: (entries: ElementEntry[], source?: ModelSource) => void;
   rejectGlb: (issue: GlbIssue) => void;
   setTimeline: (timeline: ViewerTimeline | undefined, statuses: Record<string, ElementStatus>) => void;
+  setInsets: (insets: OverlayInsets) => void;
 };
 
 export const useViewerStore = create<ViewerState>((set) => ({
@@ -41,6 +44,7 @@ export const useViewerStore = create<ViewerState>((set) => ({
   levelCut: 1,
   entries: [],
   statuses: {},
+  insets: { top: 0, bottom: 0 },
   reset: (topLevel) =>
     set({ view: "iso", navMode: "orbit", levelCut: topLevel, selectedKey: undefined, hover: undefined, entries: [], statuses: {}, source: undefined, glbIssue: undefined, timeline: undefined }),
   setView: (view) => set({ view }),
@@ -52,6 +56,7 @@ export const useViewerStore = create<ViewerState>((set) => ({
   setEntries: (entries, source) => set({ entries, source }),
   rejectGlb: (glbIssue) => set({ glbIssue, entries: [], source: undefined }),
   setTimeline: (timeline, statuses) => set({ timeline, statuses }),
+  setInsets: (insets) => set({ insets }),
 }));
 
 export function statusOf(statuses: Record<string, ElementStatus>, key: string): ElementStatus {

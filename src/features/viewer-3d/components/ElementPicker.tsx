@@ -16,7 +16,7 @@ export function ElementPicker() {
       <select
         value={selectedKey ?? ""}
         onChange={(event) => select(event.target.value || undefined)}
-        className="min-h-8 max-w-36 rounded-md bg-surface-container-high px-2 text-base text-on-surface sm:text-body-sm"
+        className="min-h-8 w-28 sm:w-auto sm:max-w-36 rounded-md bg-surface-container-high px-2 text-base text-on-surface sm:text-body-sm"
       >
         <option value="">Element…</option>
         {sorted.map((entry) => (

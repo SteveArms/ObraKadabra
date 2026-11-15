@@ -68,6 +68,12 @@ test("the viewer matches its reference image", async ({ page }) => {
   await page.getByTestId("timeline-slider").focus();
   await page.keyboard.press("End");
   await expect(viewer).toHaveAttribute("data-week", String(scheduleFor(DEMO_PROJECTS[0].floorPlan).totalWeeks));
-  const overlays = [page.getByRole("toolbar"), page.getByRole("list", { name: "Status legend" }), page.getByTestId("viewer-coordinates")];
+  const overlays = [
+    page.getByRole("toolbar"),
+    page.getByRole("list", { name: "Material legend" }),
+    page.getByTestId("legend-toggle"),
+    page.getByTestId("viewer-coordinates"),
+    page.getByTestId("mini-player"),
+  ];
   await expect(viewer).toHaveScreenshot("viewer-casa-1-piso-90.png", { mask: overlays, maxDiffPixelRatio: 0.03 });
 });

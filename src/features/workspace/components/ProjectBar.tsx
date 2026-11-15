@@ -17,7 +17,7 @@ function overallStatus(schedule: Schedule, week: number): ElementStatus {
 export function ProjectBar({ project, schedule, week }: { project: Project; schedule: Schedule; week: number }) {
   const plan = project.floorPlan;
   return (
-    <div className="flex flex-col gap-space-sm px-gutter py-space-md md:flex-row md:items-center md:justify-between lg:px-gutter-desktop">
+    <div className="flex items-start justify-between gap-space-sm px-gutter py-space-sm md:items-center lg:px-gutter-desktop lg:py-space-md">
       <div className="flex min-w-0 flex-col gap-1">
         <h1 className="font-display text-headline-md [overflow-wrap:anywhere]">{project.name}</h1>
         <div className="flex flex-wrap items-center gap-space-xs text-body-md text-on-surface-variant">
@@ -27,9 +27,9 @@ export function ProjectBar({ project, schedule, week }: { project: Project; sche
           <Badge status={overallStatus(schedule, week)} />
         </div>
       </div>
-      <Link href={`/proyecto/${project.id}/editor`} className={buttonClasses("ghost", "self-start md:self-auto")}>
+      <Link href={`/proyecto/${project.id}/editor`} className={buttonClasses("ghost", "shrink-0 max-sm:px-2")}>
         <Icon name="architecture" />
-        Edit plan
+        <span className="max-sm:sr-only">Edit plan</span>
       </Link>
     </div>
   );

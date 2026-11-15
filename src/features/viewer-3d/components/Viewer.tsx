@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { FloorPlan } from "@/schemas/floor-plan";
 import { useShallow } from "zustand/react/shallow";
 import { useFullscreen } from "../hooks/useFullscreen";
@@ -11,10 +11,10 @@ import { ViewerOverlays } from "./ViewerOverlays";
 
 const ViewerCanvas = dynamic(() => import("./ViewerCanvas"), { ssr: false });
 
-type ViewerProps = { plan: FloorPlan; glbUrl?: string; className?: string };
+type ViewerProps = { plan: FloorPlan; glbUrl?: string; className?: string; bottomSlot?: ReactNode };
 
 // The container exposes the viewer state as data attributes, which is what e2e tests read instead of WebGL pixels
-export function Viewer({ plan, glbUrl, className }: ViewerProps) {
+export function Viewer({ plan, glbUrl, className, bottomSlot }: ViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
   const { isFullscreen, toggle } = useFullscreen(containerRef);
@@ -42,7 +42,7 @@ export function Viewer({ plan, glbUrl, className }: ViewerProps) {
       className={`relative overflow-hidden bg-viewport ${className ?? ""}`}
     >
       <ViewerCanvas plan={plan} glbUrl={glbUrl} onReady={onReady} />
-      <ViewerOverlays plan={plan} cuts={cuts} isFullscreen={isFullscreen} onToggleFullscreen={toggle} />
+      <ViewerOverlays plan={plan} cuts={cuts} isFullscreen={isFullscreen} onToggleFullscreen={toggle} bottomSlot={bottomSlot} />
     </div>
   );
 }
