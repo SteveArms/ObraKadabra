@@ -10,7 +10,8 @@ import { GENERIC_ERROR, ProcessingError, readFloor } from "../api";
 import { applyStep, EMPTY_PROGRESS, type Progress } from "../progress";
 import { useUploadStore } from "../store";
 import type { Sheet, WizardDetails } from "../types";
-import { createDraftProject, parseMeters, sheetScale } from "../utils";
+import { parseMeters } from "@/lib/format";
+import { createDraftProject, sheetScale } from "../utils";
 
 // Lets the last check mark register before the editor replaces this screen
 const FINISH_PAUSE_MS = 700;
@@ -28,7 +29,8 @@ async function readAllFloors(sheets: Sheet[], signal: AbortSignal, onProgress: (
 }
 
 async function saveDraft(plans: LevelPlan[], details: WizardDetails, sheets: Sheet[]) {
-  const floorPlan = assemblePlan(plans, { name: details.name.trim(), levels: details.levels, floorHeight: parseMeters(details.floorHeight) ?? 2.6, roofType: details.roofType });
+  const calibratedMeters = sheets[0] ? (parseMeters(sheets[0].calibration.meters) ?? undefined) : undefined;
+  const floorPlan = assemblePlan(plans, { name: details.name.trim(), levels: details.levels, floorHeight: parseMeters(details.floorHeight) ?? 2.6, roofType: details.roofType, calibratedMeters });
   const project = createDraftProject(crypto.randomUUID(), new Date(), floorPlan);
   await createLocalProjectRepository(window.localStorage).save(project);
   // The editor can still work without the background photo, so a storage failure here is not fatal

@@ -32,3 +32,8 @@ export function deriveStructure(plan: Shell): Pick<FloorPlan, "footings" | "slab
   }
   return { footings: footingsFor(plan), slabs, roofs };
 }
+
+// After the walls or columns change, footings, slabs and the roof are recomputed from them
+export function withDerivedStructure(plan: FloorPlan): FloorPlan {
+  return { ...plan, ...deriveStructure(plan) };
+}

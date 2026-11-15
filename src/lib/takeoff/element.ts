@@ -1,10 +1,12 @@
 import type { FloorPlan } from "@/schemas/floor-plan";
-import type { TakeoffItem, Unit } from "@/schemas/takeoff";
+import type { MaterialQuantity, TakeoffItem, Unit } from "@/schemas/takeoff";
 import { computeCost } from "./cost";
+import { computeMaterials } from "./materials";
 import { computeTakeoffLines } from "./summary";
 
 export type ElementTakeoff = {
   quantities: { item: TakeoffItem; unit: Unit; quantity: number }[];
+  materials: MaterialQuantity[];
   cost: number;
 };
 
@@ -18,6 +20,7 @@ export function elementTakeoff(plan: FloorPlan, elementId: string): ElementTakeo
   }
   return {
     quantities: [...totals].map(([item, value]) => ({ item, ...value })),
+    materials: computeMaterials(lines),
     cost: computeCost(lines).total,
   };
 }

@@ -26,6 +26,25 @@ export function polygonArea(points: Point[]): number {
   return Math.abs(doubled) / 2;
 }
 
+// Area-weighted centroid, so room labels sit inside L-shaped rooms too; degenerate polygons fall back to the vertex average
+export function polygonCentroid(points: Point[]): Point {
+  let doubled = 0;
+  let cx = 0;
+  let cy = 0;
+  points.forEach((point, index) => {
+    const next = points[(index + 1) % points.length];
+    const cross = point.x * next.y - next.x * point.y;
+    doubled += cross;
+    cx += (point.x + next.x) * cross;
+    cy += (point.y + next.y) * cross;
+  });
+  if (doubled === 0) {
+    const count = Math.max(points.length, 1);
+    return { x: points.reduce((sum, p) => sum + p.x, 0) / count, y: points.reduce((sum, p) => sum + p.y, 0) / count };
+  }
+  return { x: cx / (3 * doubled), y: cy / (3 * doubled) };
+}
+
 export function wallArea(wall: Wall, height: number, openings: Opening[], scale = 1): number {
   const gross = wallLength(wall) * scale * height;
   const voids = openings

@@ -19,7 +19,12 @@ describe("elementTakeoff", () => {
     expect(wall.cost).toBeCloseTo(computeCost(computeTakeoffLines(plan).filter((line) => line.elementId === "M-1")).total);
   });
 
+  it("lists the bricks, cement and sand a wall consumes", () => {
+    const materials = elementTakeoff(plan, "M-1").materials.map((entry) => entry.material);
+    expect(materials).toEqual(expect.arrayContaining(["brick", "cement", "sand"]));
+  });
+
   it("returns nothing for unknown ids", () => {
-    expect(elementTakeoff(plan, "X-9")).toEqual({ quantities: [], cost: 0 });
+    expect(elementTakeoff(plan, "X-9")).toEqual({ quantities: [], materials: [], cost: 0 });
   });
 });
