@@ -1,3 +1,5 @@
+import type { ProgressContext } from "@/schemas/progress";
+
 const EXTRACTION_PROMPT = [
   "You read architectural floor plans of Peruvian confined-masonry homes.",
   "Return every wall, door, window, column and room drawn in the image as JSON that follows the schema.",
@@ -12,7 +14,27 @@ const EXTRACTION_PROMPT = [
   "Do not invent elements that are not drawn.",
 ].join("\n");
 
+function withFeedback(prompt: string, feedback?: string): string {
+  if (!feedback) return prompt;
+  return `${prompt}\n\nYour previous answer did not match the schema:\n${feedback}\nReturn the corrected JSON only.`;
+}
+
 export function extractionPrompt(feedback?: string): string {
-  if (!feedback) return EXTRACTION_PROMPT;
-  return `${EXTRACTION_PROMPT}\n\nYour previous answer did not match the schema:\n${feedback}\nReturn the corrected JSON only.`;
+  return withFeedback(EXTRACTION_PROMPT, feedback);
+}
+
+const PROGRESS_PROMPT = [
+  "You inspect site photos of Peruvian confined-masonry homes under construction.",
+  "Compare the photo with the elements planned for this week and report what was built, as JSON that follows the schema.",
+  'status: "done" when the element is fully built (columns poured and formwork removed, walls up to the beam), "in_progress" when it is partly built, "not_started" when its place is visible but empty.',
+  "percent: your estimate from 0 to 100 of how much of that element is built.",
+  "evidence: one short sentence on what in the photo supports the status.",
+  "confidence (0 to 1): how sure you are; use low values when the element is hidden, cropped or out of frame.",
+  "Only report elements from the list, with the same id and type. Leave out elements you cannot see.",
+].join("\n");
+
+export function progressPrompt(context: ProgressContext, feedback?: string): string {
+  const where = context.sector ? `${context.levelLabel}, ${context.sector}` : context.levelLabel;
+  const list = context.expected.map((element) => `- ${element.id} (${element.type}, stage ${element.stage})`).join("\n");
+  return withFeedback(`${PROGRESS_PROMPT}\n\nWeek ${context.week} · ${where}.\nExpected elements:\n${list}`, feedback);
 }
