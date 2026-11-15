@@ -8,7 +8,7 @@ import { cn } from "@/lib/cn";
 import { STAGE_LABELS } from "@/lib/schedule";
 import { elementTakeoff } from "@/lib/takeoff";
 import type { FloorPlan } from "@/schemas/floor-plan";
-import { useEscapeKey } from "../hooks/useEscapeKey";
+import { useEscapeKey } from "@/lib/hooks/useEscapeKey";
 import { ELEMENT_TYPE_LABELS, levelLabel } from "../scene";
 import { statusOf, useViewerStore } from "../store";
 import { ElementTakeoffList } from "./ElementTakeoffList";

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { makeWall } from "@/lib/geometry/test-helpers";
 import { FloorPlanSchema } from "@/schemas/floor-plan";
 import type { LevelPlan } from "@/schemas/plan-extraction";
-import { assemblePlan, mergeLevels, numberElements, pendingElements } from "./index";
+import { assemblePlan, mergeLevels, nextElementId, numberElements, pendingElements } from "./index";
 
 const square = [
   makeWall("a", 0, 0, 800, 0),
@@ -64,5 +64,13 @@ describe("assemblePlan", () => {
     expect(plan.footings).toHaveLength(1);
     expect(plan.slabs.map((slab) => slab.level)).toEqual([1]);
     expect(plan.roofs.map((roof) => roof.level)).toEqual([2]);
+  });
+});
+
+describe("nextElementId", () => {
+  it("continues after the highest id on the same floor", () => {
+    expect(nextElementId(["M-1", "M-6", "M-201", "C-2"], "M", 1)).toBe("M-7");
+    expect(nextElementId(["M-1", "M-201", "M-203"], "M", 2)).toBe("M-204");
+    expect(nextElementId(["C-1"], "M", 1)).toBe("M-1");
   });
 });

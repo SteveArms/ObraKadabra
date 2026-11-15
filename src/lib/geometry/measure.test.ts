@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Opening } from "@/schemas/floor-plan";
-import { area, length, polygonArea, volume, wallArea, wallLength } from "./measure";
+import { area, length, polygonArea, polygonCentroid, volume, wallArea, wallLength } from "./measure";
 import { makeWall } from "./test-helpers";
 
 describe("measure", () => {
@@ -36,5 +36,14 @@ describe("measure", () => {
     const wall = makeWall("M-1", 0, 0, 1, 0);
     const door: Opening = { id: "P-1", wallId: "M-1", kind: "door", offset: 0, width: 2, height: 2.4, sill: 0 };
     expect(wallArea(wall, 2.4, [door])).toBe(0);
+  });
+});
+
+describe("polygonCentroid", () => {
+  it("finds the middle of a rectangle and stays inside an L shape", () => {
+    expect(polygonCentroid([{ x: 0, y: 0 }, { x: 4, y: 0 }, { x: 4, y: 2 }, { x: 0, y: 2 }])).toEqual({ x: 2, y: 1 });
+    const center = polygonCentroid([{ x: 0, y: 0 }, { x: 4, y: 0 }, { x: 4, y: 1 }, { x: 1, y: 1 }, { x: 1, y: 4 }, { x: 0, y: 4 }]);
+    expect(center.x).toBeLessThan(2);
+    expect(center.y).toBeLessThan(2);
   });
 });

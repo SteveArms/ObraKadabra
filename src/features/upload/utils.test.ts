@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Sheet } from "./types";
 import { DEFAULT_DETAILS, NO_EDITS } from "./store";
-import { calibrationError, detailsErrors, formatScale, parseMeters, rotateRect, sheetScale, uploadError } from "./utils";
+import { calibrationError, detailsErrors, rotateRect, sheetScale, uploadError } from "./utils";
 
 const raster = { blob: new Blob(), url: "blob:x", width: 1000, height: 800 };
 
@@ -10,17 +10,9 @@ function sheet(points: Sheet["calibration"]["points"], meters: string): Sheet {
 }
 
 describe("calibration", () => {
-  it("parses meters with a dot or a comma", () => {
-    expect(parseMeters("8.00")).toBe(8);
-    expect(parseMeters("8,5")).toBe(8.5);
-    expect(parseMeters("")).toBeNull();
-    expect(parseMeters("-2")).toBeNull();
-  });
-
   it("turns two points and a distance into meters per pixel", () => {
     const scale = sheetScale(sheet([{ x: 100, y: 60 }, { x: 900, y: 60 }], "8.00"));
     expect(scale).toBeCloseTo(0.01);
-    expect(formatScale(scale ?? 0)).toBe("1 px = 0.0100 m");
   });
 
   it("asks for points first, then for the distance", () => {

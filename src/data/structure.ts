@@ -22,11 +22,18 @@ export const ROOF_THICKNESS = { concrete_slab: 0.2, metal_sheet: 0.05 } as const
 // Brick walls are laid as soga (0.15 m) or cabeza (0.25 m); measured thicknesses snap to the closest one
 export const WALL_THICKNESSES = [0.15, 0.25] as const;
 
+// Load-bearing walls are usually laid in cabeza and partitions in soga
+export const WALL_THICKNESS_BY_KIND = { load_bearing: 0.25, partition: 0.15 } as const;
+
 // Plans rarely show heights, so detected openings start with standard sizes the user can edit
 export const DEFAULT_OPENING = {
   door: { height: 2.1, sill: 0 },
   window: { height: 1.2, sill: 0.9 },
 } as const;
+
+// Openings and columns drawn by hand in the editor start at the usual sizes of a self-built home
+export const DEFAULT_OPENING_WIDTH = { door: 0.9, window: 1.2 } as const;
+export const DEFAULT_COLUMN = { w: 0.25, d: 0.25 } as const;
 
 // Minimum floor-to-floor height accepted for a dwelling (RNE A.010)
 export const MIN_FLOOR_HEIGHT = 2.4;

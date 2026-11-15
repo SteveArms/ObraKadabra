@@ -18,6 +18,8 @@ export const FloorPlanMetaSchema = z.object({
   levels: level,
   floorHeight: meters,
   roofType: RoofTypeSchema,
+  // Real distance the user marked when calibrating, kept to show how the scale was obtained
+  calibratedMeters: meters.optional(),
 });
 
 export const WallKindSchema = z.enum(["load_bearing", "partition"]);

@@ -1,6 +1,6 @@
 import { wallLength } from "@/lib/geometry";
 import type { FloorPlan, Opening, Wall } from "@/schemas/floor-plan";
-import { levelBase, levelClearHeight } from "./elevations";
+import { levelBase, levelClearHeight } from "@/lib/plan/elevations";
 import type { SceneBox } from "./types";
 
 type Span = { from: number; to: number; bottom: number; top: number };

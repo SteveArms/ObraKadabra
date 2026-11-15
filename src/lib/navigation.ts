@@ -30,9 +30,7 @@ export function getActiveHref(pathname: string, hrefs: string[]): string | undef
     .sort((a, b) => b.length - a.length)[0];
 }
 
-// Task flows own the bottom edge on phones with their action bar, so the tab bar steps aside there
-const FOCUSED_FLOWS = ["/subir"];
-
+// Task flows own the bottom edge on phones (the wizard's action bar, the editor's panel), so the tab bar steps aside there
 export function isFocusedFlow(pathname: string): boolean {
-  return FOCUSED_FLOWS.some((href) => matchesPath(pathname, href));
+  return matchesPath(pathname, "/subir") || /^\/proyecto\/[^/]+\/editor\/?$/.test(pathname);
 }

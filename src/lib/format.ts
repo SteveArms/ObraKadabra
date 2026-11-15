@@ -18,3 +18,19 @@ export function formatCount(value: number, singular: string, pluralForm: string)
 export function formatPercent(ratio: number): string {
   return percent.format(ratio);
 }
+
+const meters = new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+export function formatMeters(value: number): string {
+  return `${meters.format(value)} m`;
+}
+
+export function formatScale(scale: number): string {
+  return `1 px = ${scale.toFixed(4)} m`;
+}
+
+// Accepts "8", "8.00" and the comma decimals common in Peru ("8,00")
+export function parseMeters(text: string): number | null {
+  const value = Number(text.trim().replace(",", "."));
+  return text.trim() !== "" && Number.isFinite(value) && value > 0 ? value : null;
+}
