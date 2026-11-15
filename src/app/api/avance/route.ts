@@ -1,7 +1,7 @@
 import { analyzeProgress, errorResponse, modelForRequest, parseProgressForm, ProgressAnalysisError } from "@/lib/ai";
 
 // A vision model comparing a site photo with the plan can take well over the default limit
-export const maxDuration = 60;
+export const maxDuration = 90;
 
 export async function POST(request: Request): Promise<Response> {
   const form = await request.formData().catch(() => null);

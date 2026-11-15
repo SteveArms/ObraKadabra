@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { AiRequestError, type VisionModel } from "./model";
+import { AiRequestError, MODEL_TIMEOUT_MS, type VisionModel } from "./model";
 
 const OpenAiResponseSchema = z.object({
   choices: z.array(z.object({ message: z.object({ content: z.string() }) })).min(1),
@@ -9,6 +9,7 @@ export function openAiModel(model: string, apiKey: string): VisionModel {
   return async ({ prompt, image, schema }) => {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
+      signal: AbortSignal.timeout(MODEL_TIMEOUT_MS),
       headers: { "content-type": "application/json", authorization: `Bearer ${apiKey}` },
       body: JSON.stringify({
         model,

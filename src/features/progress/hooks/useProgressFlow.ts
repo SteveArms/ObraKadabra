@@ -30,7 +30,8 @@ export function useProgressFlow({ projectId, week, scope, save }: FlowInput) {
     try {
       const analysis = await analyzePhoto(photo.blob, photo.name, { week, levelLabel: choice.label, sector: roomName, expected });
       const id = crypto.randomUUID();
-      await saveProgressPhoto(id, photo.blob).catch(() => undefined);
+      // The photo is only for the history thumbnail, so storing it never holds back the findings
+      void saveProgressPhoto(id, photo.blob).catch(() => undefined);
       await save(entryFor(id, analysis.findings, false));
       store().setResult(id, analysis.findings);
     } catch (error) {

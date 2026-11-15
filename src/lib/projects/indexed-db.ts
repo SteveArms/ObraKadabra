@@ -12,8 +12,13 @@ export function openPhotoDb(): Promise<IDBDatabase> {
       if (!db.objectStoreNames.contains(PLAN_IMAGES_STORE)) db.createObjectStore(PLAN_IMAGES_STORE, { keyPath: ["projectId", "level"] });
       if (!db.objectStoreNames.contains(PROGRESS_PHOTOS_STORE)) db.createObjectStore(PROGRESS_PHOTOS_STORE, { keyPath: "entryId" });
     };
-    request.onsuccess = () => resolve(request.result);
+    request.onsuccess = () => {
+      // Lets another tab upgrade the database instead of leaving its request waiting forever
+      request.result.onversionchange = () => request.result.close();
+      resolve(request.result);
+    };
     request.onerror = () => reject(request.error);
+    request.onblocked = () => reject(new Error("The photo database is open in another tab with an older version"));
   });
 }
 

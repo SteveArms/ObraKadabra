@@ -8,10 +8,10 @@ import { AnalysisResult } from "./AnalysisResult";
 
 type AnalysisPanelProps = { schedule: Schedule; expectedCount: number; saving: boolean; onConfirm: () => void; onRetry: () => void };
 
-function Placeholder({ icon, children, role }: { icon: string; children: string; role?: "status" | "alert" }) {
+function Placeholder({ icon, children, role, spinning = false }: { icon: string; children: string; role?: "status" | "alert"; spinning?: boolean }) {
   return (
     <p role={role} className="flex items-center gap-space-xs rounded-lg bg-surface-container p-space-md text-body-md text-pretty text-on-surface-variant">
-      <Icon name={icon} />
+      <Icon name={icon} className={spinning ? "motion-safe:animate-spin" : undefined} />
       {children}
     </p>
   );
@@ -26,7 +26,7 @@ export function AnalysisPanel({ schedule, expectedCount, saving, onConfirm, onRe
         AI analysis
       </h2>
       {analysis.status === "idle" ? <Placeholder icon="photo_camera">{`Add a photo and the AI will check it against the ${expectedCount} elements planned for this area.`}</Placeholder> : null}
-      {analysis.status === "loading" ? <Placeholder icon="progress_activity" role="status">Comparing the photo with the planned elements…</Placeholder> : null}
+      {analysis.status === "loading" ? <Placeholder icon="progress_activity" role="status" spinning>Comparing the photo with the planned elements. This usually takes 10 to 30 seconds…</Placeholder> : null}
       {analysis.status === "error" ? (
         <div role="alert" className="flex flex-col items-start gap-space-xs rounded-lg bg-error-container p-space-md text-body-md text-on-error-container">
           {analysis.message}
