@@ -8,7 +8,7 @@
 **ObraKadabra**: web app que convierte un plano arquitectónico 2D (foto) en un modelo 3D de la vivienda, vinculado a un cronograma de obra (4D) y un presupuesto (5D). El usuario mueve un slider de tiempo y ve la casa construirse semana a semana, con costo, materiales y avance real por fotos.
 
 - Público: familias que autoconstruyen, maestros de obra y pequeños contratistas (Perú).
-- Idioma de la UI: español (Perú). Moneda: `S/`. Unidades: metros.
+- Idioma de la UI: **inglés** (todo lo que ve el usuario: textos, labels, `aria-label`, `lang="en"`). Moneda: `S/`. Unidades: metros.
 - Hackathon IceHacks: **solo vale código escrito desde el 8 de noviembre de 2026**. No copiar código de proyectos anteriores.
 
 ### Dos orígenes de un proyecto
@@ -65,9 +65,9 @@ Antes de dar una tarea por terminada: `pnpm check` debe pasar.
 ## 4. Estructura
 
 ```
-design/stitch/                # pantallas de referencia (screen.png + code.html) y DESIGN.md
+design/stitch/                # pantallas de referencia (screen.png + code.html) y DESIGN.md — local, no se versiona
 e2e/                          # specs de Playwright + fixtures/
-docs/                         # PLAN.md y prompts/ por fase
+docs/                         # PLAN.md y prompts/ por fase — locales, no se versionan
 public/models/demos/          # GLB de los 2 demos
 src/
 ├── app/                      # rutas y API routes (solo orquestan, sin lógica de negocio)
@@ -146,22 +146,22 @@ Cada responsabilidad existe en **un solo lugar** del código.
 - Las claves de API solo existen en el servidor (`api/` y `lib/ai`). Nunca usar `NEXT_PUBLIC_` para claves.
 
 ### Nombres
-- **Código en inglés**, **texto de UI en español**.
+- **Código en inglés** y **texto de UI en inglés**.
 - Componentes en `PascalCase`, hooks `useCamelCase`, funciones `camelCase`, constantes `UPPER_SNAKE_CASE`, archivos `kebab-case.ts` (componentes `PascalCase.tsx`).
 
 Glosario de dominio (úsalo siempre igual):
 
-| Código | UI |
-|---|---|
-| `wall` | Muro |
-| `opening` (`door`, `window`) | Vano (puerta, ventana) |
-| `column` | Columna |
-| `room` | Ambiente |
-| `level` | Piso / nivel |
-| `stage` | Etapa |
-| `takeoff` | Metrado |
-| `budget` | Presupuesto |
-| `progress` | Avance |
+| Código | UI | Término en Perú (referencia) |
+|---|---|---|
+| `wall` | Wall | Muro |
+| `opening` (`door`, `window`) | Opening (door, window) | Vano (puerta, ventana) |
+| `column` | Column | Columna |
+| `room` | Room | Ambiente |
+| `level` | Floor / level | Piso / nivel |
+| `stage` | Stage | Etapa |
+| `takeoff` | Takeoff | Metrado |
+| `budget` | Budget | Presupuesto |
+| `progress` | Progress | Avance |
 
 ## 7. Comentarios
 
@@ -203,6 +203,7 @@ const total = a + b;
 ## 8.1 Diseño (Stitch)
 
 - `design/stitch/<pantalla>/screen.png` es la referencia visual y `code.html` sirve para tomar estructura y clases. **No se pega el HTML entero**: se reconstruye con componentes de `components/ui` y de las features.
+- Los textos de Stitch y de `docs/prompts/` están en español: se traducen al inglés al implementarlos, usando el glosario de §6.
 - Los tokens de color, tipografía, radios y espaciado se definen **una vez** en la configuración de Tailwind a partir de `design/stitch/obrakadabra/DESIGN.md`.
 - Iconos: Material Symbols Outlined, igual que en Stitch, a través de un único componente `<Icon name="..." />`.
 - Los textos de Stitch con afirmaciones que no podemos respaldar se reemplazan por textos honestos: "CAPECO & RNE Compliant", "Validado por CAPECO", "98.4% precisión", "YOLOv11-BIM", "NTP 399.613" y "© 2025" (se cambia a 2026).
@@ -222,5 +223,5 @@ const total = a + b;
 - [ ] Sin `any`, `console.log`, código comentado ni imports sin usar.
 - [ ] `pnpm check` pasa (incluye Playwright de esta fase y de las anteriores).
 - [ ] Trabajé en la rama de la fase, no en `main`.
-- [ ] Textos de UI en español y código en inglés.
+- [ ] Textos de UI y código en inglés.
 - [ ] La UI respeta `design/stitch/` y los tokens de `DESIGN.md`.
