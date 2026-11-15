@@ -1,0 +1,27 @@
+import type { ButtonHTMLAttributes } from "react";
+import { cn } from "@/lib/cn";
+
+export type ButtonVariant = "primary" | "milestone" | "ai" | "ghost";
+
+const VARIANT_CLASSES: Record<ButtonVariant, string> = {
+  primary: "bg-primary-container text-on-primary hover:bg-primary-hover",
+  milestone: "bg-secondary-container text-on-secondary-container hover:bg-secondary-fixed-dim",
+  ai: "bg-ai-tint text-ai-strong hover:bg-tertiary-fixed",
+  ghost: "bg-surface-container-high text-on-surface hover:bg-surface-container-highest",
+};
+
+export function buttonClasses(variant: ButtonVariant = "primary", className?: string): string {
+  return cn(
+    "inline-flex min-h-10 items-center justify-center gap-space-xs rounded-md px-space-sm text-body-md font-medium whitespace-nowrap",
+    "transition-[background-color,scale] duration-150 ease-out motion-safe:not-disabled:active:scale-[0.96]",
+    "disabled:cursor-not-allowed disabled:opacity-50",
+    VARIANT_CLASSES[variant],
+    className,
+  );
+}
+
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & { variant?: ButtonVariant };
+
+export function Button({ variant, className, type = "button", ...props }: ButtonProps) {
+  return <button type={type} className={buttonClasses(variant, className)} {...props} />;
+}

@@ -1,0 +1,65 @@
+# Dependencias
+node_modules/
+.pnpm-store/
+
+# Next.js
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# Build y deploy
+build/
+dist/
+.vercel/
+
+# Entorno (solo se sube .env.example)
+.env
+.env*.local
+.env.development
+.env.production
+.env.test
+
+# Pruebas
+coverage/
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
+e2e/.auth/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Documentos de planificación locales (no se publican)
+PLAN.md
+docs/PLAN.md
+docs/notas/
+docs/prompts/
+
+# Referencias de diseño de Stitch (solo locales)
+design/
+*.local.md
+
+# Modelos 3D pesados fuera de los demos
+*.fbx
+*.blend
+*.blend1
+/models/
+/assets-raw/
+
+# Agentes de IA (config local)
+.claude/settings.local.json
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
