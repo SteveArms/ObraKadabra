@@ -49,7 +49,7 @@ export function ScaleBadge({ plan, readOnly }: { plan: FloorPlan; readOnly: bool
     <div className="flex flex-wrap items-center gap-space-xs">
       <span data-testid="scale-badge" className={BADGE}>
         <Icon name="square_foot" size={16} className="text-tertiary" />
-        {formatScale(plan.meta.scale)}
+        {readOnly ? "Drawn in meters" : formatScale(plan.meta.scale)}
         {plan.meta.calibratedMeters ? (
           <>
             <span aria-hidden="true" className="text-outline">|</span>

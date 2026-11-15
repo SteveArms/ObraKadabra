@@ -37,7 +37,7 @@ export function CanvasOverlays({ plan, pending, view, notice, hasPhoto, readOnly
         </div>
       </div>
       <div className="pointer-events-none absolute inset-x-space-sm bottom-space-sm flex items-end justify-between gap-space-sm">
-        <CanvasHint notice={notice} missingPhoto={!hasPhoto && layers !== "ai"} readOnly={readOnly} />
+        <CanvasHint notice={notice} missingPhoto={!hasPhoto && !readOnly && layers !== "ai"} readOnly={readOnly} />
         <LivePreview readOnly={readOnly} />
       </div>
       {layers !== "original" ? <DecisionPopover plan={plan} pending={pending} view={view} /> : null}
