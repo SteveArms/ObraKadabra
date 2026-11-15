@@ -1,0 +1,34 @@
+{
+  "walls": [
+    { "id": "W1", "x1": 100, "y1": 120, "x2": 900, "y2": 120, "thickness": 25, "kind": "load_bearing", "confidence": 0.97 },
+    { "id": "W2", "x1": 900, "y1": 120, "x2": 900, "y2": 720, "thickness": 25, "kind": "load_bearing", "confidence": 0.96 },
+    { "id": "W3", "x1": 900, "y1": 720, "x2": 100, "y2": 720, "thickness": 25, "kind": "load_bearing", "confidence": 0.95 },
+    { "id": "W4", "x1": 100, "y1": 720, "x2": 100, "y2": 120, "thickness": 25, "kind": "load_bearing", "confidence": 0.97 },
+    { "id": "W5", "x1": 500, "y1": 120, "x2": 500, "y2": 720, "thickness": 22, "kind": "load_bearing", "confidence": 0.62 },
+    { "id": "W6", "x1": 500, "y1": 420, "x2": 900, "y2": 420, "thickness": 15, "kind": "partition", "confidence": 0.9 }
+  ],
+  "openings": [
+    { "id": "D1", "wallId": "W3", "kind": "door", "offset": 555, "width": 90, "confidence": 0.93 },
+    { "id": "D2", "wallId": "W5", "kind": "door", "offset": 130, "width": 90, "confidence": 0.88 },
+    { "id": "D3", "wallId": "W6", "kind": "door", "offset": 60, "width": 90, "confidence": 0.85 },
+    { "id": "V1", "wallId": "W1", "kind": "window", "offset": 150, "width": 200, "confidence": 0.9 },
+    { "id": "V2", "wallId": "W2", "kind": "window", "offset": 60, "width": 120, "confidence": 0.68 }
+  ],
+  "columns": [
+    { "id": "C1", "x": 100, "y": 120, "w": 25, "d": 25, "confidence": 0.95 },
+    { "id": "C2", "x": 500, "y": 120, "w": 25, "d": 25, "confidence": 0.92 },
+    { "id": "C3", "x": 900, "y": 120, "w": 25, "d": 25, "confidence": 0.95 },
+    { "id": "C4", "x": 900, "y": 720, "w": 25, "d": 25, "confidence": 0.94 },
+    { "id": "C5", "x": 500, "y": 720, "w": 25, "d": 25, "confidence": 0.7 },
+    { "id": "C6", "x": 100, "y": 720, "w": 25, "d": 25, "confidence": 0.95 }
+  ],
+  "rooms": [
+    { "id": "R1", "name": "Living and dining", "confidence": 0.92, "polygon": [{ "x": 100, "y": 120 }, { "x": 500, "y": 120 }, { "x": 500, "y": 720 }, { "x": 100, "y": 720 }] },
+    { "id": "R2", "name": "Bedroom", "confidence": 0.9, "polygon": [{ "x": 500, "y": 120 }, { "x": 900, "y": 120 }, { "x": 900, "y": 420 }, { "x": 500, "y": 420 }] },
+    { "id": "R3", "name": "Kitchen", "confidence": 0.88, "polygon": [{ "x": 500, "y": 420 }, { "x": 900, "y": 420 }, { "x": 900, "y": 720 }, { "x": 500, "y": 720 }] }
+  ],
+  "dimensions": [
+    { "text": "8.00 m", "meters": 8, "from": { "x": 100, "y": 60 }, "to": { "x": 900, "y": 60 } },
+    { "text": "6.00 m", "meters": 6, "from": { "x": 40, "y": 120 }, "to": { "x": 40, "y": 720 } }
+  ]
+}
