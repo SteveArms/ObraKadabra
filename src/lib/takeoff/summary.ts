@@ -2,7 +2,6 @@ import { polygonArea } from "@/lib/geometry";
 import type { FloorPlan } from "@/schemas/floor-plan";
 import type { TakeoffLine } from "@/schemas/takeoff";
 import { computeCost, type CostBreakdown } from "./cost";
-import { estimateDurationWeeks } from "./duration";
 import { foundationLines, columnLines, beamAndSlabLines, roofLines } from "./structure-lines";
 import { finishLines, wallLines } from "./finish-lines";
 
@@ -10,7 +9,6 @@ export type TakeoffSummary = {
   builtArea: number;
   levels: number;
   cost: CostBreakdown;
-  durationWeeks: number;
 };
 
 export function computeTakeoffLines(plan: FloorPlan): TakeoffLine[] {
@@ -36,6 +34,5 @@ export function summarizeTakeoff(plan: FloorPlan): TakeoffSummary {
     builtArea: builtArea(plan),
     levels: plan.meta.levels,
     cost: computeCost(lines),
-    durationWeeks: estimateDurationWeeks(lines),
   };
 }

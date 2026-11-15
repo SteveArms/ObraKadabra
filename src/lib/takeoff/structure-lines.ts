@@ -1,4 +1,4 @@
-import { REBAR_KG_PER_M3, SLAB_CONCRETE_M3_PER_M2, SLAB_REBAR_KG_PER_M2, CONFINING_BEAM, STRIP_FOOTING } from "@/data/structure";
+import { FOUNDATION_DEPTH, REBAR_KG_PER_M3, SLAB_CONCRETE_M3_PER_M2, SLAB_REBAR_KG_PER_M2, CONFINING_BEAM, STRIP_FOOTING } from "@/data/structure";
 import { polygonArea, volume, wallLength } from "@/lib/geometry";
 import type { FloorPlan } from "@/schemas/floor-plan";
 import type { TakeoffLine } from "@/schemas/takeoff";
@@ -8,6 +8,7 @@ export function foundationLines(plan: FloorPlan): TakeoffLine[] {
   const footings = plan.footings.flatMap((footing) => {
     const concrete = volume(footing.w, footing.d, footing.depth);
     return [
+      makeLine("footing", footing.id, "foundation", "excavation", volume(footing.w, footing.d, FOUNDATION_DEPTH)),
       makeLine("footing", footing.id, "foundation", "structural_concrete", concrete),
       makeLine("footing", footing.id, "foundation", "rebar", concrete * REBAR_KG_PER_M3.footing),
     ];
@@ -15,9 +16,12 @@ export function foundationLines(plan: FloorPlan): TakeoffLine[] {
   // Strip footings run under every ground-floor load-bearing wall
   const strips = plan.walls
     .filter((wall) => wall.level === 1 && wall.kind === "load_bearing")
-    .map((wall) => {
-      const run = wallLength(wall) * plan.meta.scale;
-      return makeLine("footing", wall.id, "foundation", "cyclopean_concrete", volume(STRIP_FOOTING.width, STRIP_FOOTING.depth, run));
+    .flatMap((wall) => {
+      const trench = volume(STRIP_FOOTING.width, STRIP_FOOTING.depth, wallLength(wall) * plan.meta.scale);
+      return [
+        makeLine("footing", wall.id, "foundation", "excavation", trench),
+        makeLine("footing", wall.id, "foundation", "cyclopean_concrete", trench),
+      ];
     });
   return [...footings, ...strips];
 }

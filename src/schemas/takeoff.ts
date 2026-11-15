@@ -1,9 +1,10 @@
 import { z } from "zod";
-import { StageSchema } from "./schedule";
+import { StageSchema } from "./stage";
 
 export const ElementTypeSchema = z.enum(["footing", "wall", "column", "beam", "slab", "roof", "room"]);
 
 export const TakeoffItemSchema = z.enum([
+  "excavation",
   "structural_concrete",
   "cyclopean_concrete",
   "rebar",

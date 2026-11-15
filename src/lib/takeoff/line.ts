@@ -2,6 +2,7 @@ import type { Stage } from "@/schemas/schedule";
 import type { ElementType, TakeoffItem, TakeoffLine } from "@/schemas/takeoff";
 
 const ITEM_UNITS: Record<TakeoffItem, TakeoffLine["unit"]> = {
+  excavation: "m3",
   structural_concrete: "m3",
   cyclopean_concrete: "m3",
   rebar: "kg",

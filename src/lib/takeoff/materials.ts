@@ -16,6 +16,7 @@ function withBricks(bricks: number, mortarPerM2: number): Recipe {
 
 // Materials consumed by one unit (m³, m² or kg) of each takeoff item
 const RECIPES: Record<TakeoffItem, Recipe> = {
+  excavation: {},
   structural_concrete: CONCRETE_FC210,
   cyclopean_concrete: CYCLOPEAN_CONCRETE,
   rebar: { rebar: 1 },
