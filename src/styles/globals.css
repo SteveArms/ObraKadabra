@@ -147,6 +147,13 @@
     scroll-padding-block-start: 4rem;
   }
 
+  /* The pinned mobile viewer covers the top of the page, so focus and anchors scroll below it (WCAG 2.4.11) */
+  @media (width < 64rem) {
+    html:has([data-sticky-viewer]) {
+      scroll-padding-block-start: calc(4rem + 45dvh);
+    }
+  }
+
   body {
     background-color: var(--color-surface);
     color: var(--color-on-surface);
