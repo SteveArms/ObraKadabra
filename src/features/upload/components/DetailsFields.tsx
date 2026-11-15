@@ -6,6 +6,7 @@ import type { RoofType } from "@/schemas/floor-plan";
 import { useUploadStore } from "../store";
 import type { LevelOption } from "../types";
 import { FieldError } from "./FieldError";
+import { MetersInput } from "@/components/ui/MetersInput";
 
 const LEVEL_OPTIONS: { value: LevelOption; label: string }[] = [
   { value: 1, label: "1 floor" },
@@ -72,20 +73,7 @@ export function FloorHeightField({ error }: { error?: string }) {
   return (
     <div className="flex flex-col gap-1">
       <label htmlFor="floor-height" className="text-body-md font-medium">Floor-to-floor height</label>
-      <div className={cn("flex items-center rounded-md border bg-surface-container-lowest", FOCUS_RING, border(error))}>
-        <input
-          id="floor-height"
-          name="floor-height"
-          inputMode="decimal"
-          autoComplete="off"
-          value={floorHeight}
-          aria-invalid={error ? true : undefined}
-          aria-describedby="floor-height-hint floor-height-error"
-          onChange={(event) => setDetails({ floorHeight: event.target.value })}
-          className="min-h-11 w-full min-w-0 bg-transparent px-space-sm font-mono text-body-lg outline-none"
-        />
-        <span className="pe-space-sm font-mono text-body-md text-on-surface-variant">m</span>
-      </div>
+      <MetersInput id="floor-height" name="floor-height" value={floorHeight} invalid={Boolean(error)} aria-describedby="floor-height-hint floor-height-error" onChange={(event) => setDetails({ floorHeight: event.target.value })} />
       <p id="floor-height-hint" className="font-mono text-body-sm text-on-surface-variant">RNE minimum: {MIN_FLOOR_HEIGHT.toFixed(2)} m</p>
       <FieldError id="floor-height-error" message={error} />
     </div>

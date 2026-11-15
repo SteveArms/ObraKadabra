@@ -15,16 +15,25 @@ type ProjectCardProps = {
   summary: ProjectSummary;
 };
 
+function ProjectActions({ id }: { id: string }) {
+  return (
+    <div className="mt-auto grid grid-cols-2 gap-space-xs">
+      <Link href={`/proyecto/${id}`} className={buttonClasses("primary")}>
+        <Icon name="view_in_ar" />
+        Open workspace
+      </Link>
+      <Link href={`/proyecto/${id}/editor`} className={buttonClasses("ghost")}>
+        <Icon name="architecture" />
+        Edit plan
+      </Link>
+    </div>
+  );
+}
+
 export function ProjectCard({ project, summary }: ProjectCardProps) {
   const titleId = `project-${project.id}-title`;
   return (
-    <Card
-      role="group"
-      aria-labelledby={titleId}
-      data-testid="project-card"
-      data-project-id={project.id}
-      className="flex w-full flex-col gap-space-md"
-    >
+    <Card role="group" aria-labelledby={titleId} data-testid="project-card" data-project-id={project.id} className="flex w-full flex-col gap-space-md">
         <div className="flex flex-col gap-1">
           {project.status === "draft" ? (
             <span className="self-start">
@@ -46,16 +55,7 @@ export function ProjectCard({ project, summary }: ProjectCardProps) {
             { label: "Shell budget", value: formatSoles(summary.cost.total) },
           ]}
         />
-        <div className="mt-auto grid grid-cols-2 gap-space-xs">
-          <Link href={`/proyecto/${project.id}`} className={buttonClasses("primary")}>
-            <Icon name="view_in_ar" />
-            Open workspace
-          </Link>
-          <Link href={`/proyecto/${project.id}/editor`} className={buttonClasses("ghost")}>
-            <Icon name="architecture" />
-            Edit plan
-          </Link>
-        </div>
+        <ProjectActions id={project.id} />
     </Card>
   );
 }

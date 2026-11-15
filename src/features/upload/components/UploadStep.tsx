@@ -13,6 +13,28 @@ import { PlanDropzone } from "./PlanDropzone";
 import { SheetPreview } from "./SheetPreview";
 import { SheetTabs } from "./SheetTabs";
 
+type SheetFooterProps = { floor: number; canRemove: boolean; busy: boolean; onRemove: () => void; onReplace: (file: File | undefined) => void };
+
+function SheetFooter({ floor, canRemove, busy, onRemove, onReplace }: SheetFooterProps) {
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-space-sm border-t border-line px-space-sm py-space-xs">
+      <p className="flex items-center gap-space-xs text-body-md text-on-surface-variant">
+        <Icon name="check_circle" className="text-status-done-text" />
+        Plan ready for calibration.
+      </p>
+      <div className="flex gap-space-xs">
+        {canRemove ? (
+          <Button variant="ghost" onClick={onRemove}>
+            <Icon name="delete" />
+            Remove floor {floor}
+          </Button>
+        ) : null}
+        <FileButton label="Replace file" icon="upload" accept={PLAN_FILE_ACCEPT} onFile={onReplace} disabled={busy} />
+      </div>
+    </div>
+  );
+}
+
 export function UploadStep() {
   const sheets = useUploadStore((state) => state.sheets);
   const activeId = useUploadStore((state) => state.activeId);
@@ -30,23 +52,7 @@ export function UploadStep() {
             key={active.id}
             sheet={active}
             floor={index + 1}
-            footer={
-              <div className="flex flex-wrap items-center justify-between gap-space-sm border-t border-line px-space-sm py-space-xs">
-                <p className="flex items-center gap-space-xs text-body-md text-on-surface-variant">
-                  <Icon name="check_circle" className="text-status-done-text" />
-                  Plan ready for calibration.
-                </p>
-                <div className="flex gap-space-xs">
-                  {sheets.length > 1 ? (
-                    <Button variant="ghost" onClick={() => removeSheet(active.id)}>
-                      <Icon name="delete" />
-                      Remove floor {index + 1}
-                    </Button>
-                  ) : null}
-                  <FileButton label="Replace file" icon="upload" accept={PLAN_FILE_ACCEPT} onFile={(file) => files.load(file, active.id)} disabled={files.busy} />
-                </div>
-              </div>
-            }
+            footer={<SheetFooter floor={index + 1} canRemove={sheets.length > 1} busy={files.busy} onRemove={() => removeSheet(active.id)} onReplace={(file) => files.load(file, active.id)} />}
           />
         ) : (
           <PlanDropzone onFile={(file) => files.load(file)} busy={files.busy} />
@@ -58,12 +64,7 @@ export function UploadStep() {
       </div>
       <div className="flex flex-col gap-space-lg">
         <PhotoTips />
-        <NextStepHint
-          step={2}
-          title="Next: scale calibration"
-          icon="straighten"
-          text="You will mark two points of a known length, such as the 8.00 m front, so every wall is measured in meters."
-        />
+        <NextStepHint step={2} title="Next: scale calibration" icon="straighten" text="You will mark two points of a known length, such as the 8.00 m front, so every wall is measured in meters." />
       </div>
     </div>
   );

@@ -26,42 +26,65 @@ function hitTest(target: EventTarget): Hit {
   };
 }
 
+type ToolActions = ReturnType<typeof useToolActions>;
+
+// A click with a placing tool: returns a notice when the click could not do anything
+function applyClick(actions: ToolActions, tool: Tool, raw: Point, hit: Hit): string | null {
+  if (tool === "delete") return actions.remove(hit.target);
+  if (tool === "door" || tool === "window") return actions.placeOpening(tool, raw, hit.target);
+  if (tool === "select") editor().select(hit.target);
+  else if (tool === "column") actions.placeColumn(raw);
+  if (tool === "select" || tool === "column") return null;
+  const point = actions.snap(raw, editor().draft.at(-1));
+  if (tool === "wall") actions.placeWallPoint(point);
+  else if (tool === "room") actions.placeRoomPoint(point);
+  else actions.placePair(point);
+  return null;
+}
+
+function finishDrawing(actions: ToolActions) {
+  if (editor().tool === "room") actions.finishRoom();
+  else editor().setDraft([]);
+}
+
+// Select and Move vertex grab a corner, or pan when they press on empty plan; the middle button always pans
+function beginDrag(event: PointerEvent<SVGSVGElement>, plan: FloorPlan, tool: Tool, hit: Hit): Drag | null {
+  const pointing = tool === "select" || tool === "vertex";
+  if (pointing && hit.vertex && event.button === 0) {
+    editor().checkpoint();
+    return { kind: "vertex", from: hit.vertex, start: plan, moved: false };
+  }
+  if (event.button !== 1 && !(pointing && !(tool === "select" && hit.target))) return null;
+  if (tool === "select") editor().select(undefined);
+  return { kind: "pan", x: event.clientX, y: event.clientY };
+}
+
+// A vertex press without movement leaves no empty undo step behind
+function endDrag(drag: { current: Drag | null }) {
+  if (drag.current?.kind === "vertex" && !drag.current.moved) editor().dropCheckpoint();
+  drag.current = null;
+}
+
+function clearDraftOrSelection() {
+  const { draft, setDraft, select } = editor();
+  if (draft.length > 0) setDraft([]);
+  else select(undefined);
+}
+
 // Select and Move vertex drag corners or pan the empty plan; every other tool places points with snapping
 export function useCanvasPointer(view: CanvasView) {
   const drag = useRef<Drag | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const actions = useToolActions(view.scale);
 
-  const click = (tool: Tool, raw: Point, hit: Hit): string | null => {
-    if (tool === "delete") return actions.remove(hit.target);
-    if (tool === "door" || tool === "window") return actions.placeOpening(tool, raw, hit.target);
-    if (tool === "select") editor().select(hit.target);
-    else if (tool === "column") actions.placeColumn(raw);
-    if (tool === "select" || tool === "column") return null;
-    const point = actions.snap(raw, editor().draft.at(-1));
-    if (tool === "wall") actions.placeWallPoint(point);
-    else if (tool === "room") actions.placeRoomPoint(point);
-    else actions.placePair(point);
-    return null;
-  };
-
   const onPointerDown = (event: PointerEvent<SVGSVGElement>) => {
-    const { plan, tool, checkpoint } = editor();
+    const { plan, tool } = editor();
     if (!plan || event.button === 2) return;
     const hit = hitTest(event.target);
-    const pointing = tool === "select" || tool === "vertex";
     setNotice(null);
-    if (pointing && hit.vertex && event.button === 0) {
-      checkpoint();
-      drag.current = { kind: "vertex", from: hit.vertex, start: plan, moved: false };
-    } else if (event.button === 1 || (pointing && !(tool === "select" && hit.target))) {
-      if (tool === "select") editor().select(undefined);
-      drag.current = { kind: "pan", x: event.clientX, y: event.clientY };
-    } else {
-      setNotice(click(tool, view.toPlan(event.clientX, event.clientY), hit));
-      return;
-    }
-    event.currentTarget.setPointerCapture(event.pointerId);
+    drag.current = beginDrag(event, plan, tool, hit);
+    if (drag.current) event.currentTarget.setPointerCapture(event.pointerId);
+    else setNotice(applyClick(actions, tool, view.toPlan(event.clientX, event.clientY), hit));
   };
 
   const onPointerMove = (event: PointerEvent<SVGSVGElement>) => {
@@ -78,22 +101,12 @@ export function useCanvasPointer(view: CanvasView) {
     }
   };
 
-  const onPointerUp = () => {
-    if (drag.current?.kind === "vertex" && !drag.current.moved) editor().dropCheckpoint();
-    drag.current = null;
-  };
+  const onPointerUp = () => endDrag(drag);
 
   const cancel = () => {
-    const { draft, setDraft, select } = editor();
-    if (draft.length > 0) setDraft([]);
-    else select(undefined);
+    clearDraftOrSelection();
     setNotice(null);
   };
 
-  const finish = () => {
-    if (editor().tool === "room") actions.finishRoom();
-    else editor().setDraft([]);
-  };
-
-  return { onPointerDown, onPointerMove, onPointerUp, onPointerLeave: () => editor().setCursor(undefined), cancel, finish, notice };
+  return { onPointerDown, onPointerMove, onPointerUp, onPointerLeave: () => editor().setCursor(undefined), cancel, finish: () => finishDrawing(actions), notice };
 }

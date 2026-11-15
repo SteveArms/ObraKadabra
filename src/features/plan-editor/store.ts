@@ -38,36 +38,42 @@ type EditorState = {
 const NO_DRAFT = { draft: [], cursor: undefined };
 const INITIAL = { past: [], future: [], level: 1, tool: "select" as Tool, selected: undefined, layers: "both" as LayerMode, opacity: 0.75, ...NO_DRAFT };
 
+type Set = (partial: Partial<EditorState> | ((state: EditorState) => Partial<EditorState>)) => void;
+type HistoryActions = Pick<EditorState, "commit" | "checkpoint" | "dropCheckpoint" | "preview" | "undo" | "redo">;
+
+// Undo keeps the last HISTORY_LIMIT plans; a drag records one step when it starts and previews every move without recording
+function history(set: Set, get: () => EditorState): HistoryActions {
+  const record = (plan: FloorPlan) => [...get().past, plan].slice(-HISTORY_LIMIT);
+  return {
+    commit: (change) => {
+      const { plan } = get();
+      const next = plan && change(plan);
+      if (plan && next && next !== plan) set({ plan: next, past: record(plan), future: [] });
+    },
+    checkpoint: () => {
+      const { plan } = get();
+      if (plan) set({ past: record(plan), future: [] });
+    },
+    dropCheckpoint: () => set((state) => ({ past: state.past.slice(0, -1) })),
+    preview: (plan) => set({ plan }),
+    undo: () => {
+      const { plan, past, future } = get();
+      const previous = past.at(-1);
+      if (plan && previous) set({ plan: previous, past: past.slice(0, -1), future: [plan, ...future] });
+    },
+    redo: () => {
+      const { plan, past, future } = get();
+      const [next, ...rest] = future;
+      if (plan && next) set({ plan: next, past: [...past, plan], future: rest });
+    },
+  };
+}
+
 // The editor works on its own copy of the FloorPlan; nothing reaches the project until it is saved
 export const useEditorStore = create<EditorState>()((set, get) => ({
   ...INITIAL,
   load: (projectId, plan) => set({ ...INITIAL, projectId, plan }),
-  commit: (change) => {
-    const { plan, past } = get();
-    if (!plan) return;
-    const next = change(plan);
-    if (next === plan) return;
-    set({ plan: next, past: [...past, plan].slice(-HISTORY_LIMIT), future: [] });
-  },
-  // A drag records one history step when it starts and previews every move without recording
-  checkpoint: () => {
-    const { plan, past } = get();
-    if (plan) set({ past: [...past, plan].slice(-HISTORY_LIMIT), future: [] });
-  },
-  dropCheckpoint: () => set((state) => ({ past: state.past.slice(0, -1) })),
-  preview: (plan) => set({ plan }),
-  undo: () => {
-    const { plan, past, future } = get();
-    const previous = past.at(-1);
-    if (!plan || !previous) return;
-    set({ plan: previous, past: past.slice(0, -1), future: [plan, ...future] });
-  },
-  redo: () => {
-    const { plan, past, future } = get();
-    const [next, ...rest] = future;
-    if (!plan || !next) return;
-    set({ plan: next, past: [...past, plan], future: rest });
-  },
+  ...history(set, get),
   select: (selected) => {
     const { plan, level } = get();
     set({ selected, level: (plan && selected && elementLevel(plan, selected)) || level });

@@ -15,5 +15,4 @@ export const ProjectSchema = z.object({
   updatedAt: z.iso.datetime(),
 });
 
-export type ProjectStatus = z.infer<typeof ProjectStatusSchema>;
 export type Project = z.infer<typeof ProjectSchema>;

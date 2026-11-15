@@ -12,24 +12,30 @@ export const WIZARD_ERROR_ID = "wizard-error";
 
 const FIELD_IDS: Record<keyof DetailsErrors, string> = { name: "project-name", levels: "levels-error", floorHeight: "floor-height" };
 
+const focusLater = (id: string) => requestAnimationFrame(() => document.getElementById(id)?.focus());
+
+// The first invalid detail field, so focus lands on the problem the user must fix first
+function firstInvalidField(errors: DetailsErrors): string | undefined {
+  const first = (Object.keys(FIELD_IDS) as (keyof DetailsErrors)[]).find((key) => errors[key]);
+  return first ? FIELD_IDS[first] : undefined;
+}
+
 // Validates on Continue (never by disabling it), then moves focus to the new step heading or the first problem
 export function useWizardNavigation() {
   const router = useRouter();
-  const { step, sheets, details, setStep, setActive } = useUploadStore(
-    useShallow((state) => ({ step: state.step, sheets: state.sheets, details: state.details, setStep: state.setStep, setActive: state.setActive })),
-  );
+  const { step, sheets, details, setStep, setActive } = useUploadStore(useShallow(({ step, sheets, details, setStep, setActive }) => ({ step, sheets, details, setStep, setActive })));
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<DetailsErrors>({});
 
   function go(next: WizardStep) {
     setError(null);
     setStep(next);
-    requestAnimationFrame(() => document.getElementById(WIZARD_TITLE_ID)?.focus());
+    focusLater(WIZARD_TITLE_ID);
   }
 
   function fail(message: string) {
     setError(message);
-    requestAnimationFrame(() => document.getElementById(WIZARD_ERROR_ID)?.focus());
+    focusLater(WIZARD_ERROR_ID);
   }
 
   function next() {
@@ -45,8 +51,8 @@ export function useWizardNavigation() {
     }
     const errors = detailsErrors(details, sheets.length);
     setFieldErrors(errors);
-    const first = (Object.keys(FIELD_IDS) as (keyof DetailsErrors)[]).find((key) => errors[key]);
-    if (first) return document.getElementById(FIELD_IDS[first])?.focus();
+    const field = firstInvalidField(errors);
+    if (field) return document.getElementById(field)?.focus();
     router.push("/subir/procesando");
   }
 
