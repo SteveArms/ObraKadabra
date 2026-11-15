@@ -4,8 +4,9 @@ import { getMainNavItems } from "../src/lib/navigation";
 
 const NAV_ITEMS = getMainNavItems(DEFAULT_PROJECT_ID);
 
+// While Suspense streams, a hidden copy of the nav can sit in the DOM; only the visible one matters
 function visibleNav(page: Page, isMobile: boolean) {
-  return page.getByTestId(isMobile ? "mobile-nav" : "desktop-nav");
+  return page.getByTestId(isMobile ? "mobile-nav" : "desktop-nav").filter({ visible: true });
 }
 
 test("home loads with the ObraKadabra header", async ({ page }) => {
@@ -31,7 +32,7 @@ test("navigation stays reachable at every viewport", async ({ page, isMobile }) 
   await page.goto("/");
   const nav = visibleNav(page, isMobile);
   await expect(nav).toBeVisible();
-  await expect(page.getByTestId(isMobile ? "desktop-nav" : "mobile-nav")).toBeHidden();
+  await expect(page.getByTestId(isMobile ? "desktop-nav" : "mobile-nav").filter({ visible: true })).toHaveCount(0);
   for (const item of NAV_ITEMS) {
     await expect(nav.getByTestId(`nav-link-${item.id}`)).toBeVisible();
   }
