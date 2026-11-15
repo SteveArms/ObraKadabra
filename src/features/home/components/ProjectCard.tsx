@@ -4,14 +4,14 @@ import { Card } from "@/components/ui/Card";
 import { Icon } from "@/components/ui/Icon";
 import { MetricList } from "@/components/ui/MetricList";
 import { formatArea, formatCount, formatSoles } from "@/lib/format";
-import type { TakeoffSummary } from "@/lib/takeoff";
+import type { ProjectSummary } from "@/lib/schedule";
 import type { Project } from "@/schemas/project";
 
 const updatedFormat = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" });
 
 type ProjectCardProps = {
   project: Project;
-  summary: TakeoffSummary;
+  summary: ProjectSummary;
 };
 
 export function ProjectCard({ project, summary }: ProjectCardProps) {
