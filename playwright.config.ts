@@ -1,6 +1,6 @@
 import { defineConfig } from "@playwright/test";
 
-const PORT = 3000;
+const PORT = 3100;
 const isCI = Boolean(process.env.CI);
 
 export default defineConfig({
@@ -8,8 +8,6 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: isCI,
   retries: isCI ? 1 : 0,
-  // next dev compiles each route on first visit, which can exceed the 5s default
-  expect: { timeout: 15_000 },
   reporter: isCI ? [["html", { open: "never" }], ["github"]] : [["html", { open: "never" }], ["list"]],
   use: {
     baseURL: `http://localhost:${PORT}`,
@@ -23,10 +21,10 @@ export default defineConfig({
     { name: "mobile", use: { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true } },
   ],
   webServer: {
-    command: "pnpm dev",
-    env: { E2E: "1" },
+    // Production build: no per-route dev compilation and no dev overlay over the UI
+    command: `pnpm build && pnpm start --port ${PORT}`,
     url: `http://localhost:${PORT}`,
     reuseExistingServer: !isCI,
-    timeout: 120_000,
+    timeout: 300_000,
   },
 });
