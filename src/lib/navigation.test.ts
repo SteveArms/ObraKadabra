@@ -26,9 +26,11 @@ describe("getActiveHref", () => {
 });
 
 describe("isFocusedFlow", () => {
-  it("covers the upload wizard and its processing screen only", () => {
+  it("covers the upload wizard, its processing screen and the plan editor", () => {
     expect(isFocusedFlow("/subir")).toBe(true);
     expect(isFocusedFlow("/subir/procesando")).toBe(true);
+    expect(isFocusedFlow("/proyecto/x/editor")).toBe(true);
     expect(isFocusedFlow("/proyecto/x")).toBe(false);
+    expect(isFocusedFlow("/proyecto/x/avance")).toBe(false);
   });
 });
