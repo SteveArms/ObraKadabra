@@ -60,4 +60,17 @@ describe("createLocalProjectRepository", () => {
     const repository = createLocalProjectRepository(storage);
     await expect(repository.save({ ...makeProject("a", "not a date") })).rejects.toThrow();
   });
+
+  it("keeps progress logs per project, newest first, also for demos", async () => {
+    const repository = createLocalProjectRepository(storage);
+    const entry = { id: "e1", projectId: "casa-1-piso-90", week: 7, levelLabel: "Floor 1", recordedAt: "2026-11-15T10:00:00.000Z", approved: false, hasPhoto: true, findings: [] };
+    await repository.saveProgress(entry);
+    await repository.saveProgress({ ...entry, id: "e2", recordedAt: "2026-11-16T10:00:00.000Z" });
+    await repository.saveProgress({ ...entry, approved: true });
+    await repository.saveProgress({ ...entry, id: "e3", projectId: "other" });
+    const entries = await repository.listProgress("casa-1-piso-90");
+    expect(entries.map((item) => item.id)).toEqual(["e2", "e1"]);
+    expect(entries[1].approved).toBe(true);
+  });
 });
+

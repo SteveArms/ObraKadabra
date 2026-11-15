@@ -1,7 +1,8 @@
 "use client";
 
 import { Icon } from "@/components/ui/Icon";
-import { FileButton } from "./FileButton";
+import { FileButton } from "@/components/ui/FileButton";
+import { PLAN_FILE_ACCEPT } from "../utils";
 
 type AddFloorCardProps = {
   nextFloor: number;
@@ -21,7 +22,7 @@ export function AddFloorCard({ nextFloor, busy, onFile }: AddFloorCardProps) {
           <p className="text-body-md text-pretty text-on-surface-variant">Add each floor as its own file. Floors without a plan repeat the one below.</p>
         </div>
       </div>
-      <FileButton label={`Add floor ${nextFloor} plan`} icon="add_photo_alternate" onFile={onFile} disabled={busy} testId="add-floor-input" className="w-full shrink-0 sm:w-auto" />
+      <FileButton label={`Add floor ${nextFloor} plan`} icon="add_photo_alternate" accept={PLAN_FILE_ACCEPT} onFile={onFile} disabled={busy} testId="add-floor-input" className="w-full shrink-0 sm:w-auto" />
     </div>
   );
 }

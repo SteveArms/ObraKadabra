@@ -34,3 +34,16 @@ export function parseMeters(text: string): number | null {
   const value = Number(text.trim().replace(",", "."));
   return text.trim() !== "" && Number.isFinite(value) && value > 0 ? value : null;
 }
+
+// Variance from plan: "+S/ 140" ahead, "−S/ 300" behind (a real minus sign, not a hyphen)
+export function formatSignedSoles(amount: number): string {
+  const rounded = Math.round(amount);
+  if (rounded === 0) return formatSoles(0);
+  return `${rounded > 0 ? "+" : "−"}${formatSoles(Math.abs(rounded))}`;
+}
+
+const megabytes = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 });
+
+export function formatBytes(bytes: number): string {
+  return bytes < 1024 * 1024 ? `${integer.format(Math.ceil(bytes / 1024))} KB` : `${megabytes.format(bytes / 1024 / 1024)} MB`;
+}

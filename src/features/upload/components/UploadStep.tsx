@@ -5,7 +5,8 @@ import { Icon } from "@/components/ui/Icon";
 import { MAX_SHEETS, useSheetFiles } from "../hooks/useSheetFiles";
 import { useUploadStore } from "../store";
 import { AddFloorCard } from "./AddFloorCard";
-import { FileButton } from "./FileButton";
+import { FileButton } from "@/components/ui/FileButton";
+import { PLAN_FILE_ACCEPT } from "../utils";
 import { NextStepHint } from "./NextStepHint";
 import { PhotoTips } from "./PhotoTips";
 import { PlanDropzone } from "./PlanDropzone";
@@ -42,7 +43,7 @@ export function UploadStep() {
                       Remove floor {index + 1}
                     </Button>
                   ) : null}
-                  <FileButton label="Replace file" icon="upload" onFile={(file) => files.load(file, active.id)} disabled={files.busy} />
+                  <FileButton label="Replace file" icon="upload" accept={PLAN_FILE_ACCEPT} onFile={(file) => files.load(file, active.id)} disabled={files.busy} />
                 </div>
               </div>
             }

@@ -1,9 +1,12 @@
 import { MIN_FLOOR_HEIGHT } from "@/data/structure";
 import { parseMeters } from "@/lib/format";
 import { metersPerPixel } from "@/lib/geometry";
+import { PLAN_UPLOAD_TYPES } from "@/lib/plan";
 import type { FloorPlan, Point } from "@/schemas/floor-plan";
 import type { Project } from "@/schemas/project";
 import type { Rect, Sheet, WizardDetails } from "./types";
+
+export const PLAN_FILE_ACCEPT = PLAN_UPLOAD_TYPES.join(",");
 
 export function sheetScale(sheet: Sheet): number | null {
   const [a, b] = sheet.calibration.points;

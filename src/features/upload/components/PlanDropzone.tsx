@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { cn } from "@/lib/cn";
-import { FileButton } from "./FileButton";
+import { FileButton } from "@/components/ui/FileButton";
+import { PLAN_FILE_ACCEPT } from "../utils";
 
 type PlanDropzoneProps = {
   onFile: (file: File | undefined) => void;
@@ -38,8 +39,8 @@ export function PlanDropzone({ onFile, busy }: PlanDropzoneProps) {
         <p className="text-body-md text-pretty text-on-surface-variant">Drag it here, choose a file or take a photo. JPG, PNG or PDF up to 25 MB.</p>
       </div>
       <div className="flex flex-wrap justify-center gap-space-sm">
-        <FileButton label="Choose file" icon="folder_open" variant="primary" onFile={onFile} disabled={busy} testId="plan-file-input" />
-        <FileButton label="Take photo" icon="photo_camera" onFile={onFile} capture disabled={busy} />
+        <FileButton label="Choose file" icon="folder_open" variant="primary" accept={PLAN_FILE_ACCEPT} onFile={onFile} disabled={busy} testId="plan-file-input" />
+        <FileButton label="Take photo" icon="photo_camera" accept="image/*" onFile={onFile} capture disabled={busy} />
       </div>
     </div>
   );

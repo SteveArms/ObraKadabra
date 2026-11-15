@@ -1,23 +1,9 @@
+import { canvasOf, canvasToBlob, downscaleImage } from "@/lib/image";
 import type { Edits, Raster } from "./types";
 
 // Long side of the image sent to the AI: sharp enough for wall lines, small enough for a fast upload
 const MAX_SIDE = 2400;
 const CONTRAST_FILTER = "grayscale(1) contrast(1.8)";
-
-function canvasOf(width: number, height: number): { canvas: HTMLCanvasElement; context: CanvasRenderingContext2D } {
-  const canvas = document.createElement("canvas");
-  canvas.width = Math.max(1, Math.round(width));
-  canvas.height = Math.max(1, Math.round(height));
-  const context = canvas.getContext("2d");
-  if (!context) throw new Error("Canvas 2D is not available");
-  return { canvas, context };
-}
-
-function toBlob(canvas: HTMLCanvasElement, type: string): Promise<Blob> {
-  return new Promise((resolve, reject) => {
-    canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error("Unable to encode the image"))), type, 0.9);
-  });
-}
 
 async function rasterOf(blob: Blob): Promise<Raster> {
   const bitmap = await createImageBitmap(blob);
@@ -39,25 +25,12 @@ async function pdfFirstPage(file: Blob): Promise<Blob> {
   context.fillRect(0, 0, canvas.width, canvas.height);
   await page.render({ canvas, canvasContext: context, viewport }).promise;
   await task.destroy();
-  return toBlob(canvas, "image/png");
-}
-
-async function downscale(file: Blob): Promise<Blob> {
-  const bitmap = await createImageBitmap(file);
-  const ratio = MAX_SIDE / Math.max(bitmap.width, bitmap.height);
-  if (ratio >= 1) {
-    bitmap.close();
-    return file;
-  }
-  const { canvas, context } = canvasOf(bitmap.width * ratio, bitmap.height * ratio);
-  context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-  bitmap.close();
-  return toBlob(canvas, file.type === "image/png" ? "image/png" : "image/jpeg");
+  return canvasToBlob(canvas, "image/png");
 }
 
 // PDFs become their first page and large photos are reduced, so every later step works on one raster
 export async function fileToRaster(file: File): Promise<Raster> {
-  return rasterOf(file.type === "application/pdf" ? await pdfFirstPage(file) : await downscale(file));
+  return rasterOf(file.type === "application/pdf" ? await pdfFirstPage(file) : await downscaleImage(file, MAX_SIDE));
 }
 
 // Applies rotation, then the crop (given in rotated pixels), then the contrast boost
@@ -72,7 +45,7 @@ export async function renderEdits(source: Raster, edits: Edits): Promise<Raster>
   context.rotate((edits.rotation * Math.PI) / 180);
   context.drawImage(bitmap, -bitmap.width / 2, -bitmap.height / 2);
   bitmap.close();
-  return rasterOf(await toBlob(canvas, source.blob.type || "image/png"));
+  return rasterOf(await canvasToBlob(canvas, source.blob.type || "image/png"));
 }
 
 export function rasterFileName(fileName: string, raster: Raster): string {
