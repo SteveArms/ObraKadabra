@@ -5,6 +5,8 @@ const isCI = Boolean(process.env.CI);
 
 export default defineConfig({
   testDir: "./e2e",
+  // WebGL and fonts render differently per OS, so each platform keeps its own baseline (CI compares the linux one)
+  snapshotPathTemplate: "{testDir}/__screenshots__/{testFilePath}/{arg}-{projectName}-{platform}{ext}",
   fullyParallel: true,
   forbidOnly: isCI,
   retries: isCI ? 1 : 0,

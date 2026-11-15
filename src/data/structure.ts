@@ -8,3 +8,6 @@ export const SLAB_CONCRETE_M3_PER_M2 = 0.0875;
 // Rebar ratios in kg per m³ of concrete, and per m² for slabs
 export const REBAR_KG_PER_M3 = { footing: 40, column: 120, beam: 100 } as const;
 export const SLAB_REBAR_KG_PER_M2 = 3.5;
+
+// Depth of the foundation bottom below natural ground level (Df), in meters
+export const FOUNDATION_DEPTH = 1;
