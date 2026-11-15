@@ -9,6 +9,8 @@ export default defineConfig({
   snapshotPathTemplate: "{testDir}/__screenshots__/{testFilePath}/{arg}-{projectName}-{platform}{ext}",
   fullyParallel: true,
   forbidOnly: isCI,
+  // Specs tagged @ai call the real model and cost money, so CI never runs them
+  grepInvert: isCI ? /@ai/ : undefined,
   retries: isCI ? 1 : 0,
   reporter: isCI ? [["html", { open: "never" }], ["github"]] : [["html", { open: "never" }], ["list"]],
   use: {
