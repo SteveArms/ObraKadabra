@@ -56,6 +56,11 @@
   --color-viewport: #16181d;
   --color-viewport-line: #2c3038;
   --color-viewport-line-strong: #3d424c;
+  --color-material-footing: #8e8a82;
+  --color-material-concrete: #b8b4ab;
+  --color-material-brick: #a9573b;
+  --color-material-plaster: #ddd5c7;
+  --color-material-slab: #c4c0b7;
   --color-ai: #6366f1;
   --color-ai-strong: #4f46e5;
   --color-ai-tint: #eef2ff;

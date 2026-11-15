@@ -4,9 +4,9 @@ import { useEffect, useMemo } from "react";
 import type { FloorPlan } from "@/schemas/floor-plan";
 import { buildPlanObjects, buildPlanScene } from "../scene";
 import { useViewerStore } from "../store";
-import type { StatusMaterials } from "../hooks/useStatusMaterials";
+import type { ViewerMaterials } from "../hooks/useViewerMaterials";
 
-type ModelFromPlanProps = { plan: FloorPlan; materials: StatusMaterials };
+type ModelFromPlanProps = { plan: FloorPlan; materials: ViewerMaterials };
 
 export function ModelFromPlan({ plan, materials }: ModelFromPlanProps) {
   const setEntries = useViewerStore((state) => state.setEntries);

@@ -33,3 +33,10 @@ export function statusAt(schedule: Schedule, week: number, progress?: ActualProg
 export function taskForMesh(schedule: Schedule, meshKey: string): ScheduledTask | undefined {
   return schedule.tasks.find((task) => task.meshKey === meshKey);
 }
+
+// Walls whose plaster is finished by the end of a week, keyed by wall mesh; the 3D model swaps brick for plaster on them
+export function plasteredAt(schedule: Schedule, week: number): Record<string, boolean> {
+  const day = weekEndDay(week);
+  const done = schedule.tasks.filter((task) => task.stage === "finishes" && task.elementType === "wall" && task.endDay <= day);
+  return Object.fromEntries(done.map((task) => [`wall_${task.elementId}`, true]));
+}

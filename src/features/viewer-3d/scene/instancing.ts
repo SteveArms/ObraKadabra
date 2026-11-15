@@ -23,6 +23,8 @@ function isSingleBoxColumn(element: SceneElement): boolean {
 function instanceColumns(columns: SceneElement[], material: MeshStandardMaterial) {
   const mesh = new InstancedMesh(UNIT_BOX, new MeshStandardMaterial({ color: "#ffffff", roughness: material.roughness }), columns.length);
   mesh.name = "columns-instanced";
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
   mesh.userData.instanceKeys = columns.map((column) => column.key);
   const proxies = columns.map((column, index) => {
     const proxy = buildElementMesh(column, material);
