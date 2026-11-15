@@ -154,6 +154,11 @@
     }
   }
 
+  /* The wizard's fixed action bar covers the bottom of the page, so focus scrolls above it (WCAG 2.4.11) */
+  html:has([data-wizard-footer]) {
+    scroll-padding-block-end: 6rem;
+  }
+
   body {
     background-color: var(--color-surface);
     color: var(--color-on-surface);
