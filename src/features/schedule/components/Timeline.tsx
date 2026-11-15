@@ -1,13 +1,14 @@
 "use client";
 
-import type { Schedule } from "@/schemas/schedule";
+import { actualProgressAt } from "@/lib/schedule";
+import type { ActualProgress, Schedule } from "@/schemas/schedule";
 import { usePlayback } from "../hooks/usePlayback";
 import { useTimeline } from "../store";
 import { PlanVsActual } from "./PlanVsActual";
 import { TimelineControls } from "./TimelineControls";
 import { TimelineTrack } from "./TimelineTrack";
 
-export function Timeline({ schedule }: { schedule: Schedule }) {
+export function Timeline({ schedule, progress }: { schedule: Schedule; progress?: ActualProgress }) {
   usePlayback();
   const week = useTimeline((state) => state.week);
   return (
@@ -19,7 +20,7 @@ export function Timeline({ schedule }: { schedule: Schedule }) {
     >
       <TimelineControls schedule={schedule} />
       <TimelineTrack schedule={schedule} />
-      <PlanVsActual schedule={schedule} week={week} />
+      <PlanVsActual schedule={schedule} week={week} actual={progress ? actualProgressAt(schedule, week, progress) : undefined} />
     </section>
   );
 }

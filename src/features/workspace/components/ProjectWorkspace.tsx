@@ -25,7 +25,7 @@ const LAYOUT =
   "lg:[grid-template-areas:'bar_bar'_'viewer_panel'_'timeline_timeline']";
 
 function WorkspaceLayout({ project, glbUrl }: { project: Project; glbUrl?: string }) {
-  const { schedule, week, statuses } = useProjectSchedule(project);
+  const { schedule, week, statuses, progress } = useProjectSchedule(project);
   return (
     <div className={LAYOUT}>
       <div className="[grid-area:bar]">
@@ -35,10 +35,10 @@ function WorkspaceLayout({ project, glbUrl }: { project: Project; glbUrl?: strin
         <Viewer plan={project.floorPlan} glbUrl={glbUrl} className="h-[45dvh] min-h-72 lg:h-full" bottomSlot={<MiniPlayer schedule={schedule} />} />
       </div>
       <div className="[grid-area:timeline]">
-        <Timeline schedule={schedule} />
+        <Timeline schedule={schedule} progress={progress} />
       </div>
       <div className="[grid-area:panel] lg:min-h-0 lg:overflow-y-auto lg:overscroll-contain">
-        <WorkspacePanel schedule={schedule} week={week} statuses={statuses} projectName={project.name} />
+        <WorkspacePanel schedule={schedule} week={week} statuses={statuses} progress={progress} projectName={project.name} />
       </div>
     </div>
   );

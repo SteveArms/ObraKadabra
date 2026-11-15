@@ -16,7 +16,7 @@ function Meter({ label, value, fillClass }: { label: string; value?: number; fil
   );
 }
 
-// Actual progress arrives with photo logs (phase 6); until then the bar says so instead of showing zero
+// Actual progress comes from approved photo logs; without any the bar says so instead of showing zero
 export function PlanVsActual({ schedule, week, actual }: PlanVsActualProps) {
   return (
     <div data-testid="plan-vs-actual" className="flex flex-col gap-space-xs sm:flex-row sm:gap-space-lg">
