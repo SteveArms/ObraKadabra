@@ -6,6 +6,7 @@ import { ToggleButton } from "@/components/ui/ToggleButton";
 import { formatSoles } from "@/lib/format";
 import { activityLabel, plannedCostAt } from "@/lib/schedule";
 import type { Schedule } from "@/schemas/schedule";
+import { usePlaybackControls } from "../hooks/usePlaybackControls";
 import { PLAYBACK_SPEEDS, useTimeline } from "../store";
 import { activityAt } from "../utils";
 
@@ -34,17 +35,19 @@ export function TimelineControls({ schedule }: { schedule: Schedule }) {
 }
 
 function PlaybackButtons() {
-  const { week, totalWeeks, playing, speed, step, play, pause, setSpeed } = useTimeline();
+  const { playing, canGoBack, canGoForward, previous, next, toggle } = usePlaybackControls();
+  const speed = useTimeline((state) => state.speed);
+  const setSpeed = useTimeline((state) => state.setSpeed);
   return (
     <div className="flex items-center gap-space-xs">
-      <Button variant="ghost" aria-label="Previous week" onClick={() => step(-1)} disabled={week <= 1} className="px-2">
+      <Button variant="ghost" aria-label="Previous week" onClick={previous} disabled={!canGoBack} className="px-2">
         <Icon name="skip_previous" />
       </Button>
-      <Button variant="primary" onClick={playing ? pause : play} data-testid="timeline-play" className="min-w-36">
+      <Button variant="primary" onClick={toggle} data-testid="timeline-play" className="min-w-36">
         <Icon name={playing ? "pause" : "play_arrow"} filled />
         {playing ? "Pause" : "Simulate 4D"}
       </Button>
-      <Button variant="ghost" aria-label="Next week" onClick={() => step(1)} disabled={week >= totalWeeks} className="px-2">
+      <Button variant="ghost" aria-label="Next week" onClick={next} disabled={!canGoForward} className="px-2">
         <Icon name="skip_next" />
       </Button>
       <div role="group" aria-label="Playback speed" className="ms-1 flex gap-0.5 rounded-md bg-surface-container-low p-0.5">
