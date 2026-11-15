@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getActiveHref, getMainNavItems } from "./navigation";
+import { getActiveHref, getMainNavItems, isFocusedFlow } from "./navigation";
 
 const hrefs = getMainNavItems("demo-1").map((item) => item.href);
 
@@ -22,5 +22,13 @@ describe("getActiveHref", () => {
   it("returns undefined for routes outside the navigation", () => {
     expect(getActiveHref("/compartir/demo-1", hrefs)).toBeUndefined();
     expect(getActiveHref("/subirx", hrefs)).toBeUndefined();
+  });
+});
+
+describe("isFocusedFlow", () => {
+  it("covers the upload wizard and its processing screen only", () => {
+    expect(isFocusedFlow("/subir")).toBe(true);
+    expect(isFocusedFlow("/subir/procesando")).toBe(true);
+    expect(isFocusedFlow("/proyecto/x")).toBe(false);
   });
 });

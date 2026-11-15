@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, type ReactNode } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { cn } from "@/lib/cn";
 import { DEFAULT_PROJECT_ID } from "@/lib/constants";
-import { getActiveHref, getMainNavItems } from "@/lib/navigation";
+import { getActiveHref, getMainNavItems, isFocusedFlow } from "@/lib/navigation";
 
 type MainNavProps = {
   variant: "desktop" | "mobile";
@@ -28,10 +28,12 @@ export function MainNav({ variant }: MainNavProps) {
 
 function ActiveNav({ Nav }: { Nav: typeof DesktopNav }) {
   const pathname = usePathname();
-  return <Nav activeHref={getActiveHref(pathname, NAV_HREFS)} />;
+  return <Nav activeHref={getActiveHref(pathname, NAV_HREFS)} focused={isFocusedFlow(pathname)} />;
 }
 
-function DesktopNav({ activeHref }: { activeHref?: string }) {
+type NavProps = { activeHref?: string; focused?: boolean };
+
+function DesktopNav({ activeHref }: NavProps): ReactNode {
   return (
     <nav aria-label="Main" data-testid="desktop-nav" className="hidden lg:block">
       <ul className="flex items-center gap-1 rounded-lg bg-surface-container-low p-1">
@@ -58,7 +60,8 @@ function DesktopNav({ activeHref }: { activeHref?: string }) {
   );
 }
 
-function MobileNav({ activeHref }: { activeHref?: string }) {
+function MobileNav({ activeHref, focused = false }: NavProps): ReactNode {
+  if (focused) return null;
   return (
     <nav
       aria-label="Main"

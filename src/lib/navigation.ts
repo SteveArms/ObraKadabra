@@ -29,3 +29,10 @@ export function getActiveHref(pathname: string, hrefs: string[]): string | undef
     .filter((href) => matchesPath(normalized, href))
     .sort((a, b) => b.length - a.length)[0];
 }
+
+// Task flows own the bottom edge on phones with their action bar, so the tab bar steps aside there
+const FOCUSED_FLOWS = ["/subir"];
+
+export function isFocusedFlow(pathname: string): boolean {
+  return FOCUSED_FLOWS.some((href) => matchesPath(pathname, href));
+}

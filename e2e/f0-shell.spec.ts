@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import { DEFAULT_PROJECT_ID } from "../src/lib/constants";
-import { getMainNavItems } from "../src/lib/navigation";
+import { getMainNavItems, isFocusedFlow } from "../src/lib/navigation";
 
 const NAV_ITEMS = getMainNavItems(DEFAULT_PROJECT_ID);
 
@@ -18,11 +18,16 @@ test("home loads with the ObraKadabra header", async ({ page }) => {
 
 for (const item of NAV_ITEMS) {
   test(`nav link "${item.id}" opens ${item.href} and is marked active`, async ({ page, isMobile }) => {
-    const startPath = item.href === "/" ? "/subir" : "/";
+    const startPath = item.href === "/" ? `/proyecto/${DEFAULT_PROJECT_ID}/avance` : "/";
     await page.goto(startPath);
     const link = visibleNav(page, isMobile).getByTestId(`nav-link-${item.id}`);
     await link.click();
     await expect(page).toHaveURL(item.href);
+    // On phones a task flow hands the bottom edge to its own action bar
+    if (isMobile && isFocusedFlow(item.href)) {
+      await expect(visibleNav(page, isMobile)).toHaveCount(0);
+      return;
+    }
     await expect(link).toHaveAttribute("aria-current", "page");
     await expect(visibleNav(page, isMobile).locator('[aria-current="page"]')).toHaveCount(1);
   });

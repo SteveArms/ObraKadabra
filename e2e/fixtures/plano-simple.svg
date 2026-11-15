@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="800" viewBox="0 0 1000 800" font-family="Arial, sans-serif">
+  <rect width="1000" height="800" fill="#ffffff"/>
+  <g stroke="#1b1b1b" stroke-linecap="square" fill="none">
+    <path stroke-width="25" d="M100 120H250M450 120H900M900 120V180M900 300V720M900 720H345M255 720H100M100 720V120"/>
+    <path stroke-width="22" d="M500 120V250M500 340V720"/>
+    <path stroke-width="15" d="M500 420H560M650 420H900"/>
+  </g>
+  <g stroke="#1b1b1b" stroke-width="2" fill="none">
+    <path d="M250 112H450M250 128H450M892 180V300M908 180V300"/>
+    <path d="M345 720V630A90 90 0 0 0 255 720"/>
+    <path d="M500 250H590A90 90 0 0 1 500 340"/>
+    <path d="M560 420V510A90 90 0 0 0 650 420"/>
+  </g>
+  <g fill="#1b1b1b">
+    <rect x="87.5" y="107.5" width="25" height="25"/><rect x="487.5" y="107.5" width="25" height="25"/>
+    <rect x="887.5" y="107.5" width="25" height="25"/><rect x="887.5" y="707.5" width="25" height="25"/>
+    <rect x="487.5" y="707.5" width="25" height="25"/><rect x="87.5" y="707.5" width="25" height="25"/>
+  </g>
+  <g stroke="#555555" stroke-width="1.5">
+    <path d="M100 60H900M100 50V70M900 50V70M40 120V720M30 120H50M30 720H50"/>
+  </g>
+  <g fill="#1b1b1b" text-anchor="middle">
+    <text x="500" y="48" font-size="22">8.00 m</text>
+    <text x="28" y="420" font-size="22" transform="rotate(-90 28 420)">6.00 m</text>
+    <text x="300" y="430" font-size="26" font-weight="bold">LIVING AND DINING</text>
+    <text x="700" y="280" font-size="26" font-weight="bold">BEDROOM</text>
+    <text x="700" y="580" font-size="26" font-weight="bold">KITCHEN</text>
+  </g>
+</svg>

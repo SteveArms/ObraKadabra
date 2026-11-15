@@ -11,3 +11,22 @@ export const SLAB_REBAR_KG_PER_M2 = 3.5;
 
 // Depth of the foundation bottom below natural ground level (Df), in meters
 export const FOUNDATION_DEPTH = 1;
+
+// Isolated footing poured under every ground-floor column
+export const ISOLATED_FOOTING = { w: 1, d: 1, depth: 0.6 } as const;
+
+// Slab and roof thickness: lightweight joist slab vs. metal sheet on purlins
+export const SLAB_THICKNESS = 0.2;
+export const ROOF_THICKNESS = { concrete_slab: 0.2, metal_sheet: 0.05 } as const;
+
+// Brick walls are laid as soga (0.15 m) or cabeza (0.25 m); measured thicknesses snap to the closest one
+export const WALL_THICKNESSES = [0.15, 0.25] as const;
+
+// Plans rarely show heights, so detected openings start with standard sizes the user can edit
+export const DEFAULT_OPENING = {
+  door: { height: 2.1, sill: 0 },
+  window: { height: 1.2, sill: 0.9 },
+} as const;
+
+// Minimum floor-to-floor height accepted for a dwelling (RNE A.010)
+export const MIN_FLOOR_HEIGHT = 2.4;

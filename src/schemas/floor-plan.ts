@@ -7,6 +7,8 @@ const id = z.string().min(1);
 const level = z.number().int().min(1);
 const meters = z.number().positive();
 const polygon = z.array(PointSchema).min(3);
+// AI certainty for a detected element; anything hand-drawn or confirmed is 1
+const confidence = z.number().min(0).max(1);
 
 export const RoofTypeSchema = z.enum(["concrete_slab", "metal_sheet"]);
 
@@ -29,7 +31,7 @@ export const WallSchema = z.object({
   thickness: meters,
   kind: WallKindSchema,
   level,
-  confidence: z.number().min(0).max(1),
+  confidence,
 });
 
 export const OpeningSchema = z.object({
@@ -40,9 +42,10 @@ export const OpeningSchema = z.object({
   width: meters,
   height: meters,
   sill: z.number().min(0),
+  confidence: confidence.optional(),
 });
 
-export const ColumnSchema = z.object({ id, x: z.number(), y: z.number(), w: meters, d: meters, level });
+export const ColumnSchema = z.object({ id, x: z.number(), y: z.number(), w: meters, d: meters, level, confidence: confidence.optional() });
 
 export const FootingSchema = z.object({ id, x: z.number(), y: z.number(), w: meters, d: meters, depth: meters });
 
@@ -50,7 +53,7 @@ export const SlabSchema = z.object({ id, level, polygon, thickness: meters });
 
 export const RoofSchema = z.object({ id, level, polygon, thickness: meters });
 
-export const RoomSchema = z.object({ id, name: z.string().min(1), polygon, level });
+export const RoomSchema = z.object({ id, name: z.string().min(1), polygon, level, confidence: confidence.optional() });
 
 export const FloorPlanSchema = z.object({
   meta: FloorPlanMetaSchema,

@@ -10,3 +10,6 @@ export const ELEMENT_STATUS_STYLES: Record<ElementStatus, { label: string; dotCl
   done: { label: "Done", dotClass: "bg-status-done", tintClass: "bg-status-done/12", textClass: "text-status-done-text", colorVar: "--color-status-done" },
   delayed: { label: "Delayed", dotClass: "bg-status-delayed", tintClass: "bg-status-delayed/12", textClass: "text-status-delayed-text", colorVar: "--color-status-delayed" },
 };
+
+// Detected elements below this AI confidence are flagged for review in the editor
+export const PENDING_CONFIDENCE = 0.75;
