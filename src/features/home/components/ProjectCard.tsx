@@ -1,0 +1,55 @@
+import Link from "next/link";
+import { buttonClasses } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
+import { Icon } from "@/components/ui/Icon";
+import { MetricList } from "@/components/ui/MetricList";
+import { formatArea, formatCount, formatSoles } from "@/lib/format";
+import type { TakeoffSummary } from "@/lib/takeoff";
+import type { Project } from "@/schemas/project";
+
+const updatedFormat = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" });
+
+type ProjectCardProps = {
+  project: Project;
+  summary: TakeoffSummary;
+};
+
+export function ProjectCard({ project, summary }: ProjectCardProps) {
+  const titleId = `project-${project.id}-title`;
+  return (
+    <Card
+      role="group"
+      aria-labelledby={titleId}
+      data-testid="project-card"
+      data-project-id={project.id}
+      className="flex w-full flex-col gap-space-md"
+    >
+        <div className="flex flex-col gap-1">
+          <h3 id={titleId} className="font-display text-headline-sm [overflow-wrap:anywhere]">
+            {project.name}
+          </h3>
+          <p className="text-body-sm text-on-surface-variant">
+            {project.location ? `${project.location} · ` : ""}Updated {updatedFormat.format(new Date(project.updatedAt))}
+          </p>
+        </div>
+        <MetricList
+          className="sm:grid-cols-3"
+          metrics={[
+            { label: "Built area", value: formatArea(summary.builtArea) },
+            { label: "Floors", value: formatCount(summary.levels, "floor", "floors") },
+            { label: "Shell budget", value: formatSoles(summary.cost.total) },
+          ]}
+        />
+        <div className="mt-auto grid grid-cols-2 gap-space-xs">
+          <Link href={`/proyecto/${project.id}`} className={buttonClasses("primary")}>
+            <Icon name="view_in_ar" />
+            Open workspace
+          </Link>
+          <Link href={`/proyecto/${project.id}/editor`} className={buttonClasses("ghost")}>
+            <Icon name="architecture" />
+            Edit plan
+          </Link>
+        </div>
+    </Card>
+  );
+}
