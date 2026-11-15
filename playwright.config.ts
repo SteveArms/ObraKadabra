@@ -4,6 +4,9 @@ const PORT = 3100;
 const isCI = Boolean(process.env.CI);
 // Set by the deploy workflow to run the @smoke subset against a Vercel preview instead of a local build
 const remoteBaseUrl = process.env.PLAYWRIGHT_BASE_URL;
+const baseURL = remoteBaseUrl ?? `http://localhost:${PORT}`;
+// Specs act as a returning user who already saw the workspace tour; f8-pulido starts from empty storage to test it
+const tourSeen = { cookies: [], origins: [{ origin: new URL(baseURL).origin, localStorage: [{ name: "obrakadabra:tour-done", value: "true" }] }] };
 
 export default defineConfig({
   testDir: "./e2e",
@@ -16,7 +19,8 @@ export default defineConfig({
   retries: isCI ? 1 : 0,
   reporter: isCI ? [["html", { open: "never" }], ["github"]] : [["html", { open: "never" }], ["list"]],
   use: {
-    baseURL: remoteBaseUrl ?? `http://localhost:${PORT}`,
+    baseURL,
+    storageState: tourSeen,
     browserName: "chromium",
     trace: "retain-on-failure",
     screenshot: "only-on-failure",

@@ -7,7 +7,8 @@ import { formatSoles } from "@/lib/format";
 import { materialsForWeek } from "@/lib/schedule";
 import type { Schedule } from "@/schemas/schedule";
 import { useMaterialSelection } from "../hooks/useMaterialSelection";
-import { purchaseCost, shoppingListMessage, whatsappUrl } from "../utils";
+import { whatsappUrl } from "@/lib/whatsapp";
+import { purchaseCost, shoppingListMessage } from "../utils";
 import { MaterialRow } from "./MaterialRow";
 
 type MaterialsPanelProps = { schedule: Schedule; week: number; projectName: string };

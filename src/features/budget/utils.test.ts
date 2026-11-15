@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { DEMO_PROJECTS } from "@/lib/projects";
 import { scheduleFor, type WeekMaterial } from "@/lib/schedule";
-import { costByItem, purchaseCost, purchaseQuantity, shoppingListMessage, whatsappUrl } from "./utils";
+import { whatsappUrl } from "@/lib/whatsapp";
+import { costByItem, purchaseCost, purchaseQuantity, shoppingListMessage } from "./utils";
 
 const schedule = scheduleFor(DEMO_PROJECTS[0].floorPlan);
 

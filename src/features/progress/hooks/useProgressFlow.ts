@@ -5,7 +5,8 @@ import { useState } from "react";
 import { downscaleImage } from "@/lib/image";
 import { saveProgressPhoto } from "@/lib/projects";
 import type { ProgressEntry, ProgressFinding } from "@/schemas/progress";
-import { analyzePhoto, GENERIC_ERROR, ProgressRequestError } from "../api";
+import { asRequestFailure } from "@/lib/http";
+import { analyzePhoto, GENERIC_ERROR } from "../api";
 import { useProgressStore } from "../store";
 import type { SitePhoto } from "../types";
 import type { ProgressScope } from "./useProgressScope";
@@ -22,7 +23,6 @@ async function toSitePhoto(file: File): Promise<SitePhoto> {
   return { blob, url: URL.createObjectURL(blob), name: file.name, size: blob.size, takenAt: new Date().toISOString() };
 }
 
-const errorMessage = (error: unknown) => (error instanceof ProgressRequestError ? error.message : GENERIC_ERROR);
 
 function makeEntry({ projectId, week, scope }: FlowInput, id: string, findings: ProgressFinding[], approved: boolean): ProgressEntry {
   return { id, projectId, week, levelLabel: scope.choice.label, sector: scope.roomName, recordedAt: new Date().toISOString(), approved, hasPhoto: true, findings };
@@ -40,7 +40,8 @@ async function analyzeAndLog(input: FlowInput, photo: SitePhoto) {
     await save(makeEntry(input, id, analysis.findings, false));
     store().setResult(id, analysis.findings);
   } catch (error) {
-    store().setAnalysis({ status: "error", message: errorMessage(error) });
+    const { message, kind } = asRequestFailure(error, GENERIC_ERROR);
+    store().setAnalysis({ status: "error", message, kind });
   }
 }
 

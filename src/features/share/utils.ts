@@ -1,3 +1,4 @@
+import { whatsappUrl } from "@/lib/whatsapp";
 import { actualProgressAt, actualProgressFrom, earnedValueAt, plannedProgressAt } from "@/lib/schedule";
 import type { ProgressEntry } from "@/schemas/progress";
 import type { Activity, Schedule } from "@/schemas/schedule";
@@ -57,7 +58,6 @@ export function latestPhotoEntry(entries: ProgressEntry[]): ProgressEntry | unde
   return entries.filter((entry) => entry.approved && entry.hasPhoto).sort((a, b) => b.recordedAt.localeCompare(a.recordedAt))[0];
 }
 
-// wa.me opens WhatsApp with the message ready and lets the user pick the chat
 export function whatsappShareUrl(link: string): string {
-  return `https://wa.me/?text=${encodeURIComponent(`Follow how our future home is coming along: ${link}`)}`;
+  return whatsappUrl(`Follow how our future home is coming along: ${link}`);
 }

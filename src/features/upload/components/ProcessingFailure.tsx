@@ -1,25 +1,17 @@
 import Link from "next/link";
-import { Button, buttonClasses } from "@/components/ui/Button";
+import { FailureNotice } from "@/components/layout/FailureNotice";
+import { buttonClasses } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
+import type { RequestFailure } from "@/lib/http";
 
-export function ProcessingFailure({ message, onRetry }: { message: string | null; onRetry: () => void }) {
+export function ProcessingFailure({ failure, onRetry }: { failure: RequestFailure | null; onRetry: () => void }) {
   return (
-    <div role="alert" data-testid="processing-error" className="flex flex-col gap-space-md rounded-md bg-error-container p-space-md text-on-error-container">
-      <p className="flex items-start gap-space-xs text-body-md">
-        <Icon name="error" className="mt-0.5" />
-        {message}
-      </p>
-      <div className="flex flex-wrap gap-space-sm">
-        <Button onClick={onRetry}>
-          <Icon name="refresh" />
-          Try again
-        </Button>
-        <Link href="/subir" className={buttonClasses("ghost")}>
-          <Icon name="add_a_photo" />
-          Upload another photo
-        </Link>
-      </div>
-    </div>
+    <FailureNotice message={failure?.message ?? ""} kind={failure?.kind} onRetry={onRetry} testId="processing-error">
+      <Link href="/subir" className={buttonClasses("ghost")}>
+        <Icon name="add_a_photo" />
+        Upload another photo
+      </Link>
+    </FailureNotice>
   );
 }
 

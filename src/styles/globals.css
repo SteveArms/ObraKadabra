@@ -165,3 +165,46 @@
     -webkit-tap-highlight-color: transparent;
   }
 }
+
+/* AI moments only: results of the AI enter one by one (opacity for everyone, rise and blur without reduced motion) */
+@keyframes ai-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes ai-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(4px);
+  }
+}
+
+@keyframes ai-sheen {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@utility ai-reveal {
+  animation: ai-fade-in 300ms ease-out both;
+  animation-delay: calc(var(--reveal-index, 0) * 100ms);
+  @media (prefers-reduced-motion: no-preference) {
+    animation-name: ai-fade-in-up;
+  }
+}
+
+/* An indigo light passing over a track while the AI works; a still tinted track under reduced motion */
+@utility ai-sheen {
+  background-color: var(--color-ai-tint);
+  background-image: linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--color-ai) 55%, transparent) 50%, transparent 100%);
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  @media (prefers-reduced-motion: no-preference) {
+    animation: ai-sheen 1.6s linear infinite;
+  }
+}

@@ -1,3 +1,5 @@
+import { isBlurry, toGray } from "./sharpness";
+
 export function canvasOf(width: number, height: number): { canvas: HTMLCanvasElement; context: CanvasRenderingContext2D } {
   const canvas = document.createElement("canvas");
   canvas.width = Math.max(1, Math.round(width));
@@ -26,4 +28,16 @@ export async function downscaleImage(file: Blob, maxSide: number, type?: string,
   context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
   bitmap.close();
   return canvasToBlob(canvas, type ?? (file.type === "image/png" ? "image/png" : "image/jpeg"), quality);
+}
+
+// Measured on a 640 px copy: enough detail for line edges and quick on a phone
+const SHARPNESS_SIDE = 640;
+
+export async function looksBlurry(image: Blob): Promise<boolean> {
+  const bitmap = await createImageBitmap(image);
+  const scale = Math.min(1, SHARPNESS_SIDE / Math.max(bitmap.width, bitmap.height));
+  const { canvas, context } = canvasOf(bitmap.width * scale, bitmap.height * scale);
+  context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  bitmap.close();
+  return isBlurry(toGray(context.getImageData(0, 0, canvas.width, canvas.height).data), canvas.width, canvas.height);
 }

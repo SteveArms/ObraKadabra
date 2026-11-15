@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
+import { useBlurCheck } from "../hooks/useBlurCheck";
 import { MAX_SHEETS, useSheetFiles } from "../hooks/useSheetFiles";
 import { useUploadStore } from "../store";
 import { AddFloorCard } from "./AddFloorCard";
@@ -13,15 +14,30 @@ import { PlanDropzone } from "./PlanDropzone";
 import { SheetPreview } from "./SheetPreview";
 import { SheetTabs } from "./SheetTabs";
 
-type SheetFooterProps = { floor: number; canRemove: boolean; busy: boolean; onRemove: () => void; onReplace: (file: File | undefined) => void };
+type SheetFooterProps = { image: Blob; floor: number; canRemove: boolean; busy: boolean; onRemove: () => void; onReplace: (file: File | undefined) => void };
 
-function SheetFooter({ floor, canRemove, busy, onRemove, onReplace }: SheetFooterProps) {
+function SheetStatus({ image }: { image: Blob }) {
+  const blurry = useBlurCheck(image);
+  if (blurry) {
+    return (
+      <p role="status" data-testid="blurry-warning" className="flex items-start gap-space-xs text-body-md text-pretty text-on-surface">
+        <Icon name="blur_on" className="mt-0.5 shrink-0 text-status-warning" />
+        This photo looks blurry, so the AI may misread some walls. Retake it in good light, or continue and fix it in the editor.
+      </p>
+    );
+  }
+  return (
+    <p className="flex items-center gap-space-xs text-body-md text-on-surface-variant">
+      <Icon name="check_circle" className="text-status-done-text" />
+      Plan ready for calibration.
+    </p>
+  );
+}
+
+function SheetFooter({ image, floor, canRemove, busy, onRemove, onReplace }: SheetFooterProps) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-space-sm border-t border-line px-space-sm py-space-xs">
-      <p className="flex items-center gap-space-xs text-body-md text-on-surface-variant">
-        <Icon name="check_circle" className="text-status-done-text" />
-        Plan ready for calibration.
-      </p>
+      <SheetStatus image={image} />
       <div className="flex gap-space-xs">
         {canRemove ? (
           <Button variant="ghost" onClick={onRemove}>
@@ -52,7 +68,7 @@ export function UploadStep() {
             key={active.id}
             sheet={active}
             floor={index + 1}
-            footer={<SheetFooter floor={index + 1} canRemove={sheets.length > 1} busy={files.busy} onRemove={() => removeSheet(active.id)} onReplace={(file) => files.load(file, active.id)} />}
+            footer={<SheetFooter image={active.image.blob} floor={index + 1} canRemove={sheets.length > 1} busy={files.busy} onRemove={() => removeSheet(active.id)} onReplace={(file) => files.load(file, active.id)} />}
           />
         ) : (
           <PlanDropzone onFile={(file) => files.load(file)} busy={files.busy} />

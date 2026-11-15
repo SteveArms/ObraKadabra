@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { PageSection } from "@/components/layout/PageSection";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { summarizeProject } from "@/lib/schedule";
 import { useProjects } from "../hooks/useProjects";
 import { aggregatePortfolio } from "../utils";
@@ -21,6 +22,12 @@ export function ProjectsDashboard() {
     <PageSection labelledBy="projects-title">
       <SectionHeading id="projects-title" overline="Dashboard" icon="folder_managed" title="My active projects" />
       <div aria-busy={state.status === "loading"} className="min-h-24">
+        {state.status === "loading" ? (
+          <div data-testid="projects-loading" className="grid grid-cols-1 gap-space-lg md:grid-cols-2 xl:grid-cols-3">
+            <Skeleton className="h-56 rounded-lg" />
+            <Skeleton className="h-56 rounded-lg max-md:hidden" />
+          </div>
+        ) : null}
         {state.status === "ready" && projects.length === 0 ? <ProjectsEmptyState /> : null}
         {projects.length > 0 ? (
           <ul className="grid grid-cols-1 gap-space-lg md:grid-cols-2 xl:grid-cols-3">
