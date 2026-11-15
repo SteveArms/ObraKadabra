@@ -39,7 +39,7 @@ describe("buildPlanObjects", () => {
       const upper = columns.find((entry) => entry.level === 2)!;
       const lower = columns.find((entry) => entry.level === 1)!;
       applyAppearance(model.entries, {
-        levelCut: 1,
+        isVisible: (entry) => entry.level <= 1,
         selectedKey: lower.key,
         materialFor: (entry) => (entry.key === lower.key ? selected : idle),
       });

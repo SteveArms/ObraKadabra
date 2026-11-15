@@ -13,9 +13,14 @@ export type StatusMaterials = { byStatus: Record<ElementStatus, MeshStandardMate
 // One material per status shared by every mesh, so recoloring never allocates and draw state stays small
 export function useStatusMaterials(): StatusMaterials {
   const materials = useMemo(() => {
+    // Work in progress reads as translucent, so the finished structure behind it stays visible
     const entries = Object.entries(ELEMENT_STATUS_STYLES).map(([status, style]) => [
       status,
-      new MeshStandardMaterial({ color: cssColor(style.colorVar), roughness: 0.85 }),
+      new MeshStandardMaterial({
+        color: cssColor(style.colorVar),
+        roughness: 0.85,
+        ...(status === "in_progress" ? { transparent: true, opacity: 0.55, depthWrite: false } : {}),
+      }),
     ]);
     const selected = new MeshStandardMaterial({
       color: cssColor("--color-inverse-primary"),
