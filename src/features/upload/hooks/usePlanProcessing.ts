@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { createLocalProjectRepository, savePlanImages } from "@/lib/projects";
+import { getProjectRepository, savePlanImages } from "@/lib/projects";
 import { assemblePlan } from "@/lib/plan";
 import { summarizeTakeoff } from "@/lib/takeoff";
 import type { LevelPlan } from "@/schemas/plan-extraction";
@@ -32,7 +32,7 @@ async function saveDraft(plans: LevelPlan[], details: WizardDetails, sheets: She
   const calibratedMeters = sheets[0] ? (parseMeters(sheets[0].calibration.meters) ?? undefined) : undefined;
   const floorPlan = assemblePlan(plans, { name: details.name.trim(), levels: details.levels, floorHeight: parseMeters(details.floorHeight) ?? 2.6, roofType: details.roofType, calibratedMeters });
   const project = createDraftProject(crypto.randomUUID(), new Date(), floorPlan);
-  await createLocalProjectRepository(window.localStorage).save(project);
+  await getProjectRepository().save(project);
   // The editor can still work without the background photo, so a storage failure here is not fatal
   await savePlanImages(sheets.map((sheet, index) => ({ projectId: project.id, level: index + 1, blob: sheet.image.blob, width: sheet.image.width, height: sheet.image.height }))).catch(() => undefined);
   const summary = summarizeTakeoff(floorPlan);

@@ -6,6 +6,7 @@ import { Viewer } from "@/features/viewer-3d";
 import type { Project } from "@/schemas/project";
 import { useProjectSchedule } from "../hooks/useProjectSchedule";
 import { useProject } from "@/lib/hooks/useProject";
+import { useProgressLog } from "@/lib/hooks/useProgressLog";
 import { ProjectBar } from "./ProjectBar";
 import { WorkspacePanel } from "./WorkspacePanel";
 
@@ -25,7 +26,8 @@ const LAYOUT =
   "lg:[grid-template-areas:'bar_bar'_'viewer_panel'_'timeline_timeline']";
 
 function WorkspaceLayout({ project, glbUrl }: { project: Project; glbUrl?: string }) {
-  const { schedule, week, statuses, progress } = useProjectSchedule(project);
+  const { entries } = useProgressLog(project.id);
+  const { schedule, week, statuses, progress } = useProjectSchedule(project, entries);
   return (
     <div className={LAYOUT}>
       <div className="[grid-area:bar]">

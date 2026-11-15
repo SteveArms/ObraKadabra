@@ -6,6 +6,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { summarizeProject } from "@/lib/schedule";
 import { useProjects } from "../hooks/useProjects";
 import { aggregatePortfolio } from "../utils";
+import { KeepProjectsForm } from "./KeepProjectsForm";
 import { NewPlanBanner } from "./NewPlanBanner";
 import { PortfolioKpis } from "./PortfolioKpis";
 import { ProjectCard } from "./ProjectCard";
@@ -31,6 +32,7 @@ export function ProjectsDashboard() {
           </ul>
         ) : null}
       </div>
+      {projects.length > 0 ? <KeepProjectsForm /> : null}
       <NewPlanBanner />
       <PortfolioKpis totals={aggregatePortfolio(summaries)} />
     </PageSection>

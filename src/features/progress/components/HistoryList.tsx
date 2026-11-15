@@ -5,7 +5,7 @@ import { Icon } from "@/components/ui/Icon";
 import { cn } from "@/lib/cn";
 import { ELEMENT_STATUS_STYLES } from "@/lib/constants";
 import type { ProgressEntry } from "@/schemas/progress";
-import { usePhotoUrl } from "../hooks/usePhotoUrl";
+import { usePhotoUrl } from "@/lib/hooks/usePhotoUrl";
 
 const date = new Intl.DateTimeFormat("en-US", { day: "numeric", month: "short", year: "numeric" });
 

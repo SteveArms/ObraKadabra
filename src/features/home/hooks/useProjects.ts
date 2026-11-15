@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createLocalProjectRepository } from "@/lib/projects";
+import { getProjectRepository } from "@/lib/projects";
 import type { Project } from "@/schemas/project";
 
 // Storage can be blocked (private mode, disabled site data); the dashboard then behaves as if empty
 function loadProjects(): Promise<Project[]> {
   try {
-    return createLocalProjectRepository(window.localStorage).list().catch(() => []);
+    return getProjectRepository().list().catch(() => []);
   } catch {
     return Promise.resolve([]);
   }

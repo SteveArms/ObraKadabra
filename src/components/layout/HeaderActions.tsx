@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Suspense } from "react";
 import { buttonClasses } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
+import { ShareButton } from "@/features/share";
 import { DEFAULT_PROJECT_ID } from "@/lib/constants";
 import { projectIdFromPath } from "@/lib/navigation";
 
@@ -15,10 +16,7 @@ function Actions({ projectId }: { projectId: string }) {
         <Icon name="photo_camera" />
         <span className="sr-only md:not-sr-only">Log progress</span>
       </Link>
-      <Link href={`/compartir/${projectId}`} data-testid="header-share" className={buttonClasses("ghost")}>
-        <Icon name="share" />
-        <span className="sr-only md:not-sr-only">Share</span>
-      </Link>
+      <ShareButton projectId={projectId} />
     </>
   );
 }

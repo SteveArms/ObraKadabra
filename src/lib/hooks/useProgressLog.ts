@@ -1,11 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { createLocalProjectRepository } from "@/lib/projects";
+import { getProjectRepository } from "@/lib/projects";
 import type { ProgressEntry } from "@/schemas/progress";
 
 function repository() {
-  return createLocalProjectRepository(window.localStorage);
+  return getProjectRepository();
 }
 
 // Photo logs of one project, newest first; storage failures leave the list empty instead of breaking the page
