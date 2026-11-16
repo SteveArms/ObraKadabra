@@ -1,11 +1,10 @@
 "use client";
 
 import { useId, useState } from "react";
+import { MetersInput } from "@/components/ui/MetersInput";
 import { parseMeters } from "@/lib/format";
 
 type MeterFieldProps = { label: string; value: number; onCommit: (meters: number) => void; min?: number; testId?: string };
-
-const FIELD = "flex items-center gap-1 rounded-md border border-outline-variant bg-surface-container-lowest px-space-xs focus-within:outline-2 focus-within:outline-primary-container";
 
 // Commits on Enter or when focus leaves; the parent remounts it with a new key when the value changes elsewhere
 export function MeterField({ label, value, onCommit, min = 0.01, testId }: MeterFieldProps) {
@@ -25,24 +24,17 @@ export function MeterField({ label, value, onCommit, min = 0.01, testId }: Meter
       <label htmlFor={id} className="text-body-sm text-on-surface-variant">
         {label}
       </label>
-      <div className={FIELD}>
-        <input
-          id={id}
-          inputMode="decimal"
-          autoComplete="off"
-          data-testid={testId}
-          value={text}
-          aria-invalid={error ? true : undefined}
-          aria-describedby={error ? `${id}-error` : undefined}
-          onChange={(event) => setText(event.target.value)}
-          onBlur={commit}
-          onKeyDown={(event) => event.key === "Enter" && commit()}
-          className="min-h-9 w-full min-w-0 bg-transparent font-mono text-label-numeric-md tabular-nums outline-none"
-        />
-        <span aria-hidden="true" className="font-mono text-label-numeric-sm text-outline">
-          m
-        </span>
-      </div>
+      <MetersInput
+        id={id}
+        size="sm"
+        data-testid={testId}
+        value={text}
+        invalid={Boolean(error)}
+        aria-describedby={error ? `${id}-error` : undefined}
+        onChange={(event) => setText(event.target.value)}
+        onBlur={commit}
+        onKeyDown={(event) => event.key === "Enter" && commit()}
+      />
       {error ? (
         <p id={`${id}-error`} className="text-body-sm text-error">
           {error}

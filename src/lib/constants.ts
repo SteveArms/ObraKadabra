@@ -1,6 +1,6 @@
 import type { ElementStatus } from "@/schemas/schedule";
 
-// TODO: point to the project the user last opened once projects persist (phase 7)
+// TODO: point the header and nav to the project the user last opened instead of the first demo
 export const DEFAULT_PROJECT_ID = "casa-1-piso-90";
 
 // colorVar lets WebGL materials read the same CSS token as the UI; text tones are darker steps so they reach 4.5:1 on their 12% tint

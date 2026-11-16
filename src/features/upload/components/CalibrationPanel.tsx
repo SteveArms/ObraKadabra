@@ -3,6 +3,7 @@
 import { useId } from "react";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
+import { MetersInput } from "@/components/ui/MetersInput";
 import { useUploadStore } from "../store";
 import type { Sheet } from "../types";
 import { formatScale } from "@/lib/format";
@@ -30,20 +31,7 @@ export function CalibrationPanel({ sheet }: { sheet: Sheet }) {
         <label htmlFor={inputId} className="text-body-md font-medium">
           Real distance between A and B
         </label>
-        <div className="flex items-center rounded-md border border-outline-variant bg-surface-container-lowest focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-primary-container">
-          <input
-            id={inputId}
-            name="calibration-distance"
-            inputMode="decimal"
-            autoComplete="off"
-            placeholder="8.00"
-            aria-describedby={hintId}
-            value={sheet.calibration.meters}
-            onChange={(event) => setMeters(sheet.id, event.target.value)}
-            className="min-h-11 w-full min-w-0 bg-transparent px-space-sm font-mono text-body-lg outline-none"
-          />
-          <span className="pe-space-sm font-mono text-body-md text-on-surface-variant">m</span>
-        </div>
+        <MetersInput id={inputId} name="calibration-distance" placeholder="8.00" aria-describedby={hintId} value={sheet.calibration.meters} onChange={(event) => setMeters(sheet.id, event.target.value)} />
         <p id={hintId} className="text-body-sm text-on-surface-variant">
           Use the longest dimension you can find; small errors shrink with distance.
         </p>

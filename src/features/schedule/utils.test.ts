@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { DEMO_PROJECTS } from "@/lib/projects";
+import { demoProjects } from "@/lib/projects";
 import { scheduleFor } from "@/lib/schedule";
 import { activityAt, activityState, todayWeek, weekFromRatio } from "./utils";
 
-const schedule = scheduleFor(DEMO_PROJECTS[0].floorPlan);
+const schedule = scheduleFor(demoProjects()[0].floorPlan);
 
 describe("schedule utils", () => {
   it("counts calendar weeks from the start date", () => {

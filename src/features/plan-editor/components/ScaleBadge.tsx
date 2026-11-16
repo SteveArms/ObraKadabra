@@ -7,6 +7,7 @@ import { formatMeters, formatScale, parseMeters } from "@/lib/format";
 import { metersPerPixel } from "@/lib/geometry";
 import type { FloorPlan } from "@/schemas/floor-plan";
 import { useEditorStore } from "../store";
+import { MetersInput } from "@/components/ui/MetersInput";
 
 const BADGE = "flex flex-wrap items-center gap-space-xs rounded-md bg-surface-container px-space-sm py-1 font-mono text-label-numeric-sm text-on-surface-variant";
 
@@ -33,8 +34,7 @@ function CalibrationForm() {
         apply();
       }}>
       <label htmlFor="recalibrate-meters" className="text-body-sm">Real distance</label>
-      <input id="recalibrate-meters" inputMode="decimal" autoComplete="off" value={meters} onChange={(event) => setMeters(event.target.value)} aria-invalid={error ? true : undefined} aria-describedby={error ? "recalibrate-error" : undefined} placeholder="5.00" className="h-8 w-20 rounded-md border border-outline-variant bg-surface-container-lowest px-2 font-mono text-body-md" />
-      <span className="text-body-sm">m</span>
+      <MetersInput id="recalibrate-meters" size="sm" wrapperClassName="w-24" value={meters} onChange={(event) => setMeters(event.target.value)} invalid={Boolean(error)} aria-describedby={error ? "recalibrate-error" : undefined} placeholder="5.00" />
       <Button type="submit" className="min-h-8 text-body-sm">Apply scale</Button>
       {error ? <span id="recalibrate-error" className="text-body-sm text-error">{error}</span> : null}
     </form>

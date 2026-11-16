@@ -6,7 +6,8 @@ import { getProjectRepository, savePlanImages } from "@/lib/projects";
 import { assemblePlan } from "@/lib/plan";
 import { summarizeTakeoff } from "@/lib/takeoff";
 import type { LevelPlan } from "@/schemas/plan-extraction";
-import { GENERIC_ERROR, ProcessingError, readFloor } from "../api";
+import { asRequestFailure, type RequestFailure } from "@/lib/http";
+import { GENERIC_ERROR, readFloor } from "../api";
 import { applyStep, EMPTY_PROGRESS, type Progress } from "../progress";
 import { useUploadStore } from "../store";
 import type { Sheet, WizardDetails } from "../types";
@@ -47,7 +48,7 @@ export function usePlanProcessing() {
   const [attempt, setAttempt] = useState(0);
   const [progress, setProgress] = useState<Progress>(EMPTY_PROGRESS);
   const [phase, setPhase] = useState<ProcessingPhase>(sheets.length > 0 ? "running" : "empty");
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<RequestFailure | null>(null);
 
   useEffect(() => {
     if (sheets.length === 0) return;
@@ -64,7 +65,7 @@ export function usePlanProcessing() {
     };
     run().catch((reason: unknown) => {
       if (controller.signal.aborted) return;
-      setError(reason instanceof ProcessingError ? reason.message : GENERIC_ERROR);
+      setError(asRequestFailure(reason, GENERIC_ERROR));
       setPhase("failed");
     });
     return () => controller.abort();

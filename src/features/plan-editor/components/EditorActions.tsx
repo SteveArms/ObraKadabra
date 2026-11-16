@@ -8,6 +8,30 @@ import type { Project } from "@/schemas/project";
 import { useEditorSave } from "../hooks/useEditorSave";
 import { ShortcutsDialog } from "./ShortcutsDialog";
 
+type EditorSave = ReturnType<typeof useEditorSave>;
+
+function EditorDialogs({ save, pendingCount }: { save: EditorSave; pendingCount: number }) {
+  return (
+    <>
+      <ConfirmDialog
+        open={save.dialog === "build"}
+        title={`Build in 3D with ${formatCount(pendingCount, "unconfirmed element", "unconfirmed elements")}?`}
+        confirmLabel="Build in 3D"
+        cancelLabel="Keep reviewing"
+        confirmVariant="milestone"
+        onConfirm={() => void save.build()}
+        onCancel={save.closeDialog}
+        testId="confirm-build"
+      >
+        The AI was unsure about them. They will be built as detected, and you can come back to the editor at any time.
+      </ConfirmDialog>
+      <ConfirmDialog open={save.dialog === "discard"} title="Discard your corrections?" confirmLabel="Discard corrections" cancelLabel="Keep editing" onConfirm={save.discard} onCancel={save.closeDialog} testId="confirm-discard">
+        Everything you changed since opening the editor will be lost. The project stays as it was saved.
+      </ConfirmDialog>
+    </>
+  );
+}
+
 export function EditorActions({ project, pendingCount }: { project: Project; pendingCount: number }) {
   const save = useEditorSave(project);
   return (
@@ -27,29 +51,7 @@ export function EditorActions({ project, pendingCount }: { project: Project; pen
           {save.error}
         </p>
       ) : null}
-      <ConfirmDialog
-        open={save.dialog === "build"}
-        title={`Build in 3D with ${formatCount(pendingCount, "unconfirmed element", "unconfirmed elements")}?`}
-        confirmLabel="Build in 3D"
-        cancelLabel="Keep reviewing"
-        confirmVariant="milestone"
-        onConfirm={() => void save.build()}
-        onCancel={save.closeDialog}
-        testId="confirm-build"
-      >
-        The AI was unsure about them. They will be built as detected, and you can come back to the editor at any time.
-      </ConfirmDialog>
-      <ConfirmDialog
-        open={save.dialog === "discard"}
-        title="Discard your corrections?"
-        confirmLabel="Discard corrections"
-        cancelLabel="Keep editing"
-        onConfirm={save.discard}
-        onCancel={save.closeDialog}
-        testId="confirm-discard"
-      >
-        Everything you changed since opening the editor will be lost. The project stays as it was saved.
-      </ConfirmDialog>
+      <EditorDialogs save={save} pendingCount={pendingCount} />
     </div>
   );
 }

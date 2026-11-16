@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { PageSkeleton } from "@/components/layout/PageSkeleton";
 import { SharedFromDevice, SharedHome } from "@/features/share";
 import { getDemoModelUrl } from "@/lib/projects/demo-models";
 import { loadSharedProject } from "@/lib/projects/shared-server";
@@ -32,7 +33,7 @@ async function SharedContent({ token }: { token: string }) {
 
 export default function SharedPage({ params }: PageProps<"/compartir/[token]">) {
   return (
-    <Suspense fallback={<p className="px-gutter py-space-xl text-body-md lg:px-gutter-desktop">Opening the home…</p>}>
+    <Suspense fallback={<PageSkeleton label="Opening the home…" />}>
       {params.then(({ token }) => (
         <SharedContent token={token} />
       ))}

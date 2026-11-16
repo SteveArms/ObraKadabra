@@ -9,6 +9,7 @@ import { useProject } from "@/lib/hooks/useProject";
 import { useProgressLog } from "@/lib/hooks/useProgressLog";
 import { ProjectBar } from "./ProjectBar";
 import { WorkspacePanel } from "./WorkspacePanel";
+import { WorkspaceTour } from "./WorkspaceTour";
 
 type ProjectWorkspaceProps = { projectId: string; glbUrl?: string };
 
@@ -31,7 +32,7 @@ function WorkspaceLayout({ project, glbUrl }: { project: Project; glbUrl?: strin
   return (
     <div className={LAYOUT}>
       <div className="[grid-area:bar]">
-        <ProjectBar project={project} schedule={schedule} week={week} />
+        <ProjectBar project={project} schedule={schedule} week={week} progress={progress} />
       </div>
       <div data-sticky-viewer className="z-30 [grid-area:viewer] max-lg:sticky max-lg:top-16 lg:min-h-0">
         <Viewer plan={project.floorPlan} glbUrl={glbUrl} className="h-[45dvh] min-h-72 lg:h-full" bottomSlot={<MiniPlayer schedule={schedule} />} />
@@ -42,6 +43,7 @@ function WorkspaceLayout({ project, glbUrl }: { project: Project; glbUrl?: strin
       <div className="[grid-area:panel] lg:min-h-0 lg:overflow-y-auto lg:overscroll-contain">
         <WorkspacePanel schedule={schedule} week={week} statuses={statuses} progress={progress} projectName={project.name} />
       </div>
+      <WorkspaceTour />
     </div>
   );
 }

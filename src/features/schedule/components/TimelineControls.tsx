@@ -39,7 +39,7 @@ function PlaybackButtons() {
   const speed = useTimeline((state) => state.speed);
   const setSpeed = useTimeline((state) => state.setSpeed);
   return (
-    <div className="flex items-center gap-space-xs">
+    <div className="flex flex-wrap items-center gap-space-xs">
       <Button variant="ghost" aria-label="Previous week" onClick={previous} disabled={!canGoBack} className="px-2">
         <Icon name="skip_previous" />
       </Button>

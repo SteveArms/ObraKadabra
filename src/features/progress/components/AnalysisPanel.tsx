@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/Button";
+import { FailureNotice } from "@/components/layout/FailureNotice";
 import { Icon } from "@/components/ui/Icon";
 import type { Schedule } from "@/schemas/schedule";
 import { useProgressStore } from "../store";
@@ -26,13 +26,13 @@ export function AnalysisPanel({ schedule, expectedCount, saving, onConfirm, onRe
         AI analysis
       </h2>
       {analysis.status === "idle" ? <Placeholder icon="photo_camera">{`Add a photo and the AI will check it against the ${expectedCount} elements planned for this area.`}</Placeholder> : null}
-      {analysis.status === "loading" ? <Placeholder icon="progress_activity" role="status" spinning>Comparing the photo with the planned elements. This usually takes 10 to 30 seconds…</Placeholder> : null}
-      {analysis.status === "error" ? (
-        <div role="alert" className="flex flex-col items-start gap-space-xs rounded-lg bg-error-container p-space-md text-body-md text-on-error-container">
-          {analysis.message}
-          <Button variant="ghost" onClick={onRetry}>Try again</Button>
+      {analysis.status === "loading" ? (
+        <div className="flex flex-col gap-space-xs">
+          <Placeholder icon="progress_activity" role="status" spinning>Comparing the photo with the planned elements. This usually takes 10 to 30 seconds…</Placeholder>
+          <div aria-hidden="true" className="ai-sheen h-1 rounded-full" />
         </div>
       ) : null}
+      {analysis.status === "error" ? <FailureNotice message={analysis.message} kind={analysis.kind ?? "request"} onRetry={onRetry} testId="analysis-error" /> : null}
       {analysis.status === "done" ? <AnalysisResult schedule={schedule} saving={saving} onConfirm={onConfirm} /> : null}
     </section>
   );

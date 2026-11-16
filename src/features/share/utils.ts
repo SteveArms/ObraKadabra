@@ -56,8 +56,3 @@ export function familySummary(schedule: Schedule, entries: ProgressEntry[], week
 export function latestPhotoEntry(entries: ProgressEntry[]): ProgressEntry | undefined {
   return entries.filter((entry) => entry.approved && entry.hasPhoto).sort((a, b) => b.recordedAt.localeCompare(a.recordedAt))[0];
 }
-
-// wa.me opens WhatsApp with the message ready and lets the user pick the chat
-export function whatsappShareUrl(link: string): string {
-  return `https://wa.me/?text=${encodeURIComponent(`Follow how our future home is coming along: ${link}`)}`;
-}

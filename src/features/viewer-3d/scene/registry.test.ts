@@ -1,6 +1,6 @@
 import { Group, Mesh, MeshBasicMaterial, BoxGeometry } from "three";
 import { describe, expect, it } from "vitest";
-import { DEMO_PROJECTS } from "@/lib/projects";
+import { demoProjects } from "@/lib/projects";
 import { findElementKey, registerElements } from "./registry";
 
 function named(name: string, child?: Mesh) {
@@ -11,7 +11,7 @@ function named(name: string, child?: Mesh) {
 }
 
 describe("registerElements", () => {
-  const plan = DEMO_PROJECTS[1].floorPlan;
+  const plan = demoProjects()[1].floorPlan;
   const glbMesh = new Mesh(new BoxGeometry(), new MeshBasicMaterial());
   const root = new Group();
   root.add(named("column_C-1", glbMesh), named("wall_M-12.001"), named("roof_T1"), named("Camera"), named("wall_M-99"));

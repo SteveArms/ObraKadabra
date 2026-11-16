@@ -9,7 +9,7 @@ export function ToggleButton({ pressed, className, type = "button", ...props }: 
       type={type}
       aria-pressed={pressed}
       className={cn(
-        "inline-flex min-h-8 items-center justify-center gap-1 rounded-md px-2 text-body-sm whitespace-nowrap transition-[background-color,color] duration-150",
+        "inline-flex min-h-8 items-center justify-center gap-1 rounded-md px-2 text-body-sm max-sm:min-h-11 max-sm:min-w-11 whitespace-nowrap transition-[background-color,color] duration-150",
         pressed ? "bg-primary-container font-semibold text-on-primary" : "text-on-surface hover:bg-surface-container-high",
         className,
       )}

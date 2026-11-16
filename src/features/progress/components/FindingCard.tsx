@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { useId, type CSSProperties } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { ELEMENT_STATUS_STYLES } from "@/lib/constants";
 import { cn } from "@/lib/cn";
@@ -16,14 +16,14 @@ const LOOK: Record<ReportedStatus, { icon: string; surface: string; text: string
 const TYPE_LABELS: Record<ProgressFinding["type"], string> = { footing: "Footing", wall: "Wall", column: "Column", slab: "Slab", roof: "Roof" };
 const STATUSES: ReportedStatus[] = ["done", "in_progress", "not_started"];
 
-type FindingCardProps = { finding: ProgressFinding; impact: { progress: number; value: number }; share: number; editing: boolean; onStatus: (status: ReportedStatus) => void };
+type FindingCardProps = { finding: ProgressFinding; index: number; impact: { progress: number; value: number }; share: number; editing: boolean; onStatus: (status: ReportedStatus) => void };
 
-export function FindingCard({ finding, impact, share, editing, onStatus }: FindingCardProps) {
+export function FindingCard({ finding, index, impact, share, editing, onStatus }: FindingCardProps) {
   const look = LOOK[finding.status];
   const selectId = useId();
   const title = `${TYPE_LABELS[finding.type]} ${finding.elementId}`;
   return (
-    <li data-testid={`finding-${finding.elementId}`} data-status={finding.status} className={cn("flex flex-col gap-space-xs rounded-lg p-space-sm", look.surface)}>
+    <li data-testid={`finding-${finding.elementId}`} data-status={finding.status} style={{ "--reveal-index": index } as CSSProperties} className={cn("ai-reveal flex flex-col gap-space-xs rounded-lg p-space-sm", look.surface)}>
       <div className="flex items-start justify-between gap-space-sm">
         <p className={cn("flex items-center gap-1.5 text-body-md font-semibold", look.text)}>
           <Icon name={look.icon} size={18} />

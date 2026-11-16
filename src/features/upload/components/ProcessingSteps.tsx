@@ -18,13 +18,13 @@ export function ProcessingSteps({ progress, failed }: { progress: Progress; fail
             data-testid="processing-step"
             data-step={step}
             data-status={status}
-            className={cn("flex gap-space-sm rounded-md p-space-sm", status === "active" && "bg-surface-container-low")}
+            className={cn("relative flex gap-space-sm overflow-hidden rounded-md p-space-sm", status === "active" && "bg-ai-tint")}
           >
             <span
               className={cn(
                 "flex size-8 shrink-0 items-center justify-center rounded-full",
                 status === "done" && "bg-secondary-fixed text-secondary",
-                status === "active" && "bg-primary-fixed text-primary",
+                status === "active" && "bg-surface-container-lowest text-ai-strong",
                 status === "queued" && "bg-surface-container-high text-on-surface-variant",
               )}
             >
@@ -32,11 +32,16 @@ export function ProcessingSteps({ progress, failed }: { progress: Progress; fail
             </span>
             <div className="flex min-w-0 flex-1 flex-col gap-0.5">
               <p className="flex flex-wrap items-baseline justify-between gap-x-space-sm">
-                <span className={cn("text-body-lg font-medium", status === "active" && "text-primary", status === "queued" && "text-on-surface-variant")}>{STEP_LABELS[step]}</span>
+                <span className={cn("text-body-lg font-medium", status === "active" && "text-ai-strong", status === "queued" && "text-on-surface-variant")}>{STEP_LABELS[step]}</span>
                 <span className="font-mono text-label-numeric-sm text-on-surface-variant uppercase">{STATUS_COPY[status]}</span>
               </p>
-              {detail ? <p className="text-body-md text-pretty text-on-surface-variant">{detail}</p> : null}
+              {detail ? (
+                <p key={detail} className="ai-reveal text-body-md text-pretty text-on-surface-variant">
+                  {detail}
+                </p>
+              ) : null}
             </div>
+            {status === "active" ? <span aria-hidden="true" className="ai-sheen absolute inset-x-0 bottom-0 h-0.5" /> : null}
           </li>
         );
       })}

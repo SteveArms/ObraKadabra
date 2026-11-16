@@ -39,7 +39,3 @@ export function shoppingListMessage(projectName: string, week: number, entries: 
   const total = entries.reduce((sum, entry) => sum + purchaseCost(entry), 0);
   return [`${projectName} · week ${week} shopping list`, ...lines, `Total: ${formatSoles(total)}`].join("\n");
 }
-
-export function whatsappUrl(message: string): string {
-  return `https://wa.me/?text=${encodeURIComponent(message)}`;
-}

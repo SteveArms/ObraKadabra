@@ -33,7 +33,7 @@ export function ProcessingView() {
         <section aria-labelledby="pipeline-title" className="flex flex-col gap-space-md rounded-lg border border-line bg-surface-container-lowest p-space-lg">
           <ProgressBar finished={finished} />
           <ProcessingSteps progress={progress} failed={phase === "failed"} />
-          {phase === "failed" ? <ProcessingFailure message={error} onRetry={retry} /> : null}
+          {phase === "failed" ? <ProcessingFailure failure={error} onRetry={retry} /> : null}
         </section>
       )}
       {phase !== "empty" ? <DidYouKnow /> : null}

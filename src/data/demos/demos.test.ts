@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { DEMO_PROJECTS } from "@/lib/projects";
+import { demoProjects } from "@/lib/projects";
 import { builtArea } from "@/lib/takeoff";
 
 const EXPECTED = { "casa-1-piso-90": { area: 90, levels: 1 }, "vivienda-2-pisos-120": { area: 120, levels: 2 } };
 
-describe.each(DEMO_PROJECTS)("demo $id", (demo) => {
+describe.each(demoProjects())("demo $id", (demo) => {
   const plan = demo.floorPlan;
 
   it("has the advertised built area and floors", () => {

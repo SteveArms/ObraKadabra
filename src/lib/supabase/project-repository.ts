@@ -32,6 +32,23 @@ function supabaseSharing(client: SupabaseClient): Pick<ProjectRepository, "share
   };
 }
 
+function supabaseProgress(client: SupabaseClient, signedIn: () => Promise<boolean>): Pick<ProjectRepository, "listProgress" | "saveProgress"> {
+  return {
+    async listProgress(projectId) {
+      if (!(await signedIn())) return [];
+      const { data, error } = await client.from(PROGRESS_TABLE).select(PROGRESS_COLUMNS).eq("project_id", projectId).order("recorded_at", { ascending: false });
+      check(error);
+      return rowsTo(data, rowToProgress);
+    },
+    async saveProgress(entry) {
+      const valid = ProgressEntrySchema.parse(entry);
+      await ensureUserId(client);
+      check((await client.from(PROGRESS_TABLE).upsert(progressToRow(valid))).error);
+      return valid;
+    },
+  };
+}
+
 // Row level security limits every query to the signed-in owner; without a session there is simply nothing to read yet
 export function createSupabaseProjectRepository(client: SupabaseClient): ProjectRepository {
   const signedIn = async () => Boolean(await currentUser(client));
@@ -60,18 +77,7 @@ export function createSupabaseProjectRepository(client: SupabaseClient): Project
       if (isDemoId(id)) throw new ReadOnlyProjectError(id);
       if (await signedIn()) check((await client.from(PROJECTS_TABLE).delete().eq("id", id)).error);
     },
-    async listProgress(projectId) {
-      if (!(await signedIn())) return [];
-      const { data, error } = await client.from(PROGRESS_TABLE).select(PROGRESS_COLUMNS).eq("project_id", projectId).order("recorded_at", { ascending: false });
-      check(error);
-      return rowsTo(data, rowToProgress);
-    },
-    async saveProgress(entry) {
-      const valid = ProgressEntrySchema.parse(entry);
-      await ensureUserId(client);
-      check((await client.from(PROGRESS_TABLE).upsert(progressToRow(valid))).error);
-      return valid;
-    },
+    ...supabaseProgress(client, signedIn),
     ...supabaseSharing(client),
   };
 }

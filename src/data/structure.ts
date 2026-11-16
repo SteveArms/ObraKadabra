@@ -35,5 +35,5 @@ export const DEFAULT_OPENING = {
 export const DEFAULT_OPENING_WIDTH = { door: 0.9, window: 1.2 } as const;
 export const DEFAULT_COLUMN = { w: 0.25, d: 0.25 } as const;
 
-// Minimum floor-to-floor height accepted for a dwelling (RNE A.010)
+// Lowest floor-to-floor height the wizard accepts: a 2.30 m clear room height (the usual minimum for homes) plus a thin slab
 export const MIN_FLOOR_HEIGHT = 2.4;

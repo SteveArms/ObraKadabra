@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { AppFooter } from "@/components/layout/AppFooter";
+import { OfflineBanner } from "@/components/layout/OfflineBanner";
 import { BrandLink } from "@/components/layout/BrandLink";
 
 // The family view has no app navigation or tools: only the brand, the home and the footer
@@ -11,6 +12,7 @@ export default function SharedLayout({ children }: { children: ReactNode }) {
           <BrandLink />
         </div>
       </header>
+      <OfflineBanner />
       <main id="main" className="flex flex-1 flex-col bg-surface">
         {children}
       </main>

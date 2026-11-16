@@ -18,7 +18,7 @@ export function AnalysisResult({ schedule, saving, onConfirm }: { schedule: Sche
     <>
       <ul className="flex flex-col gap-space-xs">
         {findings.map((finding, index) => (
-          <FindingCard key={finding.elementId} finding={finding} impact={impacts[index]} share={impacts[index].progress / top} editing={editing} onStatus={(status) => setStatus(finding.elementId, status)} />
+          <FindingCard key={finding.elementId} finding={finding} index={index} impact={impacts[index]} share={impacts[index].progress / top} editing={editing} onStatus={(status) => setStatus(finding.elementId, status)} />
         ))}
       </ul>
       <p data-testid="analysis-total" className="flex flex-wrap justify-between gap-space-xs rounded-lg bg-surface-container-low p-space-sm font-mono text-label-numeric-md tabular-nums">

@@ -4,6 +4,16 @@ const PORT = 3100;
 const isCI = Boolean(process.env.CI);
 // Set by the deploy workflow to run the @smoke subset against a Vercel preview instead of a local build
 const remoteBaseUrl = process.env.PLAYWRIGHT_BASE_URL;
+const baseURL = remoteBaseUrl ?? `http://localhost:${PORT}`;
+// Specs act as a returning user who already saw the workspace tour; f8-pulido starts from empty storage to test it
+const tourSeen = { cookies: [], origins: [{ origin: new URL(baseURL).origin, localStorage: [{ name: "obrakadabra:tour-done", value: "true" }] }] };
+
+// @ai calls the real model and costs money, so CI never runs it; @capturas rewrites docs/capturas, so it runs only when asked for
+function skippedTags(): RegExp | undefined {
+  const asked = process.argv.join(" ");
+  const tags = [isCI ? "@ai" : "", asked.includes("@capturas") ? "" : "@capturas"].filter(Boolean);
+  return tags.length ? new RegExp(tags.join("|")) : undefined;
+}
 
 export default defineConfig({
   testDir: "./e2e",
@@ -11,12 +21,12 @@ export default defineConfig({
   snapshotPathTemplate: "{testDir}/__screenshots__/{testFilePath}/{arg}-{projectName}-{platform}{ext}",
   fullyParallel: true,
   forbidOnly: isCI,
-  // Specs tagged @ai call the real model and cost money, so CI never runs them
-  grepInvert: isCI ? /@ai/ : undefined,
+  grepInvert: skippedTags(),
   retries: isCI ? 1 : 0,
   reporter: isCI ? [["html", { open: "never" }], ["github"]] : [["html", { open: "never" }], ["list"]],
   use: {
-    baseURL: remoteBaseUrl ?? `http://localhost:${PORT}`,
+    baseURL,
+    storageState: tourSeen,
     browserName: "chromium",
     trace: "retain-on-failure",
     screenshot: "only-on-failure",

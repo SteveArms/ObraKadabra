@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { PageSkeleton } from "@/components/layout/PageSkeleton";
 import { getProjectRepository } from "@/lib/projects";
 import type { SharedProject } from "@/schemas/shared";
 import { SharedHome } from "./SharedHome";
@@ -23,7 +24,7 @@ export function SharedFromDevice({ token }: { token: string }) {
     };
   }, [token]);
 
-  if (state.status === "loading") return <p className="px-gutter py-space-xl text-body-md lg:px-gutter-desktop">Opening the home…</p>;
+  if (state.status === "loading") return <PageSkeleton label="Opening the home…" />;
   if (state.status === "missing") return <SharedNotFound />;
   return <SharedHome shared={state.shared} now={state.now} />;
 }

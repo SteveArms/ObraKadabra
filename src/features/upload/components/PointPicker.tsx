@@ -19,14 +19,31 @@ type PointPickerProps = {
 
 const MARKS = ["A", "B"];
 
-// The plan image as one big button: each click, tap or Enter places a point in image pixels
-export function PointPicker({ image, points, shape, label, instructions, onPick, testId }: PointPickerProps) {
-  const hintId = useId();
-  const picker = usePointPicker(image, onPick);
+type OverlayProps = { image: Raster; points: Point[]; shape: "line" | "rect"; cursor?: Point };
+
+function PickerOverlay({ image, points, shape, cursor }: OverlayProps) {
   // Crosshair arm length in image pixels, about 4% of the long side
   const arm = Math.max(image.width, image.height) / 25;
   const [a, b] = points;
   const rect = a && b ? rectFromPoints(a, b) : null;
+  return (
+    <svg viewBox={`0 0 ${image.width} ${image.height}`} preserveAspectRatio="none" aria-hidden="true" className="pointer-events-none absolute inset-0 size-full">
+      {shape === "line" && a && b ? <line x1={a.x} y1={a.y} x2={b.x} y2={b.y} className="stroke-secondary-container" strokeWidth={3} vectorEffect="non-scaling-stroke" /> : null}
+      {shape === "rect" && rect ? <rect {...rect} className="fill-primary-container/10 stroke-primary-container" strokeWidth={2} strokeDasharray="6 4" vectorEffect="non-scaling-stroke" /> : null}
+      {cursor ? (
+        <g className="stroke-primary-container" strokeWidth={1.5} vectorEffect="non-scaling-stroke">
+          <line x1={cursor.x - arm} y1={cursor.y} x2={cursor.x + arm} y2={cursor.y} vectorEffect="non-scaling-stroke" />
+          <line x1={cursor.x} y1={cursor.y - arm} x2={cursor.x} y2={cursor.y + arm} vectorEffect="non-scaling-stroke" />
+        </g>
+      ) : null}
+    </svg>
+  );
+}
+
+// The plan image as one big button: each click, tap or Enter places a point in image pixels
+export function PointPicker({ image, points, shape, label, instructions, onPick, testId }: PointPickerProps) {
+  const hintId = useId();
+  const picker = usePointPicker(image, onPick);
   return (
     <div className="flex flex-col gap-space-xs">
       <button
@@ -42,16 +59,7 @@ export function PointPicker({ image, points, shape, label, instructions, onPick,
         className="relative mx-auto block w-fit cursor-crosshair overflow-hidden rounded-md bg-surface-container-lowest outline-offset-4"
       >
         <Image src={image.url} alt="" width={image.width} height={image.height} unoptimized draggable={false} className="block h-auto max-h-[60dvh] w-auto max-w-full select-none" />
-        <svg viewBox={`0 0 ${image.width} ${image.height}`} preserveAspectRatio="none" aria-hidden="true" className="pointer-events-none absolute inset-0 size-full">
-          {shape === "line" && a && b ? <line x1={a.x} y1={a.y} x2={b.x} y2={b.y} className="stroke-secondary-container" strokeWidth={3} vectorEffect="non-scaling-stroke" /> : null}
-          {shape === "rect" && rect ? <rect {...rect} className="fill-primary-container/10 stroke-primary-container" strokeWidth={2} strokeDasharray="6 4" vectorEffect="non-scaling-stroke" /> : null}
-          {picker.cursor ? (
-            <g className="stroke-primary-container" strokeWidth={1.5} vectorEffect="non-scaling-stroke">
-              <line x1={picker.cursor.x - arm} y1={picker.cursor.y} x2={picker.cursor.x + arm} y2={picker.cursor.y} vectorEffect="non-scaling-stroke" />
-              <line x1={picker.cursor.x} y1={picker.cursor.y - arm} x2={picker.cursor.x} y2={picker.cursor.y + arm} vectorEffect="non-scaling-stroke" />
-            </g>
-          ) : null}
-        </svg>
+        <PickerOverlay image={image} points={points} shape={shape} cursor={picker.cursor ?? undefined} />
         {points.map((point, index) => (
           <span
             key={MARKS[index]}

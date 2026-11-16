@@ -1,11 +1,11 @@
 import { Group, Mesh, MeshBasicMaterial } from "three";
 import { describe, expect, it } from "vitest";
-import { DEMO_PROJECTS } from "@/lib/projects";
+import { demoProjects } from "@/lib/projects";
 import { footprintsMatch, objectsFootprint, sceneFootprint } from "./alignment";
 import { buildPlanScene } from "./plan-scene";
 import { buildElementMesh } from "./three-objects";
 
-const elements = buildPlanScene(DEMO_PROJECTS[0].floorPlan);
+const elements = buildPlanScene(demoProjects()[0].floorPlan);
 const material = new MeshBasicMaterial();
 
 function modelOf(transform: (root: Group) => void) {

@@ -1,47 +1,44 @@
 "use client";
 
-import { useRef } from "react";
-import { Button } from "@/components/ui/Button";
+import Link from "next/link";
+import { useState } from "react";
+import { Button, buttonClasses } from "@/components/ui/Button";
+import { Dialog } from "@/components/ui/Dialog";
 import { Icon } from "@/components/ui/Icon";
+import { DEFAULT_PROJECT_ID } from "@/lib/constants";
 
 const STEPS = [
   "Upload a clear photo of your floor plan.",
   "Review the walls, openings and columns the AI detected.",
   "Move the timeline to watch your home being built with its cost.",
+  "Log progress with a site photo and share a link with your family.",
 ];
 
 export function HowItWorksDialog() {
-  const dialogRef = useRef<HTMLDialogElement>(null);
-
+  const [open, setOpen] = useState(false);
   return (
     <>
-      <Button variant="ghost" className="min-h-12 px-space-lg text-body-lg" onClick={() => dialogRef.current?.showModal()}>
+      <Button variant="ghost" className="min-h-12 px-space-lg text-body-lg" onClick={() => setOpen(true)}>
         <Icon name="play_circle" className="text-primary" />
         See how it works
       </Button>
-      <dialog
-        ref={dialogRef}
-        aria-labelledby="how-it-works-title"
-        data-testid="how-it-works-dialog"
-        className="m-auto w-[min(36rem,calc(100%-2rem))] rounded-xl bg-surface-container-lowest p-space-lg text-on-surface backdrop:bg-inverse-surface/60"
-      >
-        <div className="flex flex-col gap-space-md">
-          <h2 id="how-it-works-title" className="font-display text-headline-md">
-            How ObraKadabra works
-          </h2>
-          <ol className="flex list-decimal flex-col gap-space-xs ps-5 text-body-lg">
-            {STEPS.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
-          </ol>
-          <p className="text-body-md text-on-surface-variant">A 2-minute video walkthrough is on its way.</p>
-          <form method="dialog" className="flex justify-end">
-            <Button type="submit" variant="primary">
-              Close
-            </Button>
-          </form>
+      <Dialog open={open} title="How ObraKadabra works" onClose={() => setOpen(false)} testId="how-it-works-dialog" wide>
+        <ol className="flex list-decimal flex-col gap-space-xs ps-5 text-body-lg">
+          {STEPS.map((step) => (
+            <li key={step}>{step}</li>
+          ))}
+        </ol>
+        <p className="text-body-md text-on-surface-variant">Try it now with a demo home. No account and no plan needed.</p>
+        <div className="flex flex-wrap justify-end gap-space-sm">
+          <Button variant="ghost" onClick={() => setOpen(false)}>
+            Close
+          </Button>
+          <Link href={`/proyecto/${DEFAULT_PROJECT_ID}`} className={buttonClasses("primary")}>
+            <Icon name="view_in_ar" />
+            Open a demo
+          </Link>
         </div>
-      </dialog>
+      </Dialog>
     </>
   );
 }
