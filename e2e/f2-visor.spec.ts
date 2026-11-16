@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { DEMO_PROJECTS } from "../src/lib/projects";
+import { demoProjects } from "../src/lib/projects";
 import { scheduleFor } from "../src/lib/schedule";
 
 async function openWorkspace(page: Page, id: string) {
@@ -67,7 +67,7 @@ test("the viewer matches its reference image", async ({ page }) => {
   // The workspace opens on today's week, so pin the last week to keep the reference image stable over time
   await page.getByTestId("timeline-slider").focus();
   await page.keyboard.press("End");
-  await expect(viewer).toHaveAttribute("data-week", String(scheduleFor(DEMO_PROJECTS[0].floorPlan).totalWeeks));
+  await expect(viewer).toHaveAttribute("data-week", String(scheduleFor(demoProjects()[0].floorPlan).totalWeeks));
   const overlays = [
     page.getByRole("toolbar"),
     page.getByRole("list", { name: "Material legend" }),

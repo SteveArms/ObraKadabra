@@ -1,6 +1,6 @@
 import { PageSection } from "@/components/layout/PageSection";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { DEMO_PROJECTS } from "@/lib/projects";
+import { demoProjects } from "@/lib/projects";
 import { DemoCard } from "./DemoCard";
 
 export function DemoGallery() {
@@ -14,7 +14,7 @@ export function DemoGallery() {
         description="Explore without uploading a plan: the 3D model, material quantities and every construction stage."
       />
       <div className="grid grid-cols-1 gap-space-lg lg:grid-cols-2">
-        {DEMO_PROJECTS.map((demo) => (
+        {demoProjects().map((demo) => (
           <DemoCard key={demo.id} demo={demo} />
         ))}
       </div>

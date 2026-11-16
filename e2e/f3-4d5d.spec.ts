@@ -1,8 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
-import { DEMO_PROJECTS } from "../src/lib/projects";
+import { demoProjects } from "../src/lib/projects";
 import { scheduleFor, statusAt } from "../src/lib/schedule";
 
-const casa = DEMO_PROJECTS.find((demo) => demo.id === "casa-1-piso-90")!;
+const casa = demoProjects().find((demo) => demo.id === "casa-1-piso-90")!;
 const schedule = scheduleFor(casa.floorPlan);
 
 async function openAtWeek(page: Page, week: number) {

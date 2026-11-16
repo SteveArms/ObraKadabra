@@ -1,12 +1,12 @@
 import { InstancedMesh, Matrix4, MeshStandardMaterial, Vector3 } from "three";
 import { describe, expect, it } from "vitest";
-import { DEMO_PROJECTS } from "@/lib/projects";
+import { demoProjects } from "@/lib/projects";
 import { applyAppearance } from "./appearance";
 import { buildPlanObjects } from "./instancing";
 import { buildPlanScene } from "./plan-scene";
 import { findElementKey } from "./registry";
 
-const plan = DEMO_PROJECTS[1].floorPlan;
+const plan = demoProjects()[1].floorPlan;
 const elements = buildPlanScene(plan);
 const idle = new MeshStandardMaterial({ color: "#9aa0a6" });
 const selected = new MeshStandardMaterial({ color: "#b7c4ff" });

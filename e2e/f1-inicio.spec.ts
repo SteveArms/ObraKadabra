@@ -1,10 +1,10 @@
 import { expect, test } from "@playwright/test";
 import { formatSoles } from "../src/lib/format";
-import { DEMO_PROJECTS, PROJECTS_STORAGE_KEY } from "../src/lib/projects";
+import { demoProjects, PROJECTS_STORAGE_KEY } from "../src/lib/projects";
 import { summarizeTakeoff } from "../src/lib/takeoff";
 
 const SEEDED_PROJECT = {
-  ...DEMO_PROJECTS[0],
+  ...demoProjects()[0],
   id: "mi-casa-sjl",
   name: "Quispe family home",
   location: "San Juan de Lurigancho",
@@ -23,7 +23,7 @@ test("shows both demo cards with area, floors and budget", async ({ page }) => {
 
 test("each demo budget matches the takeoff calculation", async ({ page }) => {
   await page.goto("/");
-  for (const demo of DEMO_PROJECTS) {
+  for (const demo of demoProjects()) {
     const total = summarizeTakeoff(demo.floorPlan).cost.total;
     const card = page.locator(`[data-testid="demo-card"][data-demo-id="${demo.id}"]`);
     await expect(card).toHaveAttribute("data-total", String(Math.round(total)));

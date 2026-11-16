@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { MATERIAL_PRICES } from "@/data/prices";
 import { WORKDAYS_PER_WEEK, YIELDS_PER_CREW_DAY } from "@/data/yields";
-import { DEMO_PROJECTS } from "@/lib/projects";
+import { demoProjects } from "@/lib/projects";
 import { computeCost, computeMaterials, computeTakeoffLines } from "@/lib/takeoff";
 import { makeTestPlan } from "@/lib/takeoff/test-plan";
 import { buildSchedule, costCurve, materialsForWeek, plasteredAt, statusAt, summarizeProject } from "./index";
 
-describe.each(DEMO_PROJECTS)("buildSchedule for $id", ({ floorPlan: plan }) => {
+describe.each(demoProjects())("buildSchedule for $id", ({ floorPlan: plan }) => {
   const lines = computeTakeoffLines(plan);
   const schedule = buildSchedule(plan, lines);
   const meshTask = (prefix: string) => schedule.tasks.filter((task) => task.meshKey?.startsWith(prefix));
@@ -103,7 +103,7 @@ describe("small case", () => {
     expect(statusAt(schedule, late, { week: late, percents: { "footing_Z-1": 0 } })["footing_Z-1"]).toBe("delayed");
     expect(statusAt(schedule, late, { week: late, percents: {} })["footing_Z-1"]).toBe("done");
     expect(statusAt(schedule, late, { week: late, percents: { "footing_Z-1": 100 } })["footing_Z-1"]).toBe("done");
-    const demo = buildSchedule(DEMO_PROJECTS[0].floorPlan, computeTakeoffLines(DEMO_PROJECTS[0].floorPlan));
+    const demo = buildSchedule(demoProjects()[0].floorPlan, computeTakeoffLines(demoProjects()[0].floorPlan));
     expect(statusAt(demo, 1, { week: 1, percents: { "column_C-1": 40 } })["column_C-1"]).toBe("in_progress");
     expect(statusAt(schedule, 1, { week: 1, percents: { "column_C-1": 40 } })["column_C-1"]).toBe("delayed");
   });

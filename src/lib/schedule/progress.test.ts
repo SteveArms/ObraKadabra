@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { DEMO_PROJECTS } from "@/lib/projects";
+import { demoProjects } from "@/lib/projects";
 import type { ProgressEntry, ProgressFinding } from "@/schemas/progress";
 import { actualProgressAt, actualProgressFrom, earnedValueAt, findingImpact, plannedCostAt, plannedProgressAt, scheduleFor, statusAt } from "./index";
 
-const schedule = scheduleFor(DEMO_PROJECTS[0].floorPlan);
+const schedule = scheduleFor(demoProjects()[0].floorPlan);
 const finding = (elementId: string, type: ProgressFinding["type"], status: ProgressFinding["status"], percent: number): ProgressFinding => ({ elementId, type, status, percent, evidence: "", confidence: 0.9 });
 
 function entry(findings: ProgressFinding[], overrides: Partial<ProgressEntry> = {}): ProgressEntry {

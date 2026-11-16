@@ -8,13 +8,17 @@ type IconProps = {
   className?: string;
 };
 
+// A fixed square box: until the icon font loads the ligature shows as its name ("upload_file"), which must not push the layout
 export function Icon({ name, filled = false, size = 20, className }: IconProps) {
+  const side = `${size / 16}rem`;
   const style: CSSProperties = {
-    fontSize: `${size / 16}rem`,
+    fontSize: side,
+    width: side,
+    height: side,
     fontVariationSettings: `"FILL" ${filled ? 1 : 0}`,
   };
   return (
-    <span aria-hidden="true" className={cn("material-symbols-outlined shrink-0", className)} style={style}>
+    <span aria-hidden="true" className={cn("material-symbols-outlined shrink-0 overflow-hidden", className)} style={style}>
       {name}
     </span>
   );

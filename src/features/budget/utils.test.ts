@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { DEMO_PROJECTS } from "@/lib/projects";
+import { demoProjects } from "@/lib/projects";
 import { scheduleFor, type WeekMaterial } from "@/lib/schedule";
 import { whatsappUrl } from "@/lib/whatsapp";
 import { costByItem, purchaseCost, purchaseQuantity, shoppingListMessage } from "./utils";
 
-const schedule = scheduleFor(DEMO_PROJECTS[0].floorPlan);
+const schedule = scheduleFor(demoProjects()[0].floorPlan);
 
 describe("costByItem", () => {
   it("adds up to the schedule total and grows with the weeks", () => {

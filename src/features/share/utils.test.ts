@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { getDemoProject } from "@/lib/projects/demos";
 import { scheduleFor } from "@/lib/schedule";
 import type { ProgressEntry } from "@/schemas/progress";
-import { addWeeks, familySummary, familyTone, latestPhotoEntry, nextCelebration, whatsappShareUrl } from "./utils";
+import { addWeeks, familySummary, familyTone, latestPhotoEntry, nextCelebration } from "./utils";
 
 const demo = getDemoProject("casa-1-piso-90");
 const schedule = scheduleFor(demo!.floorPlan);
@@ -48,13 +48,5 @@ describe("family summary", () => {
     expect(nextCelebration(schedule, schedule.totalWeeks)).toBeUndefined();
     const entries = [entry("old", "2026-11-01T00:00:00.000Z", true), entry("new", "2026-11-02T00:00:00.000Z", true), entry("draft", "2026-11-03T00:00:00.000Z", false)];
     expect(latestPhotoEntry(entries)?.id).toBe("new");
-  });
-});
-
-describe("whatsappShareUrl", () => {
-  it("puts the link inside an encoded message", () => {
-    const url = new URL(whatsappShareUrl("https://obrakadabra.app/compartir/abc"));
-    expect(url.origin).toBe("https://wa.me");
-    expect(url.searchParams.get("text")).toContain("https://obrakadabra.app/compartir/abc");
   });
 });

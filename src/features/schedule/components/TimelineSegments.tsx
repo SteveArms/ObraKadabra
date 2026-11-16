@@ -4,7 +4,7 @@ import type { Schedule } from "@/schemas/schedule";
 import { activityState, dayRatio } from "../utils";
 
 const STATE_CLASSES = {
-  done: "bg-status-done/20 text-status-done-text",
+  done: "bg-status-done/12 text-status-done-text",
   active: "bg-status-active/20 text-status-active-text ring-2 ring-inset ring-status-active",
   future: "bg-surface-container-high text-on-surface-variant",
 };

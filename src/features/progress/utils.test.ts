@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { DEMO_PROJECTS } from "@/lib/projects";
+import { demoProjects } from "@/lib/projects";
 import { scheduleFor } from "@/lib/schedule";
 import { expectedElements, levelChoices, planForFindings } from "./utils";
 
-const plan = DEMO_PROJECTS[0].floorPlan;
+const plan = demoProjects()[0].floorPlan;
 const schedule = scheduleFor(plan);
 const [firstFloor, roof] = levelChoices(plan.meta.levels);
 

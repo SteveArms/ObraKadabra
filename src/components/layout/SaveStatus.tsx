@@ -2,12 +2,12 @@
 
 import { Icon } from "@/components/ui/Icon";
 import { useOnlineStatus } from "@/lib/hooks/useOnlineStatus";
-import { isCloudStorage } from "@/lib/projects";
+import { supabaseConfig } from "@/lib/supabase/config";
 
 // Says where projects are kept and whether the app can reach the cloud right now, nothing more
 export function SaveStatus() {
   const online = useOnlineStatus();
-  const cloud = isCloudStorage();
+  const cloud = Boolean(supabaseConfig());
   const label = !online ? "Offline" : cloud ? "Cloud saving on" : "Saved on this device";
   const icon = !online ? "cloud_off" : cloud ? "cloud_done" : "devices";
   return (

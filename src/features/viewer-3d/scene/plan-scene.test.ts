@@ -1,7 +1,7 @@
 import { Box3, MeshBasicMaterial } from "three";
 import { describe, expect, it } from "vitest";
 import { wallArea } from "@/lib/geometry";
-import { DEMO_PROJECTS } from "@/lib/projects";
+import { demoProjects } from "@/lib/projects";
 import { buildPlanScene } from "./plan-scene";
 import { levelClearHeight } from "@/lib/plan/elevations";
 import { buildElementMesh } from "./three-objects";
@@ -9,7 +9,7 @@ import { wallSpans } from "./wall-boxes";
 
 const material = new MeshBasicMaterial();
 
-describe.each(DEMO_PROJECTS)("buildPlanScene for $id", ({ floorPlan: plan }) => {
+describe.each(demoProjects())("buildPlanScene for $id", ({ floorPlan: plan }) => {
   const scene = buildPlanScene(plan);
 
   it("creates one named element per footing, column, wall, slab and roof", () => {
@@ -41,7 +41,7 @@ describe.each(DEMO_PROJECTS)("buildPlanScene for $id", ({ floorPlan: plan }) => 
 });
 
 describe("element geometry", () => {
-  const plan = DEMO_PROJECTS[0].floorPlan;
+  const plan = demoProjects()[0].floorPlan;
   const scene = buildPlanScene(plan);
 
   it("places footings below ground and the roof on top", () => {

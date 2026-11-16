@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { Suspense } from "react";
 import { buttonClasses } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
-import { ShareButton } from "@/features/share";
+import { ShareButton } from "@/features/share-link";
 import { DEFAULT_PROJECT_ID } from "@/lib/constants";
 import { projectIdFromPath } from "@/lib/navigation";
 

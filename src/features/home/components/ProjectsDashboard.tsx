@@ -4,7 +4,6 @@ import { useMemo } from "react";
 import { PageSection } from "@/components/layout/PageSection";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Skeleton } from "@/components/ui/Skeleton";
-import { summarizeProject } from "@/lib/schedule";
 import { useProjects } from "../hooks/useProjects";
 import { aggregatePortfolio } from "../utils";
 import { KeepProjectsForm } from "./KeepProjectsForm";
@@ -16,7 +15,7 @@ import { ProjectsEmptyState } from "./ProjectsEmptyState";
 export function ProjectsDashboard() {
   const state = useProjects();
   const projects = useMemo(() => (state.status === "ready" ? state.projects : []), [state]);
-  const summaries = useMemo(() => projects.map((project) => summarizeProject(project.floorPlan)), [projects]);
+  const summaries = useMemo(() => projects.map((item) => item.summary), [projects]);
 
   return (
     <PageSection labelledBy="projects-title">
@@ -24,16 +23,16 @@ export function ProjectsDashboard() {
       <div aria-busy={state.status === "loading"} className="min-h-24">
         {state.status === "loading" ? (
           <div data-testid="projects-loading" className="grid grid-cols-1 gap-space-lg md:grid-cols-2 xl:grid-cols-3">
-            <Skeleton className="h-56 rounded-lg" />
-            <Skeleton className="h-56 rounded-lg max-md:hidden" />
+            <Skeleton className="h-60 rounded-lg md:h-54" />
+            <Skeleton className="h-54 rounded-lg max-md:hidden" />
           </div>
         ) : null}
         {state.status === "ready" && projects.length === 0 ? <ProjectsEmptyState /> : null}
         {projects.length > 0 ? (
           <ul className="grid grid-cols-1 gap-space-lg md:grid-cols-2 xl:grid-cols-3">
-            {projects.map((project, index) => (
+            {projects.map(({ project, summary }) => (
               <li key={project.id} className="flex">
-                <ProjectCard project={project} summary={summaries[index]} />
+                <ProjectCard project={project} summary={summary} />
               </li>
             ))}
           </ul>
