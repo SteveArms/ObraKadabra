@@ -9,7 +9,7 @@ const STATE_CLASSES = {
   future: "bg-surface-container-high text-on-surface-variant",
 };
 
-// Labels only ride segments wide enough to hold them; the Gantt tab lists every activity in full
+// Labels only ride segments wide enough to hold them, never the active one (the thumb sits there and the heading names it)
 const LABEL_MIN_RATIO = 0.12;
 
 export function TimelineSegments({ schedule, week }: { schedule: Schedule; week: number }) {
@@ -29,7 +29,7 @@ export function TimelineSegments({ schedule, week }: { schedule: Schedule; week:
             className={cn("absolute inset-y-0 flex items-center rounded-md px-1.5 font-mono text-label-numeric-sm", STATE_CLASSES[state])}
             style={{ left: `calc(${left * 100}% + 1px)`, width: `calc(${width * 100}% - 2px)` }}
           >
-            {width >= LABEL_MIN_RATIO ? <span className="hidden whitespace-nowrap sm:inline">{activityLabel(activity.stage, activity.level)}</span> : null}
+            {width >= LABEL_MIN_RATIO && state !== "active" ? <span className="hidden whitespace-nowrap sm:inline">{activityLabel(activity.stage, activity.level)}</span> : null}
           </div>
         );
       })}

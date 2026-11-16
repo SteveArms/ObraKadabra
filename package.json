@@ -10,7 +10,9 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm test:e2e"
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm test:e2e",
+    "capturas": "playwright test --grep @capturas",
+    "lighthouse": "lighthouse http://localhost:3100/ --only-categories=performance,accessibility,best-practices,seo --view"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",

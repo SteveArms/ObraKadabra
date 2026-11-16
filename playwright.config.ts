@@ -8,14 +8,20 @@ const baseURL = remoteBaseUrl ?? `http://localhost:${PORT}`;
 // Specs act as a returning user who already saw the workspace tour; f8-pulido starts from empty storage to test it
 const tourSeen = { cookies: [], origins: [{ origin: new URL(baseURL).origin, localStorage: [{ name: "obrakadabra:tour-done", value: "true" }] }] };
 
+// @ai calls the real model and costs money, so CI never runs it; @capturas rewrites docs/capturas, so it runs only when asked for
+function skippedTags(): RegExp | undefined {
+  const asked = process.argv.join(" ");
+  const tags = [isCI ? "@ai" : "", asked.includes("@capturas") ? "" : "@capturas"].filter(Boolean);
+  return tags.length ? new RegExp(tags.join("|")) : undefined;
+}
+
 export default defineConfig({
   testDir: "./e2e",
   // WebGL and fonts render differently per OS, so each platform keeps its own baseline (CI compares the linux one)
   snapshotPathTemplate: "{testDir}/__screenshots__/{testFilePath}/{arg}-{projectName}-{platform}{ext}",
   fullyParallel: true,
   forbidOnly: isCI,
-  // Specs tagged @ai call the real model and cost money, so CI never runs them
-  grepInvert: isCI ? /@ai/ : undefined,
+  grepInvert: skippedTags(),
   retries: isCI ? 1 : 0,
   reporter: isCI ? [["html", { open: "never" }], ["github"]] : [["html", { open: "never" }], ["list"]],
   use: {

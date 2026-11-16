@@ -23,6 +23,7 @@ const VIEWS: { view: ViewMode; label: string }[] = [
 
 type ViewerToolbarProps = { cuts: number[]; isFullscreen: boolean; onToggleFullscreen: () => void };
 
+// Phones orbit, pan and pinch with gestures, so the camera mode buttons are hidden there to leave room for the model
 export function ViewerToolbar({ cuts, isFullscreen, onToggleFullscreen }: ViewerToolbarProps) {
   const { navMode, view, levelCut, setNavMode, setView, setLevelCut } = useViewerStore(
     useShallow(({ navMode, view, levelCut, setNavMode, setView, setLevelCut }) => ({ navMode, view, levelCut, setNavMode, setView, setLevelCut })),
@@ -30,13 +31,15 @@ export function ViewerToolbar({ cuts, isFullscreen, onToggleFullscreen }: Viewer
   return (
     <div className="flex flex-wrap items-start justify-between gap-space-xs">
       <div role="toolbar" aria-label="Camera" className={`${GLASS_SURFACE} flex flex-wrap items-center gap-0.5 p-1`}>
-        {NAV_MODES.map((item) => (
-          <ToggleButton key={item.mode} pressed={navMode === item.mode} onClick={() => setNavMode(item.mode)} aria-label={item.label}>
-            <Icon name={item.icon} size={18} />
-            <span className="hidden sm:inline">{item.label}</span>
-          </ToggleButton>
-        ))}
-        <span aria-hidden="true" className="mx-1 h-5 w-px bg-outline-variant" />
+        <div className="flex items-center gap-0.5 max-sm:hidden">
+          {NAV_MODES.map((item) => (
+            <ToggleButton key={item.mode} pressed={navMode === item.mode} onClick={() => setNavMode(item.mode)} aria-label={item.label}>
+              <Icon name={item.icon} size={18} />
+              <span className="hidden sm:inline">{item.label}</span>
+            </ToggleButton>
+          ))}
+          <span aria-hidden="true" className="mx-1 h-5 w-px bg-outline-variant" />
+        </div>
         {VIEWS.map((item) => (
           <ToggleButton key={item.view} pressed={view === item.view} onClick={() => setView(item.view)}>
             {item.label}
