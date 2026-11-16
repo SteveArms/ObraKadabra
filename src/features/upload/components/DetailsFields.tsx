@@ -74,7 +74,7 @@ export function FloorHeightField({ error }: { error?: string }) {
     <div className="flex flex-col gap-1">
       <label htmlFor="floor-height" className="text-body-md font-medium">Floor-to-floor height</label>
       <MetersInput id="floor-height" name="floor-height" value={floorHeight} invalid={Boolean(error)} aria-describedby="floor-height-hint floor-height-error" onChange={(event) => setDetails({ floorHeight: event.target.value })} />
-      <p id="floor-height-hint" className="font-mono text-body-sm text-on-surface-variant">RNE minimum: {MIN_FLOOR_HEIGHT.toFixed(2)} m</p>
+      <p id="floor-height-hint" className="font-mono text-body-sm text-on-surface-variant">Lowest we accept: {MIN_FLOOR_HEIGHT.toFixed(2)} m</p>
       <FieldError id="floor-height-error" message={error} />
     </div>
   );
